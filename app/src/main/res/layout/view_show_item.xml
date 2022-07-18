@@ -7,6 +7,7 @@
     android:padding="8dp"
     android:clipToPadding="false">
     <androidx.cardview.widget.CardView
+        android:id="@+id/showCardContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="16dp"
