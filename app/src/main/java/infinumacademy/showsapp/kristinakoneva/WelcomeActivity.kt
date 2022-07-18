@@ -2,10 +2,17 @@ package infinumacademy.showsapp.kristinakoneva
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import infinumacademy.showsapp.kristinakoneva.databinding.ActivityLoginBinding
+import infinumacademy.showsapp.kristinakoneva.databinding.ActivityWelcomeBinding
 
 class WelcomeActivity : AppCompatActivity() {
+    lateinit var binding: ActivityWelcomeBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_welcome)
+
+        binding = ActivityWelcomeBinding.inflate(layoutInflater)
+
+        setContentView(binding.root)
     }
 }
