@@ -46,13 +46,13 @@ class LoginActivity : AppCompatActivity() {
         }
 
 
-        //if(binding.btnLogin.isEnabled==true){
-            binding.btnLogin.setOnClickListener{
-                val intent = Intent(this,WelcomeActivity::class.java)
-                intent.putExtra("USERNAME",extractUsername())
-                startActivity(intent)
-            }
-        //}
+
+        binding.btnLogin.setOnClickListener{
+            val intent = Intent(this,WelcomeActivity::class.java)
+            intent.putExtra("USERNAME",extractUsername())
+            startActivity(intent)
+        }
+
     }
     private fun extractUsername(): String{
         val email = binding.etEmail.text.toString()
@@ -64,7 +64,14 @@ class LoginActivity : AppCompatActivity() {
         val isValidEmail = email!=null && email.isNotBlank() && email.matches("^[a-z][a-z0-9\\.\\_]*@[a-z]+\\.[a-z]+".toRegex())
         val isValidPassword = password!=null && password.isNotBlank() && password.length>=6
 
+        setEmailError(isValidEmail)
+
         return isValidEmail && isValidPassword
+    }
+    private fun setEmailError(isValidEmail: Boolean){
+        if(!isValidEmail){
+            binding.etEmail.error = "Invalid email address!"
+        }
     }
 
 }
