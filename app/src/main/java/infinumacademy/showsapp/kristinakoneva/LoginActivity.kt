@@ -54,12 +54,15 @@ class LoginActivity : AppCompatActivity() {
         }
 
     }
+
+
     private fun extractUsername(): String{
         val email = binding.etEmail.text.toString()
         val parts = email.split("@")
         val username = parts[0]
         return username
     }
+
     private fun validateLoginForm(email: String?, password: String?) : Boolean{
         val isValidEmail = email!=null && email.isNotBlank() && email.matches("^[a-z][a-z0-9\\.\\_]*@[a-z]+\\.[a-z]+".toRegex())
         val isValidPassword = password!=null && password.isNotBlank() && password.length>=6
@@ -68,6 +71,7 @@ class LoginActivity : AppCompatActivity() {
 
         return isValidEmail && isValidPassword
     }
+
     private fun setEmailError(isValidEmail: Boolean){
         if(!isValidEmail){
             binding.etEmail.error = "Invalid email address!"
