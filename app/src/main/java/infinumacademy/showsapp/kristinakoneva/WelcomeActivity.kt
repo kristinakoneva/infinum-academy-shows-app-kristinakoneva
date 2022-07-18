@@ -13,6 +13,9 @@ class WelcomeActivity : AppCompatActivity() {
 
         binding = ActivityWelcomeBinding.inflate(layoutInflater)
 
+        val username = intent.extras?.getString("USERNAME")
+        binding.tvWelcomeText.text = "Welcome, $username"
+
         setContentView(binding.root)
     }
 }
