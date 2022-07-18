@@ -7,4 +7,6 @@
     <string name="hint_password">Password</string>
     <string name="login">Login</string>
     <string name="welcome_message">Welcome, %s!</string>
+    <string name="shows">Shows</string>
+    <string name="lorem_short">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</string>
 </resources>
