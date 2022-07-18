@@ -6,4 +6,39 @@
     android:layout_height="match_parent"
     tools:context=".WelcomeActivity">
 
+    <ImageView
+        android:id="@+id/imgPurpleEllipse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/purple_ellipse"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+
+        />
+
+    <ImageView
+        android:id="@+id/imgPlayButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/big_play_button"
+        app:layout_constraintBottom_toBottomOf="@+id/imgPurpleEllipse"
+        app:layout_constraintEnd_toEndOf="@+id/imgPurpleEllipse"
+        app:layout_constraintStart_toStartOf="@+id/imgPurpleEllipse"
+        app:layout_constraintTop_toTopOf="@+id/imgPurpleEllipse" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/welcome_message"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgPurpleEllipse"
+        android:layout_marginTop="30dp"
+        android:textSize="17sp"
+        android:textColor="#808080"
+        android:textStyle="bold"/>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
