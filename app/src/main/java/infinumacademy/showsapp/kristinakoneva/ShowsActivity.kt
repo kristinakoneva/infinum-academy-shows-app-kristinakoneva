@@ -55,6 +55,8 @@ class ShowsActivity : AppCompatActivity() {
     }
 
     private fun showDetailsAbout(show: Show){
-
+        val intent = ShowDetailsActivity.buildIntent(this)
+        intent.putExtra("SHOW",show)
+        startActivity(intent)
     }
 }
