@@ -48,7 +48,7 @@ class LoginActivity : AppCompatActivity() {
 
 
         binding.btnLogin.setOnClickListener{
-            val intent = Intent(this,WelcomeActivity::class.java)
+            val intent = ShowsActivity.buildIntent(this)
             intent.putExtra("USERNAME",extractUsername())
             startActivity(intent)
         }
