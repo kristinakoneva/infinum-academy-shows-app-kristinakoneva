@@ -10,7 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import infinumacademy.showsapp.kristinakoneva.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
-    lateinit var binding: ActivityLoginBinding
+    private lateinit var binding: ActivityLoginBinding
     private val emailLiveData = MutableLiveData<String>()
     private val passwordLiveData = MutableLiveData<String>()
     private val isValidLiveData = MediatorLiveData<Boolean>().apply {
