@@ -8,6 +8,8 @@ import android.view.View
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.isVisible
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import infinumacademy.showsapp.kristinakoneva.databinding.ActivityShowDetailsBinding
@@ -34,20 +36,48 @@ class ShowDetailsActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        val show = getIntent ().getExtras()?.getParcelable<Show>("SHOW") as Show
-        binding.showName.text = show.name
-        binding.showDesc.text = show.description
-        binding.showImg.setImageResource(show.imageResourceId)
+        displayShow()
+        getUsername()
+        btnGoBack()
+        initReviewsRecycler()
+        initAddReviewButton()
+        setReviewsStatus()
+    }
+    private fun getUsername(): String? {
+        return intent.getStringExtra("USERNAME")
+    }
 
+    private fun getAverageReviewsRating(): Double {
+        var total=0.0
+        for(review in reviewsList){
+            total+=review.rating
+        }
+        return total/reviewsList.count()
+    }
+
+    private fun setReviewsStatus(){
+        val numOfReviews = reviewsList.count()
+        val averageRating = getAverageReviewsRating()
+        binding.reviewsStatus.text =  "$numOfReviews REVIEWS, $averageRating AVERAGE"
+        val avgRating = averageRating.toFloat()
+        binding.ratingStatus.rating = String.format("%.2f", avgRating).toFloat()
+    }
+
+
+    private fun btnGoBack(){
         binding.btnGoBack.setOnClickListener{
             val intent = ShowsActivity.buildIntent(this)
             startActivity(intent)
         }
-
-        initReviewsRecycler()
-        initAddReviewButton()
-
     }
+
+    private fun displayShow(){
+        val show = getIntent ().getExtras()?.getParcelable<Show>("SHOW") as Show
+        binding.showName.text = show.name
+        binding.showDesc.text = show.description
+        binding.showImg.setImageResource(show.imageResourceId)
+    }
+
     private fun initReviewsRecycler(){
         adapter = ShowDetailsAdapter(reviewsList)
 
@@ -55,23 +85,46 @@ class ShowDetailsActivity : AppCompatActivity() {
             LinearLayoutManager.VERTICAL,false)
 
         binding.reviewsRecycler.adapter = adapter
+
+        binding.reviewsRecycler.addItemDecoration(
+            DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+        )
     }
+
     private fun initAddReviewButton(){
         binding.btnWriteReview.setOnClickListener{
             showAddReviewBottomSheet()
         }
+        setReviewsStatus()
     }
     private fun showAddReviewBottomSheet(){
         val dialog = BottomSheetDialog(this)
         val bottomSheetBinding = DialogAddReviewBinding.inflate(layoutInflater)
         dialog.setContentView(bottomSheetBinding.root)
+
+        bottomSheetBinding.rbRating.setOnRatingBarChangeListener { _, _, _ ->
+            bottomSheetBinding.btnSubmitReview.isEnabled = true
+        }
+
         bottomSheetBinding.btnSubmitReview.setOnClickListener {
             addReviewToList(bottomSheetBinding.rbRating.rating.toDouble(),bottomSheetBinding.etComment.text.toString())
             dialog.dismiss()
+            showReviews()
+            setReviewsStatus()
         }
+
         dialog.show()
     }
+    private fun showReviews(){
+        binding.reviewsStatus.isVisible = true
+        binding.reviewsRecycler.isVisible = true
+        binding.ratingStatus.isVisible = true
+        binding.noReviews.isVisible = false
+    }
     private fun addReviewToList(rating: Double, comment: String){
-        adapter.addItem(Review(rating,comment))
+        val username = getUsername()
+        adapter.addItem(Review(rating,comment,username))
+        reviewsList = reviewsList + Review(rating,comment,username)
+        setReviewsStatus()
     }
 }

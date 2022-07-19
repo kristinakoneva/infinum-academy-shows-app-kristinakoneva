@@ -12,11 +12,12 @@
         android:layout_height="56dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-        <ImageView
+        <ImageButton
             android:id="@+id/btnGoBack"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:src="@drawable/ic_back_arrow"
+            android:backgroundTint="@color/white"
             />
 
     </Toolbar>
@@ -64,9 +65,8 @@
                 android:layout_height="wrap_content"
                 android:textSize="17sp"
                 android:textColor="@color/black"
-                tools:text="TEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
-                EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEXXXXXXXXXXXXXXXXXXXXXXXTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-                TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"
+                tools:text="Lorem ipsum dolor sit amet. Sit voluptatibus vitae qui quis minus non dignissimos autem! Qui cupiditate tempore rem perspiciatis
+                galisum et quia nihil rem consequatur quia aut quia saepe."
                 />
             <TextView
                 android:layout_width="wrap_content"
@@ -78,14 +78,48 @@
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:textColor="@color/black"/>
+            <TextView
+                android:id="@+id/reviewsStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="review status"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:textColor="#999999"
+                android:textSize="14sp"
+                android:visibility="gone"/>
+            <RatingBar
+                android:id="@+id/ratingStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:numStars="5"
+                android:isIndicator="true"
+                android:progressTint="#52368C"
+                android:visibility="gone"
+                />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/reviewsRecycler"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:listitem="@layout/view_review_item"
+                android:layout_marginTop="10dp"
+                android:visibility="gone"
                 >
 
             </androidx.recyclerview.widget.RecyclerView>
+
+            <TextView
+                android:id="@+id/noReviews"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/no_reviews_yet"
+                android:textSize="17sp"
+                android:textColor="#000000"
+                />
 
         </LinearLayout>
     </ScrollView>
