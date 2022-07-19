@@ -20,7 +20,7 @@
         android:numStars="5"
         android:progressTint="#52368C"
         />
-    
+
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:id="@+id/tilComment"
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:lines="10"
-            android:inputType="textEmailAddress"
+            android:inputType="text"
             />
 
     </com.google.android.material.textfield.TextInputLayout>

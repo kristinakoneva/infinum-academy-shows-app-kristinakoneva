@@ -52,15 +52,15 @@ class ShowDetailsActivity : AppCompatActivity() {
         for(review in reviewsList){
             total+=review.rating
         }
-        return total/reviewsList.count()
+        return total/reviewsList.count().toDouble()
     }
 
     private fun setReviewsStatus(){
         val numOfReviews = reviewsList.count()
         val averageRating = getAverageReviewsRating()
-        binding.reviewsStatus.text =  "$numOfReviews REVIEWS, $averageRating AVERAGE"
-        val avgRating = averageRating.toFloat()
-        binding.ratingStatus.rating = String.format("%.2f", avgRating).toFloat()
+        binding.ratingStatus.rating = String.format("%.2f",averageRating.toFloat()).toFloat()
+        binding.reviewsStatus.text =  String.format("%d REVIEWS, %.2f AVERAGE",numOfReviews,averageRating.toFloat())
+
     }
 
 
