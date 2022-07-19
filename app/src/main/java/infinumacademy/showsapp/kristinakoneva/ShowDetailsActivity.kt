@@ -8,12 +8,18 @@ import android.view.View
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import infinumacademy.showsapp.kristinakoneva.databinding.ActivityShowDetailsBinding
+import infinumacademy.showsapp.kristinakoneva.databinding.DialogAddReviewBinding
+import model.Review
 import model.Show
 
 
 class ShowDetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityShowDetailsBinding
+    private lateinit var adapter: ShowDetailsAdapter
+    private var reviewsList = listOf<Review>()
 
     companion object{
         fun buildIntent(activity: Activity): Intent {
@@ -38,8 +44,34 @@ class ShowDetailsActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        initReviewsRecycler()
+        initAddReviewButton()
 
+    }
+    private fun initReviewsRecycler(){
+        adapter = ShowDetailsAdapter(reviewsList)
 
+        binding.reviewsRecycler.layoutManager = LinearLayoutManager(this,
+            LinearLayoutManager.VERTICAL,false)
 
+        binding.reviewsRecycler.adapter = adapter
+    }
+    private fun initAddReviewButton(){
+        binding.btnWriteReview.setOnClickListener{
+            showAddReviewBottomSheet()
+        }
+    }
+    private fun showAddReviewBottomSheet(){
+        val dialog = BottomSheetDialog(this)
+        val bottomSheetBinding = DialogAddReviewBinding.inflate(layoutInflater)
+        dialog.setContentView(bottomSheetBinding.root)
+        bottomSheetBinding.btnSubmitReview.setOnClickListener {
+            addReviewToList(bottomSheetBinding.rbRating.rating.toDouble(),bottomSheetBinding.etComment.text.toString())
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+    private fun addReviewToList(rating: Double, comment: String){
+        adapter.addItem(Review(rating,comment))
     }
 }
