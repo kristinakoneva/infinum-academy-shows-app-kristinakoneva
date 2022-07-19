@@ -9,6 +9,8 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import infinumacademy.showsapp.kristinakoneva.databinding.ActivityLoginBinding
 
+
+
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private val emailLiveData = MutableLiveData<String>()
@@ -24,6 +26,9 @@ class LoginActivity : AppCompatActivity() {
             val email = emailLiveData.value
             this.value = validateLoginForm(email,password)
         }
+    }
+    companion object{
+        const val MIN_CHARS_FOR_PASSWORD = 6
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +70,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun validateLoginForm(email: String?, password: String?) : Boolean{
         val isValidEmail = email!=null && email.isNotBlank() && email.matches("^[a-z][a-z0-9\\.\\_]*@[a-z]+\\.[a-z]+".toRegex())
-        val isValidPassword = password!=null && password.isNotBlank() && password.length>=6
+        val isValidPassword = password!=null && password.isNotBlank() && password.length >= MIN_CHARS_FOR_PASSWORD
 
         setEmailError(isValidEmail)
         setPasswordError(isValidPassword)
