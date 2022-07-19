@@ -58,9 +58,11 @@ class ShowsActivity : AppCompatActivity() {
 
         binding.showsRecycler.adapter = adapter
     }
+
     private fun getUsername(): String? {
         return intent.getStringExtra("USERNAME")
     }
+
     private fun showDetailsAbout(show: Show){
         val intent = ShowDetailsActivity.buildIntent(this)
         intent.putExtra("SHOW",show)

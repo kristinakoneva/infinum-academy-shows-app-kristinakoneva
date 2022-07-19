@@ -43,6 +43,7 @@ class ShowDetailsActivity : AppCompatActivity() {
         initAddReviewButton()
         setReviewsStatus()
     }
+
     private fun getUsername(): String? {
         return intent.getStringExtra("USERNAME")
     }
@@ -105,6 +106,9 @@ class ShowDetailsActivity : AppCompatActivity() {
         bottomSheetBinding.rbRating.setOnRatingBarChangeListener { _, _, _ ->
             bottomSheetBinding.btnSubmitReview.isEnabled = true
         }
+        bottomSheetBinding.btnCloseDialog.setOnClickListener{
+            dialog.dismiss()
+        }
 
         bottomSheetBinding.btnSubmitReview.setOnClickListener {
             addReviewToList(bottomSheetBinding.rbRating.rating.toDouble(),bottomSheetBinding.etComment.text.toString())
@@ -115,12 +119,14 @@ class ShowDetailsActivity : AppCompatActivity() {
 
         dialog.show()
     }
+
     private fun showReviews(){
         binding.reviewsStatus.isVisible = true
         binding.reviewsRecycler.isVisible = true
         binding.ratingStatus.isVisible = true
         binding.noReviews.isVisible = false
     }
+
     private fun addReviewToList(rating: Double, comment: String){
         val username = getUsername()
         adapter.addItem(Review(rating,comment,username))
