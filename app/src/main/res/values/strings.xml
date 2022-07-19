@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Shows-kristina-koneva</string>
+    <string name="title_shows">Shows</string>
+    <string name="login_title">Login</string>
+    <string name="login_required_message">In order to continue please log in.</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="login">Login</string>
+    <string name="welcome_message">Welcome, %s!</string>
+    <string name="invalid_email_error_message">Invalid email address!</string>
+    <string name="invalid_password_error_message">Invalid password!</string>
 </resources>
