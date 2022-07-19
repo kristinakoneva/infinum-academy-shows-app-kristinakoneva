@@ -68,13 +68,20 @@ class LoginActivity : AppCompatActivity() {
         val isValidPassword = password!=null && password.isNotBlank() && password.length>=6
 
         setEmailError(isValidEmail)
+        setPasswordError(isValidPassword)
 
         return isValidEmail && isValidPassword
     }
 
     private fun setEmailError(isValidEmail: Boolean){
         if(!isValidEmail){
-            binding.etEmail.error = "Invalid email address!"
+            binding.etEmail.error = getString(R.string.invalid_email_error_message)
+        }
+    }
+
+    private fun setPasswordError(isValidPassword: Boolean){
+        if(!isValidPassword){
+            binding.etPassword.error = getString(R.string.invalid_password_error_message)
         }
     }
 

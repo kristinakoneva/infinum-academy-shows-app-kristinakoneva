@@ -7,4 +7,6 @@
     <string name="hint_password">Password</string>
     <string name="login">Login</string>
     <string name="welcome_message">Welcome, %s!</string>
+    <string name="invalid_email_error_message">Invalid email address!</string>
+    <string name="invalid_password_error_message">Invalid password!</string>
 </resources>
