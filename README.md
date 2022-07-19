@@ -11,7 +11,7 @@ Further information about the project will be provided when new features are imp
 &nbsp; &nbsp; &nbsp; &nbsp;
 <img src="README_images/login_screen_with_input.png" width="30%" height="30%"/>
 </p>
-The application start with the login screen where the user is required to enter an email and a password to continue. <br /><br />
+The application starts with the login screen where the user is required to enter an email and a password to continue. <br /><br />
 The email and password must be inputted in the correct format, otherwise the LOGIN button is disabled, an error message is displayed and the user cannot continue to the next activity. 
 An example of a correct email format is: example@gmail.com and the password must contain at least 6 characters. <br /> <br />
 A click on the LOGIN button takes the user to the next activity. 
