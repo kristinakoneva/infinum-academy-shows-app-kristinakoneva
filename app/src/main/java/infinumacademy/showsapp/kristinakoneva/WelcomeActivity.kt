@@ -6,7 +6,7 @@ import infinumacademy.showsapp.kristinakoneva.databinding.ActivityLoginBinding
 import infinumacademy.showsapp.kristinakoneva.databinding.ActivityWelcomeBinding
 
 class WelcomeActivity : AppCompatActivity() {
-    lateinit var binding: ActivityWelcomeBinding
+    private lateinit var binding: ActivityWelcomeBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
