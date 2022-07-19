@@ -38,7 +38,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imgPurpleEllipse"
         android:layout_marginTop="30dp"
         android:textSize="17sp"
-        android:textColor="#808080"
+        android:textColor="@color/grey"
         android:textStyle="bold"/>
 
 
