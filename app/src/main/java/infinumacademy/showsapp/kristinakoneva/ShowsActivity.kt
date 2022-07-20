@@ -27,6 +27,8 @@ class ShowsActivity : AppCompatActivity() {
 
 
     companion object{
+        const val USERNAME = "USERNAME"
+        const val SHOW = "SHOW"
         fun buildIntent(activity: Activity): Intent {
             return Intent(activity,ShowsActivity::class.java)
         }
@@ -60,14 +62,14 @@ class ShowsActivity : AppCompatActivity() {
     }
 
     private fun getUsername(): String? {
-        return intent.getStringExtra("USERNAME")
+        return intent.getStringExtra(USERNAME)
     }
 
     private fun showDetailsAbout(show: Show){
         val intent = ShowDetailsActivity.buildIntent(this)
-        intent.putExtra("SHOW",show)
+        intent.putExtra(SHOW,show)
         val username = getUsername()
-        intent.putExtra("USERNAME",username)
+        intent.putExtra(USERNAME,username)
         startActivity(intent)
     }
 }

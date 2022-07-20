@@ -24,6 +24,8 @@ class ShowDetailsActivity : AppCompatActivity() {
     private var reviewsList = listOf<Review>()
 
     companion object{
+        const val USERNAME = "USERNAME"
+        const val SHOW = "SHOW"
         fun buildIntent(activity: Activity): Intent {
             return Intent(activity,ShowDetailsActivity::class.java)
         }
@@ -45,7 +47,7 @@ class ShowDetailsActivity : AppCompatActivity() {
     }
 
     private fun getUsername(): String? {
-        return intent.getStringExtra("USERNAME")
+        return intent.getStringExtra(USERNAME)
     }
 
     private fun getAverageReviewsRating(): Double {
@@ -73,7 +75,7 @@ class ShowDetailsActivity : AppCompatActivity() {
     }
 
     private fun displayShow(){
-        val show = getIntent ().getExtras()?.getParcelable<Show>("SHOW") as Show
+        val show = getIntent ().getExtras()?.getParcelable<Show>(SHOW) as Show
         binding.showName.text = show.name
         binding.showDesc.text = show.description
         binding.showImg.setImageResource(show.imageResourceId)
