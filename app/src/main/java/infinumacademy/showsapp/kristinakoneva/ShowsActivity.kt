@@ -48,7 +48,7 @@ class ShowsActivity : AppCompatActivity() {
 
 
     }
-    
+
     private fun initListeners(){
         binding.btnShowHideEmptyState.setOnClickListener{
             binding.showsEmptyState.isVisible = !binding.showsEmptyState.isVisible

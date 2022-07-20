@@ -39,7 +39,6 @@ class ShowDetailsActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         displayShow()
-        getUsername()
         btnGoBack()
         initReviewsRecycler()
         initAddReviewButton()
