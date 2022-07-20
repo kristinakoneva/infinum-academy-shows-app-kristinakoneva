@@ -3,11 +3,11 @@
     <!--When Button is not enabled -->
     <item android:state_enabled="false" android:color="@color/light_grey" />
     <!--When Button is enabled -->
-    <item android:state_enabled="true" android:color="@color/white" />
+    <item android:state_enabled="true" android:color="@color/purple" />
     <!--When Button is in pressed state -->
-    <item android:state_pressed="true" android:color="@color/white" />
+    <item android:state_pressed="true" android:color="@color/purple" />
     <!--When Button is in selected state -->
-    <item android:state_selected="true" android:color="@color/white" />
+    <item android:state_selected="true" android:color="@color/purple" />
     <!--Default Background Color -->
-    <item android:color="@color/white" />
+    <item android:color="@color/purple" />
 </selector>

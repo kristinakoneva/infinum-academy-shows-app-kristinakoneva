@@ -67,7 +67,7 @@ class ShowDetailsActivity : AppCompatActivity() {
         binding.ratingStatus.rating = String.format("%.2f",averageRating.toFloat()).toFloat()
         binding.reviewsStatus.text = getString(R.string.review_status,numOfReviews,averageRating.toFloat())
     }
-    
+
 
     private fun displayShow(){
         val show = getIntent ().getExtras()?.getParcelable<Show>(SHOW) as Show

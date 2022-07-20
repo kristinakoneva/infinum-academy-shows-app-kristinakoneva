@@ -24,7 +24,7 @@
         app:cornerRadius="21.5dp"
         android:textColor="@color/white"
         android:textSize="14sp"
-        android:backgroundTint="#52368C"
+        android:backgroundTint="@color/purple"
         />
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/showsEmptyState"
@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="@string/shows_empty_state_message"
-            android:textColor="#808080"
+            android:textColor="@color/grey"
             android:textSize="17sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

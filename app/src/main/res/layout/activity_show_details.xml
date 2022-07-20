@@ -22,8 +22,7 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/btnWriteReview"
         app:layout_constraintTop_toBottomOf="@+id/showDetailsToolbar"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_editor_absoluteX="-53dp">
+     >
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -88,7 +87,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#999999"
+                android:textColor="@color/lighter_grey"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/reviewsTitle"
@@ -101,8 +100,8 @@
                 android:layout_height="wrap_content"
                 android:isIndicator="true"
                 android:numStars="5"
-                android:progressTint="#52368C"
-                android:secondaryProgressTint="#00000000"
+                android:progressTint="@color/purple"
+                android:secondaryProgressTint="@color/transparent"
                 android:stepSize="0.1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/reviewsStatus" />
@@ -124,7 +123,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:text="@string/no_reviews_yet"
-                android:textColor="#000000"
+                android:textColor="@color/black"
                 android:textSize="17sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -149,7 +148,7 @@
         android:layout_marginBottom="20dp"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
-        android:backgroundTint="#52368C"
+        android:backgroundTint="@color/purple"
         android:text="@string/write_a_review"
         android:textColor="@color/white"
         android:textStyle="bold"

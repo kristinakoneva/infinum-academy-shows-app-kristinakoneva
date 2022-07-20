@@ -11,4 +11,6 @@
     <color name="light_grey">#BBBBBB</color>
     <color name="purple">#52368C</color>
     <color name="grey">#808080</color>
+    <color name="transparent">#00000000</color>
+    <color name="lighter_grey">#999999</color>
 </resources>
