@@ -1,5 +1,6 @@
 package infinumacademy.showsapp.kristinakoneva
 
+import android.app.ActionBar
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -36,11 +37,18 @@ class ShowDetailsActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         displayShow()
-        btnGoBack()
+        initBackButtonFromToolbar()
         initReviewsRecycler()
         initAddReviewButton()
         setReviewsStatus()
     }
+
+    private fun initBackButtonFromToolbar(){
+        binding.showDetailsToolbar.setNavigationOnClickListener{
+            finish()
+        }
+    }
+
 
     private fun getUsername(): String? {
         return intent.getStringExtra(USERNAME)
@@ -62,12 +70,12 @@ class ShowDetailsActivity : AppCompatActivity() {
     }
 
 
-    private fun btnGoBack(){
-        binding.btnGoBack.setOnClickListener{
-            val intent = ShowsActivity.buildIntent(this)
-            startActivity(intent)
-        }
-    }
+//    private fun btnGoBack(){
+//        binding.btnGoBack.setOnClickListener{
+//            val intent = ShowsActivity.buildIntent(this)
+//            startActivity(intent)
+//        }
+//    }
 
     private fun displayShow(){
         val show = getIntent ().getExtras()?.getParcelable<Show>(SHOW) as Show
