@@ -33,14 +33,18 @@ class ReviewsAdapter (
 
     inner class ShowDetailsViewHolder(private val binding: ViewReviewItemBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(item: Review){
-            binding.reviewRating.text = item.rating.toString()
-            if(item.reviewer==null){
-                binding.reviewUsername.text = "username"
+
+            with(binding){
+                reviewRating.text = item.rating.toString()
+                if(item.reviewer==null){
+                    reviewUsername.text = "username"
+                }
+                else{
+                    reviewUsername.text = item.reviewer
+                }
+                reviewComment.text = item.comment
             }
-            else{
-                binding.reviewUsername.text = item.reviewer
-            }
-            binding.reviewComment.text = item.comment
+
         }
     }
 }
