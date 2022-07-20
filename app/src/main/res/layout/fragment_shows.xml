@@ -5,6 +5,19 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
+    <Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageButton
+            android:id="@+id/btnLogout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_logout_button"
+            android:layout_gravity="end"
+            android:layout_marginEnd="30dp"
+            android:backgroundTint="@color/white"
+            />
+    </Toolbar>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -12,7 +25,7 @@
         android:textColor="@color/black"
         android:textStyle="bold"
         android:textSize="36sp"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="30dp"
         android:layout_marginStart="23dp"
         />
     <com.google.android.material.button.MaterialButton
@@ -66,7 +79,6 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:id="@+id/showsRecycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

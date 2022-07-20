@@ -52,13 +52,17 @@ class ShowsFragment : Fragment() {
             binding.showsEmptyState.isVisible = !binding.showsEmptyState.isVisible
             binding.showsRecycler.isVisible = !binding.showsRecycler.isVisible
         }
+
+        binding.btnLogout.setOnClickListener{
+            findNavController().navigate(R.id.toLoginFragment)
+        }
     }
     private fun initShowsRecycler(){
         adapter = ShowsAdapter(showsList){ show ->
             showDetailsAbout(show)
         }
 
-        //binding.showsRecycler.layoutManager = LinearLayoutManager()
+        binding.showsRecycler.layoutManager = LinearLayoutManager(requireContext())
 
         binding.showsRecycler.adapter = adapter
     }

@@ -10,11 +10,14 @@
         android:id="@+id/loginFragment"
         android:name="infinumacademy.showsapp.kristinakoneva.LoginFragment"
         android:label="LoginFragment"
-        tools:layout="@layout/fragment_login">
+        tools:layout="@layout/fragment_login"
+        >
 
         <action
             android:id="@+id/toShowsFragment"
-            app:destination="@id/showsFragment" />
+            app:destination="@id/showsFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
     <fragment
         android:id="@+id/showsFragment"
@@ -27,6 +30,9 @@
         <action
             android:id="@+id/toShowDetailsFragment"
             app:destination="@id/showDetailsFragment" />
+        <action
+            android:id="@+id/toLoginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/showDetailsFragment"
