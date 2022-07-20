@@ -121,9 +121,7 @@ class ShowDetailsActivity : AppCompatActivity() {
     }
 
     private fun showReviews(){
-        binding.reviewsStatus.isVisible = true
-        binding.reviewsRecycler.isVisible = true
-        binding.ratingStatus.isVisible = true
+        binding.groupShowReviews.isVisible = true
         binding.noReviews.isVisible = false
     }
 

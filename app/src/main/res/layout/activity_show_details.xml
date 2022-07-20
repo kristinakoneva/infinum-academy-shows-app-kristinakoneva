@@ -28,110 +28,134 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/btnWriteReview"
-        app:layout_constraintTop_toBottomOf="@+id/showDetailsToolbar">
+        app:layout_constraintTop_toBottomOf="@+id/showDetailsToolbar"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="-53dp">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="70dp"
-            android:orientation="vertical"
 
-            >
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/showName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
                 android:textColor="@color/black"
                 android:textSize="36sp"
                 android:textStyle="bold"
-                tools:text="Show Name" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Show Name"
+                android:layout_marginStart="24dp"/>
 
             <ImageView
                 android:id="@+id/showImg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="24dp"
                 android:src="@drawable/ic_office"
-                />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/showName" />
 
             <TextView
                 android:id="@+id/showDesc"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="24dp"
                 android:textColor="@color/black"
+                android:layout_marginTop="20dp"
                 android:textSize="17sp"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/showImg"
                 tools:text="Lorem ipsum dolor sit amet. Sit voluptatibus vitae qui quis minus non dignissimos autem! Qui cupiditate tempore rem perspiciatis
                 galisum et quia nihil rem consequatur quia aut quia saepe." />
 
             <TextView
+                android:id="@+id/reviewsTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginEnd="24dp"
+                android:layout_marginTop="20dp"
                 android:text="@string/reviews"
                 android:textColor="@color/black"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_marginStart="24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/showDesc" />
 
             <TextView
+                android:layout_marginStart="24dp"
                 android:id="@+id/reviewsStatus"
+                android:layout_marginTop="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
                 android:textColor="#999999"
                 android:textSize="14sp"
-                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/reviewsTitle"
                 tools:text="review status" />
 
             <RatingBar
+                android:layout_marginStart="24dp"
                 android:id="@+id/ratingStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
                 android:isIndicator="true"
                 android:numStars="5"
                 android:progressTint="#52368C"
-                android:stepSize="0.1"
                 android:secondaryProgressTint="#00000000"
-                android:visibility="gone" />
+                android:stepSize="0.1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/reviewsStatus" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/reviewsRecycler"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:visibility="gone"
-                tools:listitem="@layout/view_review_item">
+                tools:listitem="@layout/view_review_item"
+                app:layout_constraintTop_toBottomOf="@+id/ratingStatus"
+                app:layout_constraintStart_toStartOf="parent">
 
             </androidx.recyclerview.widget.RecyclerView>
 
             <TextView
                 android:id="@+id/noReviews"
+                android:layout_marginTop="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:text="@string/no_reviews_yet"
                 android:textColor="#000000"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/reviewsTitle"
+                android:visibility="visible"/>
 
-        </LinearLayout>
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/groupShowReviews"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:constraint_referenced_ids="reviewsStatus,reviewsRecycler,ratingStatus" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnWriteReview"
-        android:layout_width="342dp"
-        android:layout_height="44dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginBottom="20dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
         android:backgroundTint="#52368C"
         android:text="@string/write_a_review"
         android:textColor="@color/white"
