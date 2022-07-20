@@ -1,13 +1,10 @@
 package infinumacademy.showsapp.kristinakoneva
 
-import android.R
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,7 +17,7 @@ import model.Show
 
 class ShowDetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityShowDetailsBinding
-    private lateinit var adapter: ShowDetailsAdapter
+    private lateinit var adapter: ReviewsAdapter
     private var reviewsList = listOf<Review>()
 
     companion object{
@@ -80,7 +77,7 @@ class ShowDetailsActivity : AppCompatActivity() {
     }
 
     private fun initReviewsRecycler(){
-        adapter = ShowDetailsAdapter(reviewsList)
+        adapter = ReviewsAdapter(reviewsList)
 
         binding.reviewsRecycler.layoutManager = LinearLayoutManager(this,
             LinearLayoutManager.VERTICAL,false)

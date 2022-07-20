@@ -4,15 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import infinumacademy.showsapp.kristinakoneva.databinding.ViewReviewItemBinding
-import infinumacademy.showsapp.kristinakoneva.databinding.ViewShowItemBinding
 import model.Review
-import model.Show
 
-class ShowDetailsAdapter (
+class ReviewsAdapter (
 
     private var items: List<Review>
 
-): RecyclerView.Adapter<ShowDetailsAdapter.ShowDetailsViewHolder>()
+): RecyclerView.Adapter<ReviewsAdapter.ShowDetailsViewHolder>()
 {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShowDetailsViewHolder {
