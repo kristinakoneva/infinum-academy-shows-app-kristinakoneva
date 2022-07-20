@@ -68,7 +68,7 @@ class LoginFragment : Fragment() {
     private fun initListeners(){
         binding.btnLogin.setOnClickListener{
             val username = extractUsername()
-            val directions = LoginFragmentDirections.toShowsFragment(username)
+            val directions = LoginFragmentDirections.toShowsNavGraph(username)
             findNavController().navigate(directions)
         }
     }
