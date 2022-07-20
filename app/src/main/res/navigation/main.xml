@@ -25,12 +25,19 @@
             android:name="username"
             app:argType="string"/>
         <action
-            android:id="@+id/toShowsFragment"
+            android:id="@+id/toShowDetailsFragment"
             app:destination="@id/showDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/showDetailsFragment"
         android:name="infinumacademy.showsapp.kristinakoneva.ShowDetailsFragment"
         android:label="ShowDetailsFragment"
-        tools:layout="@layout/fragment_show_details"/>
+        tools:layout="@layout/fragment_show_details">
+        <argument
+            android:name="username"
+            app:argType="string"/>
+        <argument
+            android:name="show"
+            app:argType="model.Show"/>
+    </fragment>
 </navigation>
