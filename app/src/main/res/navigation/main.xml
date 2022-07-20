@@ -11,6 +11,7 @@
         android:name="infinumacademy.showsapp.kristinakoneva.LoginFragment"
         android:label="LoginFragment"
         tools:layout="@layout/fragment_login">
+
         <action
             android:id="@+id/toShowsFragment"
             app:destination="@id/showsFragment" />
@@ -20,6 +21,9 @@
         android:name="infinumacademy.showsapp.kristinakoneva.ShowsFragment"
         android:label="ShowsFragment"
         tools:layout="@layout/fragment_shows">
+        <argument
+            android:name="username"
+            app:argType="string"/>
         <action
             android:id="@+id/toShowsFragment"
             app:destination="@id/showDetailsFragment" />
