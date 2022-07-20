@@ -39,5 +39,6 @@
         <argument
             android:name="show"
             app:argType="model.Show"/>
+
     </fragment>
 </navigation>
