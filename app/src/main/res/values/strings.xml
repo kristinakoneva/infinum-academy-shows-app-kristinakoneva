@@ -20,4 +20,5 @@
     <string name="shows_empty_state_message">Your shows are not showing. Get it?</string>
     <string name="invalid_email_error_message">Invalid email address!</string>
     <string name="invalid_password_error_message">Invalid password!</string>
+    <string name="review_status">%d REVIEWS, %.2f AVERAGE</string>
 </resources>

@@ -62,8 +62,7 @@ class ShowDetailsActivity : AppCompatActivity() {
         val numOfReviews = reviewsList.count()
         val averageRating = getAverageReviewsRating()
         binding.ratingStatus.rating = String.format("%.2f",averageRating.toFloat()).toFloat()
-        binding.reviewsStatus.text =  String.format("%d REVIEWS, %.2f AVERAGE",numOfReviews,averageRating.toFloat())
-
+        binding.reviewsStatus.text = getString(infinumacademy.showsapp.kristinakoneva.R.string.review_status,numOfReviews,averageRating.toFloat())
     }
 
 
