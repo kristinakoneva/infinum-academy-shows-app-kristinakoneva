@@ -12,6 +12,10 @@ class ShowsAdapter (
         ): RecyclerView.Adapter<ShowsAdapter.ShowsViewHolder>()
 {
 
+   fun addAllItems(shows: List<Show>){
+        items = shows
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShowsViewHolder {
         val binding = ViewShowItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)

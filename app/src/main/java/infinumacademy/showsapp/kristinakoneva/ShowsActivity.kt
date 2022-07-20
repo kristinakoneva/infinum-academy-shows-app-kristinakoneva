@@ -21,6 +21,7 @@ class ShowsActivity : AppCompatActivity() {
         Show(2,"Krv nije voda","Lorem ipsum dolor sit amet. Sit voluptatibus vitae qui quis minus non dignissimos autem! " +
                 "Qui cupiditate tempore rem perspiciatis galisum et quia nihil rem consequatur quia aut quia saepe.",R.drawable.ic_krv_nije_voda)
     )
+    private var showEmptyState = true
 
     private lateinit var binding: ActivityShowsBinding
     private lateinit var adapter: ShowsAdapter
@@ -45,21 +46,36 @@ class ShowsActivity : AppCompatActivity() {
 
         initListeners()
 
-
-
     }
 
     private fun initListeners(){
         binding.btnShowHideEmptyState.setOnClickListener{
-            binding.showsEmptyState.isVisible = !binding.showsEmptyState.isVisible
-            binding.showsRecycler.isVisible = !binding.showsRecycler.isVisible
+            if(showEmptyState){
+                showEmptyState = false
+                showShows()
+            }else{
+                showEmptyState = true
+                hideShows()
+            }
+            resetVisibility()
         }
     }
 
+    private fun resetVisibility(){
+        binding.showsEmptyState.isVisible = !binding.showsEmptyState.isVisible
+        binding.showsRecycler.isVisible = !binding.showsRecycler.isVisible
+    }
 
+    private fun showShows(){
+        adapter.addAllItems(showsList)
+    }
+    private fun hideShows(){
+        adapter.addAllItems(emptyList())
+    }
+    
     private fun initShowsRecycler(){
 
-        adapter = ShowsAdapter(showsList){ show ->
+        adapter = ShowsAdapter(emptyList()){ show ->
             showDetailsAbout(show)
         }
 
