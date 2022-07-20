@@ -26,6 +26,10 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    companion object{
+        const val MIN_CHARS_FOR_PASSWORD = 6
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -65,16 +69,23 @@ class LoginActivity : AppCompatActivity() {
 
     private fun validateLoginForm(email: String?, password: String?) : Boolean{
         val isValidEmail = email!=null && email.isNotBlank() && email.matches("^[a-z][a-z0-9\\.\\_]*@[a-z]+\\.[a-z]+".toRegex())
-        val isValidPassword = password!=null && password.isNotBlank() && password.length>=6
+        val isValidPassword = password!=null && password.isNotBlank() && password.length >= MIN_CHARS_FOR_PASSWORD
 
         setEmailError(isValidEmail)
+        setPasswordError(isValidPassword)
 
         return isValidEmail && isValidPassword
     }
 
     private fun setEmailError(isValidEmail: Boolean){
         if(!isValidEmail){
-            binding.etEmail.error = "Invalid email address!"
+            binding.etEmail.error = getString(R.string.invalid_email_error_message)
+        }
+    }
+
+    private fun setPasswordError(isValidPassword: Boolean){
+        if(!isValidPassword){
+            binding.etPassword.error = getString(R.string.invalid_password_error_message)
         }
     }
 
