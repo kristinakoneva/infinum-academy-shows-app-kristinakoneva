@@ -19,7 +19,6 @@ import model.Show
 class ShowDetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityShowDetailsBinding
     private lateinit var adapter: ReviewsAdapter
-    private var reviewsList = listOf<Review>()
 
     companion object{
         const val USERNAME = "USERNAME"
@@ -56,26 +55,19 @@ class ShowDetailsActivity : AppCompatActivity() {
 
     private fun getAverageReviewsRating(): Double {
         var total=0.0
-        for(review in reviewsList){
+        for(review in adapter.getAllItems()){
             total+=review.rating
         }
-        return total/reviewsList.count().toDouble()
+        return total/adapter.getAllItems().count().toDouble()
     }
 
     private fun setReviewsStatus(){
-        val numOfReviews = reviewsList.count()
+        val numOfReviews = adapter.getAllItems().count()
         val averageRating = getAverageReviewsRating()
         binding.ratingStatus.rating = String.format("%.2f",averageRating.toFloat()).toFloat()
-        binding.reviewsStatus.text = getString(infinumacademy.showsapp.kristinakoneva.R.string.review_status,numOfReviews,averageRating.toFloat())
+        binding.reviewsStatus.text = getString(R.string.review_status,numOfReviews,averageRating.toFloat())
     }
-
-
-//    private fun btnGoBack(){
-//        binding.btnGoBack.setOnClickListener{
-//            val intent = ShowsActivity.buildIntent(this)
-//            startActivity(intent)
-//        }
-//    }
+    
 
     private fun displayShow(){
         val show = getIntent ().getExtras()?.getParcelable<Show>(SHOW) as Show
@@ -85,7 +77,7 @@ class ShowDetailsActivity : AppCompatActivity() {
     }
 
     private fun initReviewsRecycler(){
-        adapter = ReviewsAdapter(reviewsList)
+        adapter = ReviewsAdapter(emptyList())
 
         binding.reviewsRecycler.layoutManager = LinearLayoutManager(this,
             LinearLayoutManager.VERTICAL,false)
@@ -133,7 +125,6 @@ class ShowDetailsActivity : AppCompatActivity() {
     private fun addReviewToList(rating: Double, comment: String){
         val username = getUsername()
         adapter.addItem(Review(rating,comment,username))
-        reviewsList = reviewsList + Review(rating,comment,username)
         setReviewsStatus()
     }
 }

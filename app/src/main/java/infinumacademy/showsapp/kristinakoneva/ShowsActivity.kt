@@ -72,7 +72,7 @@ class ShowsActivity : AppCompatActivity() {
     private fun hideShows(){
         adapter.addAllItems(emptyList())
     }
-    
+
     private fun initShowsRecycler(){
 
         adapter = ShowsAdapter(emptyList()){ show ->

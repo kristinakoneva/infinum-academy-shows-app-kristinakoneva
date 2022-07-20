@@ -13,6 +13,9 @@ class ReviewsAdapter (
 ): RecyclerView.Adapter<ReviewsAdapter.ShowDetailsViewHolder>()
 {
 
+    fun getAllItems(): List<Review>{
+        return items
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShowDetailsViewHolder {
         val binding = ViewReviewItemBinding.inflate(LayoutInflater.from(parent.context))
         return ShowDetailsViewHolder(binding)
