@@ -43,12 +43,19 @@ class ShowsActivity : AppCompatActivity() {
 
         initShowsRecycler()
 
+        initListeners()
+
+
+
+    }
+    
+    private fun initListeners(){
         binding.btnShowHideEmptyState.setOnClickListener{
             binding.showsEmptyState.isVisible = !binding.showsEmptyState.isVisible
             binding.showsRecycler.isVisible = !binding.showsRecycler.isVisible
         }
-
     }
+
 
     private fun initShowsRecycler(){
 
