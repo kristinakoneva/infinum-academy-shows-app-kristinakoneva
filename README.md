@@ -19,14 +19,14 @@ A click on the LOGIN button takes the user to the next screen - the shows screen
 
 ## Shows Screen
 <p align="left">
-<img src="README_images/shows_screen_empty_state.png" width="30%" height="30%"/>
-&nbsp; &nbsp; &nbsp; &nbsp;
 <img src="README_images/shows_screen.png" width="30%" height="30%"/>
+&nbsp; &nbsp; &nbsp; &nbsp;
+<img src="README_images/shows_screen_empty_state.png" width="30%" height="30%"/>
 </p>
-The first image shows the empty state screen and once the SHOW/HIDE EMPTY STATE button is clicked, 
-the shows are displayed on the screen as seen on the second image. 
+This is the Shows screen where a list of shows is displayed as seen in the first image. <br /> <br />
 When the user clicks on the SHOW/HIDE EMPTY STATE button several times, 
-depending on the previous state, the shows empty state will be shown/hidden accordingly. <br /> <br />
+depending on the previous state, the shows empty state will be shown/hidden accordingly. 
+The design of the empty state screen is shown in the second image <br /> <br />
 On the top right corner there is a logout button which when clicked, takes the user back to the login screen and requires him to login again. <br /> <br />
 If the user click on a show card, a new screen is shown where details about that particular show are displayed.
 
