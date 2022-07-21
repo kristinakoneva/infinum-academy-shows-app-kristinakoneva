@@ -42,7 +42,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/showsEmptyState"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/imageView"
@@ -84,7 +85,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="20dp"
         tools:listitem="@layout/view_show_item"
-        android:visibility="gone"
+        android:visibility="visible"
         />
 
 </LinearLayout>

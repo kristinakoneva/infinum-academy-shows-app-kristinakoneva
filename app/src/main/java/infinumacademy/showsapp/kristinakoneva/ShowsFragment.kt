@@ -22,7 +22,8 @@ class ShowsFragment : Fragment() {
 
     private lateinit var adapter: ShowsAdapter
 
-    private var showEmptyState = true
+    private var showEmptyState = false
+
 
 
     private val showsList = listOf(
@@ -45,18 +46,20 @@ class ShowsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        showEmptyState = false
         initShowsRecycler()
+        showShows()
         initListeners()
     }
 
+
     private fun initListeners(){
         binding.btnShowHideEmptyState.setOnClickListener{
+            showEmptyState = !showEmptyState
             if(showEmptyState){
-                showEmptyState = false
-                showShows()
-            }else{
-                showEmptyState = true
                 hideShows()
+            }else{
+                showShows()
             }
             resetVisibility()
         }
@@ -67,8 +70,8 @@ class ShowsFragment : Fragment() {
     }
 
     private fun resetVisibility(){
-        binding.showsEmptyState.isVisible = !binding.showsEmptyState.isVisible
-        binding.showsRecycler.isVisible = !binding.showsRecycler.isVisible
+       binding.showsEmptyState.isVisible = !binding.showsEmptyState.isVisible
+       binding.showsRecycler.isVisible = !binding.showsRecycler.isVisible
     }
 
     private fun showShows(){
