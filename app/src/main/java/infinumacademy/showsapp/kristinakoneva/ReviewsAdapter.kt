@@ -14,7 +14,7 @@ class ReviewsAdapter (
 {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShowDetailsViewHolder {
-        val binding = ViewReviewItemBinding.inflate(LayoutInflater.from(parent.context))
+        val binding = ViewReviewItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return ShowDetailsViewHolder(binding)
     }
 
