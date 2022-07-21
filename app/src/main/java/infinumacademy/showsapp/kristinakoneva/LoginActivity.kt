@@ -9,6 +9,8 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import infinumacademy.showsapp.kristinakoneva.databinding.ActivityLoginBinding
 
+
+
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private val emailLiveData = MutableLiveData<String>()
@@ -25,10 +27,10 @@ class LoginActivity : AppCompatActivity() {
             this.value = validateLoginForm(email,password)
         }
     }
-
     companion object{
         const val MIN_CHARS_FOR_PASSWORD = 6
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
