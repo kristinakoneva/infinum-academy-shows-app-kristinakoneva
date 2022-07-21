@@ -22,6 +22,8 @@ class ShowsFragment : Fragment() {
 
     private lateinit var adapter: ShowsAdapter
 
+    private var showEmptyState = true
+
 
     private val showsList = listOf(
         Show(0,"The Office","The Office is an American mockumentary sitcom television series that depicts " +
@@ -49,16 +51,35 @@ class ShowsFragment : Fragment() {
 
     private fun initListeners(){
         binding.btnShowHideEmptyState.setOnClickListener{
-            binding.showsEmptyState.isVisible = !binding.showsEmptyState.isVisible
-            binding.showsRecycler.isVisible = !binding.showsRecycler.isVisible
+            if(showEmptyState){
+                showEmptyState = false
+                showShows()
+            }else{
+                showEmptyState = true
+                hideShows()
+            }
+            resetVisibility()
         }
 
         binding.btnLogout.setOnClickListener{
             findNavController().navigate(R.id.toLoginFragment)
         }
     }
+
+    private fun resetVisibility(){
+        binding.showsEmptyState.isVisible = !binding.showsEmptyState.isVisible
+        binding.showsRecycler.isVisible = !binding.showsRecycler.isVisible
+    }
+
+    private fun showShows(){
+        adapter.addAllItems(showsList)
+    }
+    private fun hideShows(){
+        adapter.addAllItems(emptyList())
+    }
+
     private fun initShowsRecycler(){
-        adapter = ShowsAdapter(showsList){ show ->
+        adapter = ShowsAdapter(emptyList()){ show ->
             showDetailsAbout(show)
         }
 

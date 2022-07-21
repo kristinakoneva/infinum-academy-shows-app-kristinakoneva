@@ -14,7 +14,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import infinumacademy.showsapp.kristinakoneva.databinding.DialogAddReviewBinding
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentShowDetailsBinding
 import model.Review
-import model.Show
 
 
 class ShowDetailsFragment : Fragment(){
@@ -23,8 +22,8 @@ class ShowDetailsFragment : Fragment(){
 
     private val binding get() = _binding!!
 
-    private lateinit var adapter: ShowDetailsAdapter
-    private var reviewsList = listOf<Review>()
+    private lateinit var adapter: ReviewsAdapter
+
     private val args by navArgs<ShowDetailsFragmentArgs>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -36,7 +35,7 @@ class ShowDetailsFragment : Fragment(){
         super.onViewCreated(view, savedInstanceState)
 
         displayShow()
-        btnGoBack()
+        initBackButtonFromToolbar()
         initReviewsRecycler()
         initAddReviewButton()
         setReviewsStatus()
@@ -45,24 +44,23 @@ class ShowDetailsFragment : Fragment(){
 
     private fun getAverageReviewsRating(): Double {
         var total=0.0
-        for(review in reviewsList){
+        for(review in adapter.getAllItems()){
             total+=review.rating
         }
-        return total/reviewsList.count().toDouble()
+        return total/adapter.getAllItems().count().toDouble()
     }
 
     private fun setReviewsStatus(){
-        val numOfReviews = reviewsList.count()
+        val numOfReviews = adapter.getAllItems().count()
         val averageRating = getAverageReviewsRating()
         binding.ratingStatus.rating = String.format("%.2f",averageRating.toFloat()).toFloat()
-        binding.reviewsStatus.text =  String.format("%d REVIEWS, %.2f AVERAGE",numOfReviews,averageRating.toFloat())
+        binding.reviewsStatus.text = getString(R.string.review_status,numOfReviews,averageRating.toFloat())
 
     }
 
-
-    private fun btnGoBack(){
-        binding.btnGoBack.setOnClickListener{
-            findNavController().popBackStack()
+    private fun initBackButtonFromToolbar(){
+        binding.showDetailsToolbar.setNavigationOnClickListener{
+            finish()
         }
     }
 
@@ -74,7 +72,7 @@ class ShowDetailsFragment : Fragment(){
     }
 
     private fun initReviewsRecycler(){
-        adapter = ShowDetailsAdapter(reviewsList)
+        adapter = ReviewsAdapter(emptyList())
 
         binding.reviewsRecycler.layoutManager = LinearLayoutManager(requireContext(),
             LinearLayoutManager.VERTICAL,false)
@@ -115,16 +113,13 @@ class ShowDetailsFragment : Fragment(){
     }
 
     private fun showReviews(){
-        binding.reviewsStatus.isVisible = true
-        binding.reviewsRecycler.isVisible = true
-        binding.ratingStatus.isVisible = true
+        binding.groupShowReviews.isVisible = true
         binding.noReviews.isVisible = false
     }
 
     private fun addReviewToList(rating: Double, comment: String){
         val username = args.username
         adapter.addItem(Review(rating,comment,username))
-        reviewsList = reviewsList + Review(rating,comment,username)
         setReviewsStatus()
     }
 
