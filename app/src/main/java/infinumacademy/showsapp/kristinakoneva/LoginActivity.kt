@@ -31,7 +31,6 @@ class LoginActivity : AppCompatActivity() {
         const val MIN_CHARS_FOR_PASSWORD = 6
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
