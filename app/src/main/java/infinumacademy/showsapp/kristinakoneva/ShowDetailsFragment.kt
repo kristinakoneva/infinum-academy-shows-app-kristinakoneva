@@ -60,7 +60,7 @@ class ShowDetailsFragment : Fragment(){
 
     private fun initBackButtonFromToolbar(){
         binding.showDetailsToolbar.setNavigationOnClickListener{
-            finish()
+            findNavController().popBackStack()
         }
     }
 
