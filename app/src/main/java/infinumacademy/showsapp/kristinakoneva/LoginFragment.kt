@@ -10,7 +10,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentLoginBinding
-import infinumacademy.showsapp.kristinakoneva.databinding.FragmentShowDetailsBinding
+
 
 
 class LoginFragment : Fragment() {
