@@ -20,7 +20,9 @@
         app:destination="@id/showDetailsFragment" />
     <action
         android:id="@+id/toLoginFragment"
-        app:destination="@id/main" />
+        app:destination="@id/main"
+        app:popUpTo="@id/main"
+        app:popUpToInclusive="true"/>
 </fragment>
 <fragment
     android:id="@+id/showDetailsFragment"
