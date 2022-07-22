@@ -104,9 +104,9 @@ class ShowDetailsFragment : Fragment(){
 
         bottomSheetBinding.btnSubmitReview.setOnClickListener {
             addReviewToList(bottomSheetBinding.rbRating.rating.toDouble(),bottomSheetBinding.etComment.text.toString())
-            dialog.dismiss()
             showReviews()
             setReviewsStatus()
+            dialog.dismiss()
         }
 
         dialog.show()
