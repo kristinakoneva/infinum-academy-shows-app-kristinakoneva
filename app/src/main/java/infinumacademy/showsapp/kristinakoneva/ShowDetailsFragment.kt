@@ -36,7 +36,7 @@ class ShowDetailsFragment : Fragment() {
 
 
         viewModel.showReviews(binding)
-        viewModel.displayShow(binding,args.show)
+        viewModel.displayShow(binding, args.show)
         initBackButtonFromToolbar()
         initReviewsRecycler()
         initAddReviewButton()
@@ -47,9 +47,9 @@ class ShowDetailsFragment : Fragment() {
     // but I cannot find a way to get this kind of formatted string inside the view model class:
     // getString(R.string.review_status, numOfReviews, averageRating.toFloat())
     private fun setReviewsStatus() {
-        val numOfReviews =  viewModel.reviewsListLiveData.value?.size
+        val numOfReviews = viewModel.reviewsListLiveData.value?.size
         val averageRating = viewModel.getAverageReviewsRating()
-        viewModel.setReviewsStatus(binding,getString(R.string.review_status, numOfReviews, averageRating.toFloat()))
+        viewModel.setReviewsStatus(binding, getString(R.string.review_status, numOfReviews, averageRating.toFloat()))
     }
 
     private fun initBackButtonFromToolbar() {
@@ -58,9 +58,8 @@ class ShowDetailsFragment : Fragment() {
         }
     }
 
-
-    private fun populateRecyclerView(){
-        viewModel.reviewsListLiveData.observe(viewLifecycleOwner){reviewsList->
+    private fun populateRecyclerView() {
+        viewModel.reviewsListLiveData.observe(viewLifecycleOwner) { reviewsList ->
             adapter.addAllItems(reviewsList)
         }
     }
@@ -81,7 +80,6 @@ class ShowDetailsFragment : Fragment() {
             DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
         )
     }
-
 
     private fun initAddReviewButton() {
         binding.btnWriteReview.setOnClickListener {
@@ -113,14 +111,12 @@ class ShowDetailsFragment : Fragment() {
         dialog.show()
     }
 
-
     private fun addReviewToList(rating: Double, comment: String) {
         val username = args.username
-        viewModel.addReviewToList(rating,comment,username)
+        viewModel.addReviewToList(rating, comment, username)
         populateRecyclerView()
         setReviewsStatus()
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -1,7 +1,5 @@
 package infinumacademy.showsapp.kristinakoneva
 
-
-
 import android.content.res.Resources
 import androidx.core.view.isVisible
 import androidx.lifecycle.LiveData
@@ -11,7 +9,7 @@ import infinumacademy.showsapp.kristinakoneva.databinding.FragmentShowDetailsBin
 import model.Review
 import model.Show
 
-class ShowDetailsViewModel: ViewModel() {
+class ShowDetailsViewModel : ViewModel() {
     private val _showLiveData = MutableLiveData<Show>()
     val showLiveData: LiveData<Show> = _showLiveData
 
@@ -21,12 +19,12 @@ class ShowDetailsViewModel: ViewModel() {
     private val _showReviewsLiveData = MutableLiveData(reviewsListLiveData.value!!.isNotEmpty())
     val showReviewsLiveData: LiveData<Boolean> = _showReviewsLiveData
 
-    fun addReviewToList(rating: Double, comment: String, username: String){
-        val review = Review(rating,comment,username)
+    fun addReviewToList(rating: Double, comment: String, username: String) {
+        val review = Review(rating, comment, username)
         _reviewsListLiveData.value = _reviewsListLiveData.value?.plus(review)
     }
 
-    fun getAverageReviewsRating(): Double{
+    fun getAverageReviewsRating(): Double {
         var total = 0.0
         for (review in _reviewsListLiveData.value!!) {
             total += review.rating
@@ -40,21 +38,19 @@ class ShowDetailsViewModel: ViewModel() {
         binding.noReviews.isVisible = !_showReviewsLiveData.value!!
     }
 
-    fun displayShow(binding: FragmentShowDetailsBinding, show: Show){
+    fun displayShow(binding: FragmentShowDetailsBinding, show: Show) {
         binding.showName.text = show.name
         binding.showDesc.text = show.description
         binding.showImg.setImageResource(show.imageResourceId)
     }
 
-    fun setReviewsStatus(binding: FragmentShowDetailsBinding, reviewStatus: String){
-        if(_reviewsListLiveData.value!!.isNotEmpty()){
+    fun setReviewsStatus(binding: FragmentShowDetailsBinding, reviewStatus: String) {
+        if (_reviewsListLiveData.value!!.isNotEmpty()) {
             binding.ratingStatus.rating = String.format("%.2f", getAverageReviewsRating().toFloat()).toFloat()
             binding.reviewsStatus.text = reviewStatus
             //binding.reviewsStatus.text = Resources.getSystem().getString(R.string.review_status,_reviewsListLiveData.value?.size,getAverageReviewsRating().toFloat())
         }
     }
-
-
 
 
 }

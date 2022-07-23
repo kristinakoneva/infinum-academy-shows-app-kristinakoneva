@@ -39,7 +39,7 @@ class ShowsFragment : Fragment() {
 
     private fun initListeners() {
         binding.btnShowHideEmptyState.setOnClickListener {
-            viewModel.showEmptyStateLiveData.observe(viewLifecycleOwner){showEmptyState->
+            viewModel.showEmptyStateLiveData.observe(viewLifecycleOwner) { showEmptyState ->
                 if (showEmptyState) {
                     hideShows()
                 } else {
@@ -55,9 +55,8 @@ class ShowsFragment : Fragment() {
         }
     }
 
-
     private fun showShows() {
-        viewModel.showsListLiveData.observe(viewLifecycleOwner){ showsList ->
+        viewModel.showsListLiveData.observe(viewLifecycleOwner) { showsList ->
             adapter.addAllItems(showsList)
         }
     }
