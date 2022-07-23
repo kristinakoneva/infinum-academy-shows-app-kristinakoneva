@@ -35,8 +35,8 @@ class ShowDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        showReviews()
-        displayShow()
+        viewModel.showReviews(binding)
+        viewModel.displayShow(binding,args.show)
         initBackButtonFromToolbar()
         initReviewsRecycler()
         initAddReviewButton()
@@ -56,9 +56,6 @@ class ShowDetailsFragment : Fragment() {
         }
     }
 
-    private fun displayShow() {
-        viewModel.displayShow(binding,args.show)
-    }
 
     private fun populateRecyclerView(){
         viewModel.reviewsListLiveData.observe(viewLifecycleOwner){reviewsList->
@@ -106,7 +103,7 @@ class ShowDetailsFragment : Fragment() {
 
         bottomSheetBinding.btnSubmitReview.setOnClickListener {
             addReviewToList(bottomSheetBinding.rbRating.rating.toDouble(), bottomSheetBinding.etComment.text.toString())
-            showReviews()
+            viewModel.showReviews(binding)
             setReviewsStatus()
             dialog.dismiss()
         }
@@ -114,9 +111,6 @@ class ShowDetailsFragment : Fragment() {
         dialog.show()
     }
 
-    private fun showReviews() {
-        viewModel.showReviews(binding)
-    }
 
     private fun addReviewToList(rating: Double, comment: String) {
         val username = args.username

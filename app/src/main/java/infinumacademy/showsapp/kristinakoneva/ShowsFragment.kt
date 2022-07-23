@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -46,7 +45,7 @@ class ShowsFragment : Fragment() {
                 } else {
                     showShows()
                 }
-                resetVisibility()
+                viewModel.resetVisibility(binding)
             }
 
         }
@@ -56,10 +55,6 @@ class ShowsFragment : Fragment() {
         }
     }
 
-    private fun resetVisibility() {
-        binding.showsEmptyState.isVisible = !binding.showsEmptyState.isVisible
-        binding.showsRecycler.isVisible = !binding.showsRecycler.isVisible
-    }
 
     private fun showShows() {
         viewModel.showsListLiveData.observe(viewLifecycleOwner){ showsList ->
