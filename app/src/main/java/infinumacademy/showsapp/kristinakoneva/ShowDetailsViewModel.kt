@@ -46,6 +46,14 @@ class ShowDetailsViewModel: ViewModel() {
         binding.showImg.setImageResource(show.imageResourceId)
     }
 
+    fun setReviewsStatus(binding: FragmentShowDetailsBinding, reviewStatus: String){
+        if(_reviewsListLiveData.value!!.isNotEmpty()){
+            binding.ratingStatus.rating = String.format("%.2f", getAverageReviewsRating().toFloat()).toFloat()
+            binding.reviewsStatus.text = reviewStatus
+            //binding.reviewsStatus.text = Resources.getSystem().getString(R.string.review_status,_reviewsListLiveData.value?.size,getAverageReviewsRating().toFloat())
+        }
+    }
+
 
 
 

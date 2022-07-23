@@ -43,11 +43,13 @@ class ShowDetailsFragment : Fragment() {
         setReviewsStatus()
     }
 
+    // the whole method setReviewsStatus() should be moved to the ShowDetailsViewModel,
+    // but I cannot find a way to get this kind of formatted string inside the view model class:
+    // getString(R.string.review_status, numOfReviews, averageRating.toFloat())
     private fun setReviewsStatus() {
         val numOfReviews =  viewModel.reviewsListLiveData.value?.size
         val averageRating = viewModel.getAverageReviewsRating()
-        binding.ratingStatus.rating = String.format("%.2f", averageRating.toFloat()).toFloat()
-        binding.reviewsStatus.text = getString(R.string.review_status, numOfReviews, averageRating.toFloat())
+        viewModel.setReviewsStatus(binding,getString(R.string.review_status, numOfReviews, averageRating.toFloat()))
     }
 
     private fun initBackButtonFromToolbar() {
