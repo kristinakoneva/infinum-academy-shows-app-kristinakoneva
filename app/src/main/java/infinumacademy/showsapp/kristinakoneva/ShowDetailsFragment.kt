@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import infinumacademy.showsapp.kristinakoneva.databinding.DialogAddReviewBinding
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentShowDetailsBinding
-import model.Review
 
 class ShowDetailsFragment : Fragment() {
 
@@ -25,6 +24,8 @@ class ShowDetailsFragment : Fragment() {
 
     private val args by navArgs<ShowDetailsFragmentArgs>()
 
+    private val viewModel by viewModels<ShowDetailsViewModel>()
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentShowDetailsBinding.inflate(inflater, container, false)
         return binding.root
@@ -33,6 +34,8 @@ class ShowDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        showReviews()
         displayShow()
         initBackButtonFromToolbar()
         initReviewsRecycler()
@@ -40,20 +43,11 @@ class ShowDetailsFragment : Fragment() {
         setReviewsStatus()
     }
 
-    private fun getAverageReviewsRating(): Double {
-        var total = 0.0
-        for (review in adapter.getAllItems()) {
-            total += review.rating
-        }
-        return total / adapter.getAllItems().count().toDouble()
-    }
-
     private fun setReviewsStatus() {
-        val numOfReviews = adapter.getAllItems().count()
-        val averageRating = getAverageReviewsRating()
+        val numOfReviews =  viewModel.reviewsListLiveData.value?.size
+        val averageRating = viewModel.getAverageReviewsRating()
         binding.ratingStatus.rating = String.format("%.2f", averageRating.toFloat()).toFloat()
         binding.reviewsStatus.text = getString(R.string.review_status, numOfReviews, averageRating.toFloat())
-
     }
 
     private fun initBackButtonFromToolbar() {
@@ -63,14 +57,19 @@ class ShowDetailsFragment : Fragment() {
     }
 
     private fun displayShow() {
-        val show = args.show
-        binding.showName.text = show.name
-        binding.showDesc.text = show.description
-        binding.showImg.setImageResource(show.imageResourceId)
+        viewModel.displayShow(binding,args.show)
+    }
+
+    private fun populateRecyclerView(){
+        viewModel.reviewsListLiveData.observe(viewLifecycleOwner){reviewsList->
+            adapter.addAllItems(reviewsList)
+        }
     }
 
     private fun initReviewsRecycler() {
-        adapter = ReviewsAdapter(emptyList())
+        adapter = ReviewsAdapter(listOf())
+
+        populateRecyclerView()
 
         binding.reviewsRecycler.layoutManager = LinearLayoutManager(
             requireContext(),
@@ -84,10 +83,12 @@ class ShowDetailsFragment : Fragment() {
         )
     }
 
+
     private fun initAddReviewButton() {
         binding.btnWriteReview.setOnClickListener {
             showAddReviewBottomSheet()
         }
+
         setReviewsStatus()
     }
 
@@ -114,15 +115,16 @@ class ShowDetailsFragment : Fragment() {
     }
 
     private fun showReviews() {
-        binding.groupShowReviews.isVisible = true
-        binding.noReviews.isVisible = false
+        viewModel.showReviews(binding)
     }
 
     private fun addReviewToList(rating: Double, comment: String) {
         val username = args.username
-        adapter.addItem(Review(rating, comment, username))
+        viewModel.addReviewToList(rating,comment,username)
+        populateRecyclerView()
         setReviewsStatus()
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

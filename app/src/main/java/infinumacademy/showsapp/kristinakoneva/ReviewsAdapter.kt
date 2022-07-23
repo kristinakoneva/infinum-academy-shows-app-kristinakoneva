@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import infinumacademy.showsapp.kristinakoneva.databinding.ViewReviewItemBinding
 import model.Review
+import model.Show
 
 class ReviewsAdapter(
 
@@ -26,13 +27,9 @@ class ReviewsAdapter(
         return items.count()
     }
 
-    fun addItem(review: Review) {
-        items = items + review
-        notifyItemInserted(items.size - 1)
-    }
-
-    fun getAllItems(): List<Review> {
-        return items
+    fun addAllItems(reviews: List<Review>) {
+        items = reviews
+        notifyDataSetChanged()
     }
 
     inner class ShowDetailsViewHolder(private val binding: ViewReviewItemBinding) : RecyclerView.ViewHolder(binding.root) {
