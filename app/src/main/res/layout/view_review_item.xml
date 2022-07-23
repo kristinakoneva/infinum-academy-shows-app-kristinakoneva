@@ -1,68 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="12dp"
+    >
+    <ImageView
+        android:id="@+id/profilePhoto"
+        android:layout_width="52dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_profile_placeholder"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/reviewComment"
+        android:layout_marginStart="24dp"
+        />
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/reviewUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="16dp"
+        android:textSize="15sp"
+        android:textColor="@color/purple"
+        tools:text="username"
+        app:layout_constraintStart_toEndOf="@+id/profilePhoto"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/reviewComment"/>
+
+    <TextView
+        android:id="@+id/reviewRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="100dp"
+        tools:text="5"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/star"
+        app:layout_constraintBottom_toTopOf="@+id/reviewComment"/>
+
+    <ImageView
+        android:id="@+id/star"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/ic_full_star"
+        app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/reviewComment"
+        android:layout_marginEnd="24dp"/>
+    <TextView
+        android:id="@+id/reviewComment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:padding="10dp"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:textColor="@color/black"
+        tools:text="comment comment comment comment comment"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profilePhoto"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+</androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ImageView
-                android:layout_width="52dp"
-                android:layout_height="50dp"
-                android:src="@drawable/ic_profile_placeholder"
-                />
-
-            <TextView
-                android:id="@+id/reviewUsername"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="10dp"
-                android:textSize="15sp"
-                android:textColor="@color/purple"
-                tools:text="username"/>
-
-            <TextView
-                android:id="@+id/reviewRating"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="100dp"
-                tools:text="5"/>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_full_star"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/reviewComment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:textColor="@color/black"
-                tools:text="comment comment comment comment comment"
-                />
-        </LinearLayout>
-
-    </LinearLayout>
-
-</FrameLayout>
