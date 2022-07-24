@@ -1,10 +1,13 @@
 package infinumacademy.showsapp.kristinakoneva
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.edit
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -32,8 +35,16 @@ class LoginFragment : Fragment() {
         }
     }
 
+    private lateinit var sharedPreferences: SharedPreferences
+
     companion object {
         const val MIN_CHARS_FOR_PASSWORD = 6
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        sharedPreferences = requireContext().getSharedPreferences("ShowsApp",Context.MODE_PRIVATE)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -44,9 +55,29 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        checkRememberMe()
         observeLiveDataForValidation()
         initListeners()
+    }
 
+    private fun checkRememberMe(){
+        binding.cbRememberMe.isChecked = sharedPreferences.getBoolean(REMEMBER_ME,false)
+        if(binding.cbRememberMe.isChecked){
+            val directions = LoginFragmentDirections.toShowsNavGraph("username")
+            findNavController().navigate(directions)
+        }
+    }
+
+    private fun saveRememberMe(){
+        sharedPreferences.edit{
+            putBoolean(REMEMBER_ME,binding.cbRememberMe.isChecked)
+        }
+    }
+
+    private fun saveUsername(username: String){
+        sharedPreferences.edit {
+            putString(USERNAME,username)
+        }
     }
 
     private fun observeLiveDataForValidation() {
@@ -65,7 +96,9 @@ class LoginFragment : Fragment() {
 
     private fun initListeners() {
         binding.btnLogin.setOnClickListener {
+            saveRememberMe()
             val username = extractUsername()
+            saveUsername(username)
             val directions = LoginFragmentDirections.toShowsNavGraph(username)
             findNavController().navigate(directions)
         }

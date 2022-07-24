@@ -1,10 +1,13 @@
 package infinumacademy.showsapp.kristinakoneva
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.edit
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -23,6 +26,15 @@ class ShowsFragment : Fragment() {
     private val viewModel by viewModels<ShowsViewModel>()
 
     private val args by navArgs<ShowsFragmentArgs>()
+
+    private lateinit var sharedPreferences: SharedPreferences
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        sharedPreferences = requireContext().getSharedPreferences("ShowsApp", Context.MODE_PRIVATE)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentShowsBinding.inflate(inflater, container, false)
@@ -51,6 +63,10 @@ class ShowsFragment : Fragment() {
         }
 
         binding.btnLogout.setOnClickListener {
+            sharedPreferences.edit{
+                putBoolean(REMEMBER_ME,false)
+                putString(USERNAME,"username")
+            }
             findNavController().navigate(R.id.toLoginFragment)
         }
     }

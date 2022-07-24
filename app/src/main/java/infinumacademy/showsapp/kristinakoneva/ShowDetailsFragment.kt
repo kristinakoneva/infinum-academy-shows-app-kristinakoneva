@@ -1,5 +1,7 @@
 package infinumacademy.showsapp.kristinakoneva
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +27,14 @@ class ShowDetailsFragment : Fragment() {
     private val args by navArgs<ShowDetailsFragmentArgs>()
 
     private val viewModel by viewModels<ShowDetailsViewModel>()
+
+    private lateinit var sharedPreferences: SharedPreferences
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        sharedPreferences = requireContext().getSharedPreferences("ShowsApp", Context.MODE_PRIVATE)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentShowDetailsBinding.inflate(inflater, container, false)
@@ -112,8 +122,8 @@ class ShowDetailsFragment : Fragment() {
     }
 
     private fun addReviewToList(rating: Double, comment: String) {
-        val username = args.username
-        viewModel.addReviewToList(rating, comment, username)
+        val username = sharedPreferences.getString(USERNAME,"username")
+        viewModel.addReviewToList(rating, comment, username!!)
         populateRecyclerView()
         setReviewsStatus()
     }
