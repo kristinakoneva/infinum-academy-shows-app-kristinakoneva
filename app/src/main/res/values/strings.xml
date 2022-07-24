@@ -31,4 +31,13 @@
     <string name="cancel">Cancel</string>
     <string name="camera">Camera</string>
     <string name="gallery">Gallery</string>
+    <string name="logging_out_alert_message">Are you sure that you want to logout?</string>
+    <string name="gallery_denied_permission_message">You have denied the storage permission to select an image.</string>
+    <string name="data">data</string>
+    <string name="denied_permissions_message">It looks like you have turned off the permissions required for this feature. They can be enabled under App settings.</string>
+    <string name="go_to_settings">GO TO SETTINGS</string>
+    <string name="default_text">default_text</string>
+    <string name="profile_photo_jpg">profile_photo.jpg</string>
+    <string name="images">images</string>
+    <string name="intent_type_image">image/*</string>
 </resources>

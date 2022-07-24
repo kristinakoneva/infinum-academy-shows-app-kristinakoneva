@@ -59,8 +59,10 @@ class ShowsFragment : Fragment() {
 
     private lateinit var sharedPreferences: SharedPreferences
 
-    private val CAMERA_REQUEST_CODE = 1
-    private val GALLERY_REQUEST_CODE = 2
+    companion object {
+        const val CAMERA_REQUEST_CODE = 1
+        const val GALLERY_REQUEST_CODE = 2
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -105,10 +107,10 @@ class ShowsFragment : Fragment() {
         val bottomSheetBinding = DialogChangeProfilePhotoOrLogoutBinding.inflate(layoutInflater)
         dialog.setContentView(bottomSheetBinding.root)
 
-
-        if(sharedPreferences.getBoolean(PROFILE_PHOTO_CHANGED,false)){
+        // User Interface
+        if (sharedPreferences.getBoolean(PROFILE_PHOTO_CHANGED, false)) {
             try {
-                val f = File(sharedPreferences.getString(PROFILE_PHOTO,"default_text")!!)
+                val f = File(sharedPreferences.getString(PROFILE_PHOTO, getString(R.string.default_text))!!)
                 val b = BitmapFactory.decodeStream(FileInputStream(f))
                 bottomSheetBinding.profilePhoto.load(b) {
                     transformations(CircleCropTransformation())
@@ -117,10 +119,9 @@ class ShowsFragment : Fragment() {
                 e.printStackTrace()
             }
         }
+        bottomSheetBinding.emailAddress.text = sharedPreferences.getString(EMAIL, getString(R.string.example_email))
 
-
-
-        bottomSheetBinding.emailAddress.text = sharedPreferences.getString(EMAIL,getString(R.string.example_email))
+        // Listeners
         bottomSheetBinding.btnChangeProfilePhoto.setOnClickListener {
             openDialogForChoosingChangingProfilePhotoMethod()
             dialog.dismiss()
@@ -129,10 +130,11 @@ class ShowsFragment : Fragment() {
         bottomSheetBinding.btnLogout.setOnClickListener {
             showAreYouSureAlertDialog(dialog)
         }
+
         dialog.show()
     }
 
-    private fun openDialogForChoosingChangingProfilePhotoMethod(){
+    private fun openDialogForChoosingChangingProfilePhotoMethod() {
         val dialog = BottomSheetDialog(requireContext())
         val bottomSheetBinding = DialogChooseChangingPofilePhotoMethodBinding.inflate(layoutInflater)
         dialog.setContentView(bottomSheetBinding.root)
@@ -152,17 +154,16 @@ class ShowsFragment : Fragment() {
         dialog.show()
     }
 
-
     private fun showAreYouSureAlertDialog(bottomSheetDialog: BottomSheetDialog) {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle(getString(R.string.logout))
-        builder.setMessage("Are you sure that you want to logout?")
+        builder.setMessage(getString(R.string.logging_out_alert_message))
 
         builder.setPositiveButton(getString(R.string.logout)) { dialog, _ ->
             sharedPreferences.edit {
                 putBoolean(REMEMBER_ME, false)
                 putString(USERNAME, getString(R.string.username_placeholder))
-                putBoolean(PROFILE_PHOTO_CHANGED,false)
+                putBoolean(PROFILE_PHOTO_CHANGED, false)
             }
             dialog.dismiss()
             bottomSheetDialog.dismiss()
@@ -172,6 +173,7 @@ class ShowsFragment : Fragment() {
         builder.setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
             dialog.dismiss()
         }
+
         builder.show()
     }
 
@@ -206,11 +208,6 @@ class ShowsFragment : Fragment() {
         _binding = null
     }
 
-
-
-
-
-
     private fun galleryCheckPermission() {
 
         Dexter.withContext(requireContext()).withPermission(
@@ -223,14 +220,15 @@ class ShowsFragment : Fragment() {
             override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
                 Toast.makeText(
                     requireContext(),
-                    "You have denied the storage permission to select an image.",
+                    getString(R.string.gallery_denied_permission_message),
                     Toast.LENGTH_SHORT
                 ).show()
                 showRotationalDialogForPermission()
             }
 
             override fun onPermissionRationaleShouldBeShown(
-                p0: PermissionRequest?, p1: PermissionToken?) {
+                p0: PermissionRequest?, p1: PermissionToken?
+            ) {
                 showRotationalDialogForPermission()
             }
         }).onSameThread().check()
@@ -238,17 +236,17 @@ class ShowsFragment : Fragment() {
 
     private fun gallery() {
         val intent = Intent(Intent.ACTION_PICK)
-        intent.type = "image/*"
+        intent.type = getString(R.string.intent_type_image)
         startActivityForResult(intent, GALLERY_REQUEST_CODE)
     }
-
 
     private fun cameraCheckPermission() {
 
         Dexter.withContext(requireContext())
             .withPermissions(
                 android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                android.Manifest.permission.CAMERA).withListener(
+                android.Manifest.permission.CAMERA
+            ).withListener(
 
                 object : MultiplePermissionsListener {
                     override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
@@ -263,7 +261,8 @@ class ShowsFragment : Fragment() {
 
                     override fun onPermissionRationaleShouldBeShown(
                         p0: MutableList<PermissionRequest>?,
-                        p1: PermissionToken?) {
+                        p1: PermissionToken?
+                    ) {
                         showRotationalDialogForPermission()
                     }
 
@@ -271,31 +270,27 @@ class ShowsFragment : Fragment() {
             ).onSameThread().check()
     }
 
-
     private fun camera() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         startActivityForResult(intent, CAMERA_REQUEST_CODE)
     }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (resultCode == Activity.RESULT_OK) {
 
-
             when (requestCode) {
 
                 CAMERA_REQUEST_CODE -> {
 
-                    val bitmap = data?.extras?.get("data") as Bitmap
+                    val bitmap = data?.extras?.get(getString(R.string.data)) as Bitmap
 
                     val ppPath = saveToInternalStorage(bitmap)
-                    sharedPreferences.edit{
-                        putString(PROFILE_PHOTO,ppPath)
-                        putBoolean(PROFILE_PHOTO_CHANGED,true)
+                    sharedPreferences.edit {
+                        putString(PROFILE_PHOTO, ppPath)
+                        putBoolean(PROFILE_PHOTO_CHANGED, true)
                     }
-
 
                 }
 
@@ -303,12 +298,10 @@ class ShowsFragment : Fragment() {
 
                     val bitmap = MediaStore.Images.Media.getBitmap(requireContext().contentResolver, data?.data)
                     val ppPath = saveToInternalStorage(bitmap)
-                    sharedPreferences.edit{
-                        putString(PROFILE_PHOTO,ppPath)
-                        putBoolean(PROFILE_PHOTO_CHANGED,true)
+                    sharedPreferences.edit {
+                        putString(PROFILE_PHOTO, ppPath)
+                        putBoolean(PROFILE_PHOTO_CHANGED, true)
                     }
-
-
 
                 }
             }
@@ -318,13 +311,11 @@ class ShowsFragment : Fragment() {
 
     }
 
-
     private fun showRotationalDialogForPermission() {
         AlertDialog.Builder(requireContext())
-            .setMessage("It looks like you have turned off the permissions"
-                + "required for this feature. They can be enabled under App settings.")
+            .setMessage(getString(R.string.denied_permissions_message))
 
-            .setPositiveButton("GO TO SETTINGS") { _, _ ->
+            .setPositiveButton(getString(R.string.go_to_settings)) { _, _ ->
 
                 try {
                     val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
@@ -344,34 +335,19 @@ class ShowsFragment : Fragment() {
 
     private fun saveToInternalStorage(bitmap: Bitmap): String? {
 
-        // Get the context wrapper instance
         val wrapper = ContextWrapper(requireContext().applicationContext)
-
-        // Initializing a new file
-        // The bellow line returns a directory in internal storage
-        var file = wrapper.getDir("images", Context.MODE_PRIVATE)
-
-
-        // Create a file to save the image
-        file = File(file, "profile_photo.jpg")
+        var file = wrapper.getDir(getString(R.string.images), Context.MODE_PRIVATE)
+        file = File(file, getString(R.string.profile_photo_jpg))
 
         try {
-            // Get the file output stream
             val stream: OutputStream = FileOutputStream(file)
-
-            // Compress bitmap
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-
-            // Flush the stream
             stream.flush()
-
-            // Close stream
             stream.close()
-        } catch (e: IOException){ // Catch the exception
+        } catch (e: IOException) {
             e.printStackTrace()
         }
 
-        // Return the saved image absolute path
         return file.absolutePath
     }
 
@@ -387,10 +363,10 @@ class ShowsFragment : Fragment() {
         }
     }
 
-    private fun showProfilePhoto(){
-        val isPhotoChanged = sharedPreferences.getBoolean(PROFILE_PHOTO_CHANGED,false)
-        if(isPhotoChanged){
-            loadImageFromStorage(sharedPreferences.getString(PROFILE_PHOTO,"default_text")!!)
+    private fun showProfilePhoto() {
+        val isPhotoChanged = sharedPreferences.getBoolean(PROFILE_PHOTO_CHANGED, false)
+        if (isPhotoChanged) {
+            loadImageFromStorage(sharedPreferences.getString(PROFILE_PHOTO, getString(R.string.default_text))!!)
         }
     }
 

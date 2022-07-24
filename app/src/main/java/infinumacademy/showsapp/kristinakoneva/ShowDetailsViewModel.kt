@@ -10,14 +10,12 @@ import model.Review
 import model.Show
 
 class ShowDetailsViewModel : ViewModel() {
-    private val _showLiveData = MutableLiveData<Show>()
-    val showLiveData: LiveData<Show> = _showLiveData
 
     private val _reviewsListLiveData = MutableLiveData<List<Review>>(listOf())
     val reviewsListLiveData: LiveData<List<Review>> = _reviewsListLiveData
 
     private val _showReviewsLiveData = MutableLiveData(reviewsListLiveData.value!!.isNotEmpty())
-    val showReviewsLiveData: LiveData<Boolean> = _showReviewsLiveData
+    // val showReviewsLiveData: LiveData<Boolean> = _showReviewsLiveData
 
     fun addReviewToList(rating: Double, comment: String, username: String) {
         val review = Review(rating, comment, username)
