@@ -30,4 +30,6 @@
     <string name="logout_button_text">Logout</string>
     <string name="logout">Logout</string>
     <string name="cancel">Cancel</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
 </resources>

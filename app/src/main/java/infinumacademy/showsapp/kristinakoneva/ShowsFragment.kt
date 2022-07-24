@@ -65,26 +65,26 @@ class ShowsFragment : Fragment() {
         }
 
         binding.btnDialogChangeProfilePicOrLogout.setOnClickListener {
-            openDialogFroChangingProfilePicOrLoggingOut()
+            openDialogForChangingProfilePicOrLoggingOut()
         }
     }
 
-    private fun openDialogFroChangingProfilePicOrLoggingOut() {
+    private fun openDialogForChangingProfilePicOrLoggingOut() {
         val dialog = BottomSheetDialog(requireContext())
         val bottomSheetBinding = DialogChangeProfilePhotoOrLogoutBinding.inflate(layoutInflater)
         dialog.setContentView(bottomSheetBinding.root)
+        bottomSheetBinding.emailAddress.text = sharedPreferences.getString(EMAIL,getString(R.string.example_email))
         bottomSheetBinding.btnChangeProfilePhoto.setOnClickListener {
             // TODO: implement choosing a photo from gallery or camera
         }
 
         bottomSheetBinding.btnLogout.setOnClickListener {
-            showAreYouSureAlertDialog()
-
+            showAreYouSureAlertDialog(dialog)
         }
         dialog.show()
     }
 
-    private fun showAreYouSureAlertDialog() {
+    private fun showAreYouSureAlertDialog(bottomSheetDialog: BottomSheetDialog) {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Logout")
         builder.setMessage("Are you sure that you want to logout?")
@@ -95,6 +95,7 @@ class ShowsFragment : Fragment() {
                 putString(USERNAME, "username")
             }
             dialog.dismiss()
+            bottomSheetDialog.dismiss()
             findNavController().navigate(R.id.toLoginFragment)
         }
 
