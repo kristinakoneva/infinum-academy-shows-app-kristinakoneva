@@ -4,23 +4,25 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import androidx.fragment.app.Fragment
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.edit
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import android.provider.Settings
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -32,9 +34,15 @@ import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.karumi.dexter.listener.single.PermissionListener
-import infinumacademy.showsapp.kristinakoneva.databinding.FragmentShowsBinding
 import infinumacademy.showsapp.kristinakoneva.databinding.DialogChangeProfilePhotoOrLogoutBinding
 import infinumacademy.showsapp.kristinakoneva.databinding.DialogChooseChangingPofilePhotoMethodBinding
+import infinumacademy.showsapp.kristinakoneva.databinding.FragmentShowsBinding
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.OutputStream
 import model.Show
 
 class ShowsFragment : Fragment() {
@@ -68,6 +76,7 @@ class ShowsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        showProfilePhoto()
         initShowsRecycler()
         showShows()
         initListeners()
@@ -95,6 +104,22 @@ class ShowsFragment : Fragment() {
         val dialog = BottomSheetDialog(requireContext())
         val bottomSheetBinding = DialogChangeProfilePhotoOrLogoutBinding.inflate(layoutInflater)
         dialog.setContentView(bottomSheetBinding.root)
+
+
+        if(sharedPreferences.getBoolean(PROFILE_PHOTO_CHANGED,false)){
+            try {
+                val f = File(sharedPreferences.getString(PROFILE_PHOTO,"default_text")!!)
+                val b = BitmapFactory.decodeStream(FileInputStream(f))
+                bottomSheetBinding.profilePhoto.load(b) {
+                    transformations(CircleCropTransformation())
+                }
+            } catch (e: FileNotFoundException) {
+                e.printStackTrace()
+            }
+        }
+
+
+
         bottomSheetBinding.emailAddress.text = sharedPreferences.getString(EMAIL,getString(R.string.example_email))
         bottomSheetBinding.btnChangeProfilePhoto.setOnClickListener {
             openDialogForChoosingChangingProfilePhotoMethod()
@@ -112,15 +137,16 @@ class ShowsFragment : Fragment() {
         val bottomSheetBinding = DialogChooseChangingPofilePhotoMethodBinding.inflate(layoutInflater)
         dialog.setContentView(bottomSheetBinding.root)
 
+
         bottomSheetBinding.imgBtnCamera.setOnClickListener {
             cameraCheckPermission()
-
+            showProfilePhoto()
             dialog.dismiss()
         }
 
         bottomSheetBinding.imgBtnGallery.setOnClickListener {
             galleryCheckPermission()
-
+            showProfilePhoto()
             dialog.dismiss()
         }
         dialog.show()
@@ -136,6 +162,7 @@ class ShowsFragment : Fragment() {
             sharedPreferences.edit {
                 putBoolean(REMEMBER_ME, false)
                 putString(USERNAME, getString(R.string.username_placeholder))
+                putBoolean(PROFILE_PHOTO_CHANGED,false)
             }
             dialog.dismiss()
             bottomSheetDialog.dismiss()
@@ -256,33 +283,38 @@ class ShowsFragment : Fragment() {
 
         if (resultCode == Activity.RESULT_OK) {
 
+
             when (requestCode) {
 
                 CAMERA_REQUEST_CODE -> {
 
                     val bitmap = data?.extras?.get("data") as Bitmap
-                    
 
-
-                    binding.btnDialogChangeProfilePicOrLogout.load(bitmap) {
-                        crossfade(true)
-                        crossfade(1000)
-                        transformations(CircleCropTransformation())
+                    val ppPath = saveToInternalStorage(bitmap)
+                    sharedPreferences.edit{
+                        putString(PROFILE_PHOTO,ppPath)
+                        putBoolean(PROFILE_PHOTO_CHANGED,true)
                     }
+
+
                 }
 
                 GALLERY_REQUEST_CODE -> {
 
-                    binding.btnDialogChangeProfilePicOrLogout.load(data?.data) {
-                        crossfade(true)
-                        crossfade(1000)
-                        transformations(CircleCropTransformation())
+                    val bitmap = MediaStore.Images.Media.getBitmap(requireContext().contentResolver, data?.data)
+                    val ppPath = saveToInternalStorage(bitmap)
+                    sharedPreferences.edit{
+                        putString(PROFILE_PHOTO,ppPath)
+                        putBoolean(PROFILE_PHOTO_CHANGED,true)
                     }
+
+
 
                 }
             }
-
+            showProfilePhoto()
         }
+
 
     }
 
@@ -292,7 +324,7 @@ class ShowsFragment : Fragment() {
             .setMessage("It looks like you have turned off the permissions"
                 + "required for this feature. They can be enabled under App settings.")
 
-            .setPositiveButton("Go TO SETTINGS") { _, _ ->
+            .setPositiveButton("GO TO SETTINGS") { _, _ ->
 
                 try {
                     val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
@@ -310,6 +342,57 @@ class ShowsFragment : Fragment() {
             }.show()
     }
 
+    private fun saveToInternalStorage(bitmap: Bitmap): String? {
+
+        // Get the context wrapper instance
+        val wrapper = ContextWrapper(requireContext().applicationContext)
+
+        // Initializing a new file
+        // The bellow line returns a directory in internal storage
+        var file = wrapper.getDir("images", Context.MODE_PRIVATE)
+
+
+        // Create a file to save the image
+        file = File(file, "profile_photo.jpg")
+
+        try {
+            // Get the file output stream
+            val stream: OutputStream = FileOutputStream(file)
+
+            // Compress bitmap
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+
+            // Flush the stream
+            stream.flush()
+
+            // Close stream
+            stream.close()
+        } catch (e: IOException){ // Catch the exception
+            e.printStackTrace()
+        }
+
+        // Return the saved image absolute path
+        return file.absolutePath
+    }
+
+    private fun loadImageFromStorage(path: String) {
+        try {
+            val f = File(path)
+            val b = BitmapFactory.decodeStream(FileInputStream(f))
+            binding.btnDialogChangeProfilePicOrLogout.load(b) {
+                transformations(CircleCropTransformation())
+            }
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun showProfilePhoto(){
+        val isPhotoChanged = sharedPreferences.getBoolean(PROFILE_PHOTO_CHANGED,false)
+        if(isPhotoChanged){
+            loadImageFromStorage(sharedPreferences.getString(PROFILE_PHOTO,"default_text")!!)
+        }
+    }
 
 
 }

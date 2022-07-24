@@ -63,7 +63,7 @@ class LoginFragment : Fragment() {
     private fun checkRememberMe() {
         binding.cbRememberMe.isChecked = sharedPreferences.getBoolean(REMEMBER_ME, false)
         if (binding.cbRememberMe.isChecked) {
-            val directions = LoginFragmentDirections.toShowsNavGraph("username")
+            val directions = LoginFragmentDirections.toShowsNavGraph(getString(R.string.username_placeholder))
             findNavController().navigate(directions)
         }
     }
