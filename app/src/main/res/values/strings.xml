@@ -24,4 +24,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="review_status">%d REVIEWS, %.2f AVERAGE</string>
     <string name="username_placeholder">username</string>
+    <string name="remember_me_checkbox_message">Remember me</string>
 </resources>
