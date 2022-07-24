@@ -25,4 +25,7 @@
     <string name="review_status">%d REVIEWS, %.2f AVERAGE</string>
     <string name="username_placeholder">username</string>
     <string name="remember_me_checkbox_message">Remember me</string>
+    <string name="example_email">username@gmail.com</string>
+    <string name="change_profile_photo_button_text">Change profile photo</string>
+    <string name="logout_button_text">Logout</string>
 </resources>

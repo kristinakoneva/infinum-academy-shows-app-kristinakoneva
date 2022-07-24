@@ -74,9 +74,10 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private fun saveUsername(username: String){
+    private fun saveUsernameAndEmail(username: String, email: String){
         sharedPreferences.edit {
             putString(USERNAME,username)
+            putString(EMAIL,email)
         }
     }
 
@@ -98,7 +99,8 @@ class LoginFragment : Fragment() {
         binding.btnLogin.setOnClickListener {
             saveRememberMe()
             val username = extractUsername()
-            saveUsername(username)
+            val email = binding.etEmail.text.toString()
+            saveUsernameAndEmail(username,email)
             val directions = LoginFragmentDirections.toShowsNavGraph(username)
             findNavController().navigate(directions)
         }
