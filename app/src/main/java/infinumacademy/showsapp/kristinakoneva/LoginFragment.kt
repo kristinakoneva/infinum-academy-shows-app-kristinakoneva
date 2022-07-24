@@ -44,7 +44,7 @@ class LoginFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        sharedPreferences = requireContext().getSharedPreferences("ShowsApp", Context.MODE_PRIVATE)
+        sharedPreferences = requireContext().getSharedPreferences(SHOWS_APP, Context.MODE_PRIVATE)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
