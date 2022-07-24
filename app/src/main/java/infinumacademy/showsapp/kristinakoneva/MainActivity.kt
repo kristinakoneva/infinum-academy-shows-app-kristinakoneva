@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import infinumacademy.showsapp.kristinakoneva.databinding.ActivityMainBinding
 
-
 const val USERNAME = "USERNAME"
 const val REMEMBER_ME = "REMEMBER_ME"
 const val EMAIL = "EMAIL"

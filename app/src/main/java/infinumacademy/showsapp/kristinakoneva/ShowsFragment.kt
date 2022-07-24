@@ -14,8 +14,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import infinumacademy.showsapp.kristinakoneva.databinding.DialogChangeProfilePhotoOrLogoutBinding
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentShowsBinding
+import infinumacademy.showsapp.kristinakoneva.databinding.DialogChangeProfilePhotoOrLogoutBinding
 import model.Show
 
 class ShowsFragment : Fragment() {
@@ -31,7 +31,6 @@ class ShowsFragment : Fragment() {
     private val args by navArgs<ShowsFragmentArgs>()
 
     private lateinit var sharedPreferences: SharedPreferences
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,31 +65,34 @@ class ShowsFragment : Fragment() {
         }
 
         binding.btnDialogChangeProfilePicOrLogout.setOnClickListener {
-
-            val dialog = BottomSheetDialog(requireContext())
-            val bottomSheetBinding = DialogChangeProfilePhotoOrLogoutBinding.inflate(layoutInflater)
-            dialog.setContentView(bottomSheetBinding.root)
-            bottomSheetBinding.btnChangeProfilePhoto.setOnClickListener {
-                // TODO: implement choosing a photo from gallery or camera
-            }
-
-            bottomSheetBinding.btnLogout.setOnClickListener{
-                showAreYouSureAlertDialog()
-
-            }
-            dialog.show()
-
+            openDialogFroChangingProfilePicOrLoggingOut()
         }
     }
-    private fun showAreYouSureAlertDialog(){
+
+    private fun openDialogFroChangingProfilePicOrLoggingOut() {
+        val dialog = BottomSheetDialog(requireContext())
+        val bottomSheetBinding = DialogChangeProfilePhotoOrLogoutBinding.inflate(layoutInflater)
+        dialog.setContentView(bottomSheetBinding.root)
+        bottomSheetBinding.btnChangeProfilePhoto.setOnClickListener {
+            // TODO: implement choosing a photo from gallery or camera
+        }
+
+        bottomSheetBinding.btnLogout.setOnClickListener {
+            showAreYouSureAlertDialog()
+
+        }
+        dialog.show()
+    }
+
+    private fun showAreYouSureAlertDialog() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Logout")
         builder.setMessage("Are you sure that you want to logout?")
 
         builder.setPositiveButton(getString(R.string.logout)) { dialog, _ ->
-            sharedPreferences.edit{
-                putBoolean(REMEMBER_ME,false)
-                putString(USERNAME,"username")
+            sharedPreferences.edit {
+                putBoolean(REMEMBER_ME, false)
+                putString(USERNAME, "username")
             }
             dialog.dismiss()
             findNavController().navigate(R.id.toLoginFragment)

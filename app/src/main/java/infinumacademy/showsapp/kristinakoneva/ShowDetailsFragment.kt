@@ -122,7 +122,7 @@ class ShowDetailsFragment : Fragment() {
     }
 
     private fun addReviewToList(rating: Double, comment: String) {
-        val username = sharedPreferences.getString(USERNAME,"username")
+        val username = sharedPreferences.getString(USERNAME, "username")
         viewModel.addReviewToList(rating, comment, username!!)
         populateRecyclerView()
         setReviewsStatus()

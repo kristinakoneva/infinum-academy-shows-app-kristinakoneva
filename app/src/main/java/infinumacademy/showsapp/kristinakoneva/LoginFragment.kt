@@ -44,7 +44,7 @@ class LoginFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        sharedPreferences = requireContext().getSharedPreferences("ShowsApp",Context.MODE_PRIVATE)
+        sharedPreferences = requireContext().getSharedPreferences("ShowsApp", Context.MODE_PRIVATE)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -60,24 +60,24 @@ class LoginFragment : Fragment() {
         initListeners()
     }
 
-    private fun checkRememberMe(){
-        binding.cbRememberMe.isChecked = sharedPreferences.getBoolean(REMEMBER_ME,false)
-        if(binding.cbRememberMe.isChecked){
+    private fun checkRememberMe() {
+        binding.cbRememberMe.isChecked = sharedPreferences.getBoolean(REMEMBER_ME, false)
+        if (binding.cbRememberMe.isChecked) {
             val directions = LoginFragmentDirections.toShowsNavGraph("username")
             findNavController().navigate(directions)
         }
     }
 
-    private fun saveRememberMe(){
-        sharedPreferences.edit{
-            putBoolean(REMEMBER_ME,binding.cbRememberMe.isChecked)
+    private fun saveRememberMe() {
+        sharedPreferences.edit {
+            putBoolean(REMEMBER_ME, binding.cbRememberMe.isChecked)
         }
     }
 
-    private fun saveUsernameAndEmail(username: String, email: String){
+    private fun saveUsernameAndEmail(username: String, email: String) {
         sharedPreferences.edit {
-            putString(USERNAME,username)
-            putString(EMAIL,email)
+            putString(USERNAME, username)
+            putString(EMAIL, email)
         }
     }
 
@@ -100,7 +100,7 @@ class LoginFragment : Fragment() {
             saveRememberMe()
             val username = extractUsername()
             val email = binding.etEmail.text.toString()
-            saveUsernameAndEmail(username,email)
+            saveUsernameAndEmail(username, email)
             val directions = LoginFragmentDirections.toShowsNavGraph(username)
             findNavController().navigate(directions)
         }
