@@ -12,12 +12,12 @@
         android:layout_height="wrap_content">
 
         <ImageButton
-            android:id="@+id/btnLogout"
+            android:id="@+id/btnDialogChangeProfilePicOrLogout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginEnd="30dp"
-            android:src="@drawable/ic_logout_button"
+            android:src="@drawable/btn_profile_photo"
             android:backgroundTint="@color/white"
             />
     </Toolbar>

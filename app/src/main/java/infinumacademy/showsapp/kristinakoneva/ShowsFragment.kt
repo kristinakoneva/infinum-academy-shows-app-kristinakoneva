@@ -1,5 +1,6 @@
 package infinumacademy.showsapp.kristinakoneva
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -12,6 +13,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import infinumacademy.showsapp.kristinakoneva.databinding.DialogChangeProfilePhotoOrLogoutBinding
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentShowsBinding
 import model.Show
 
@@ -62,13 +65,41 @@ class ShowsFragment : Fragment() {
 
         }
 
-        binding.btnLogout.setOnClickListener {
+        binding.btnDialogChangeProfilePicOrLogout.setOnClickListener {
+
+            val dialog = BottomSheetDialog(requireContext())
+            val bottomSheetBinding = DialogChangeProfilePhotoOrLogoutBinding.inflate(layoutInflater)
+            dialog.setContentView(bottomSheetBinding.root)
+            bottomSheetBinding.btnChangeProfilePhoto.setOnClickListener {
+                // TODO: implement choosing a photo from gallery or camera
+            }
+
+            bottomSheetBinding.btnLogout.setOnClickListener{
+                showAreYouSureAlertDialog()
+
+            }
+            dialog.show()
+
+        }
+    }
+    private fun showAreYouSureAlertDialog(){
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Logout")
+        builder.setMessage("Are you sure that you want to logout?")
+
+        builder.setPositiveButton(getString(R.string.logout)) { dialog, _ ->
             sharedPreferences.edit{
                 putBoolean(REMEMBER_ME,false)
                 putString(USERNAME,"username")
             }
+            dialog.dismiss()
             findNavController().navigate(R.id.toLoginFragment)
         }
+
+        builder.setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+            dialog.dismiss()
+        }
+        builder.show()
     }
 
     private fun showShows() {

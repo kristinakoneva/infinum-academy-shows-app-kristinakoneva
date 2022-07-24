@@ -28,4 +28,6 @@
     <string name="example_email">username@gmail.com</string>
     <string name="change_profile_photo_button_text">Change profile photo</string>
     <string name="logout_button_text">Logout</string>
+    <string name="logout">Logout</string>
+    <string name="cancel">Cancel</string>
 </resources>
