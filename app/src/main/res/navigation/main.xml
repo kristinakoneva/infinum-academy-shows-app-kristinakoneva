@@ -20,11 +20,10 @@
             app:popUpToInclusive="true">
             <argument
                 android:name="username"
-                app:argType="string" />
+                app:argType="string"/>
         </action>
 
     </fragment>
-
 
     <include app:graph="@navigation/shows_nav_graph"/>
 </navigation>
