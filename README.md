@@ -17,7 +17,7 @@ The email and password must be inputted in the correct format, otherwise the Log
 An example of a correct email format is: username@gmail.com and the password must contain at least 6 characters. <br /> <br />
 If the user has checked the Remember me checkbox (as shown in the second image), the next time the user opens the app, 
 he/she will be directly taken to the Shows screen, without the need to log in again. <br /> <br />
-A click on the Login button takes the user to the next screen - the shows screen.
+A click on the Login button takes the user to the next screen - the Shows screen.
 
 ## Shows Screen
 <p align="left">
@@ -29,17 +29,17 @@ This is the Shows screen where a list of shows is displayed as seen in the first
 If the user click on a show card, a new screen is shown where details about that particular show are displayed. <br /> <br />
 When the user clicks on the SHOW/HIDE EMPTY STATE button several times, 
 depending on the previous state, the shows empty state will be shown/hidden accordingly. 
-The design of the empty state screen is shown in the second image <br /> <br />
+The design of the empty state screen is shown in the second image. <br /> <br />
 On the top right corner, the user's profile photo is shown and when it is clicked, it opens a bottom sheet dialog whose design is shown in the following photo: <br /> <br />
-<img src="README_images/profile_photo_dialog.png" width="30%" height="30%"/> <br /> <br />
+<img src="README_images/profile_photo_dialog.png" width="30%" height="30%"/> <br />
 In the bottom sheet dialog, the user's profile photo and email are displayed. Below them, there are two button: one for changing the profile photo and one for logging out. <br /> <br />
-If the user click on the button - Change profile photo, 
+If the user clicks on the button - Change profile photo, 
 a new bottom sheet dialog is opened where the user can choose whether to change the photo 
 by taking a photo directly from the Camera app or choose a photo from his/her gallery. This bottom sheet dialog is shown below: <br /> <br />
-<img src="README_images/change_profile_photo_method.png" width="30%" height="30%"/> <br /> <br />
-If the user clicks on the logout button from the previously shown bottom sheet dialog, an alert dialog will be shown where the user has to confirm their logout: <br /> <br />
-<img src="README_images/logout_alert_dialog.png" width="30%" height="30%"/> <br /> <br />
-If the user confirms their logout, he/she is taken back to the Login screen.
+<img src="README_images/change_profile_photo_method.png" width="30%" height="30%"/> <br />
+If the user clicks on the Logout button, an alert dialog will be shown where the user has to confirm their logout: <br /> <br />
+<img src="README_images/logout_alert_dialog.png" width="30%" height="30%"/> <br /> 
+If the user confirms their logout, he/she will be taken back to the Login screen.
 
 ## Show Details Screen
 <p align="left">
