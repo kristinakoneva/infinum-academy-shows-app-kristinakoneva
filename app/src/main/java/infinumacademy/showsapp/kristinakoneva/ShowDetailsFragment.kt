@@ -2,6 +2,7 @@ package infinumacademy.showsapp.kristinakoneva
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,9 +13,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import coil.load
+import coil.transform.CircleCropTransformation
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import infinumacademy.showsapp.kristinakoneva.databinding.DialogAddReviewBinding
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentShowDetailsBinding
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileNotFoundException
 
 class ShowDetailsFragment : Fragment() {
 
@@ -81,7 +87,8 @@ class ShowDetailsFragment : Fragment() {
 
         binding.reviewsRecycler.layoutManager = LinearLayoutManager(
             requireContext(),
-            LinearLayoutManager.VERTICAL, false
+            LinearLayoutManager.VERTICAL,
+            false
         )
 
         binding.reviewsRecycler.adapter = adapter

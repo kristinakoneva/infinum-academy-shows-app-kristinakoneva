@@ -18,6 +18,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.edit
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -80,21 +81,24 @@ class ShowsFragment : Fragment() {
 
         showProfilePhoto()
         initShowsRecycler()
-        showShows()
+        displayState()
         initListeners()
+    }
+
+    private fun displayState() {
+        viewModel.showEmptyStateLiveData.observe(viewLifecycleOwner) { showEmptyState ->
+            if (showEmptyState) {
+                hideShows()
+            } else {
+                showShows()
+            }
+        }
     }
 
     private fun initListeners() {
         binding.btnShowHideEmptyState.setOnClickListener {
-            viewModel.showEmptyStateLiveData.observe(viewLifecycleOwner) { showEmptyState ->
-                if (showEmptyState) {
-                    hideShows()
-                } else {
-                    showShows()
-                }
-                viewModel.resetVisibility(binding)
-            }
-
+            viewModel.resetEmptyState()
+            displayState()
         }
 
         binding.btnDialogChangeProfilePicOrLogout.setOnClickListener {
@@ -181,10 +185,14 @@ class ShowsFragment : Fragment() {
         viewModel.showsListLiveData.observe(viewLifecycleOwner) { showsList ->
             adapter.addAllItems(showsList)
         }
+        binding.showsEmptyState.isVisible = false
+        binding.showsRecycler.isVisible = true
     }
 
     private fun hideShows() {
         adapter.addAllItems(emptyList())
+        binding.showsEmptyState.isVisible = true
+        binding.showsRecycler.isVisible = false
     }
 
     private fun initShowsRecycler() {

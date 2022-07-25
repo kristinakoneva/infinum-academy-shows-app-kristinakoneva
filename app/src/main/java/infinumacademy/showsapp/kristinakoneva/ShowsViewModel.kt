@@ -38,10 +38,9 @@ class ShowsViewModel : ViewModel() {
     val showsListLiveData: LiveData<List<Show>> = _showsListLiveData
 
     private val _showEmptyStateLiveData = MutableLiveData(false)
-    val showEmptyStateLiveData: MutableLiveData<Boolean> = _showEmptyStateLiveData
+    val showEmptyStateLiveData: LiveData<Boolean> = _showEmptyStateLiveData
 
-    fun resetVisibility(binding: FragmentShowsBinding) {
-        binding.showsEmptyState.isVisible = !binding.showsEmptyState.isVisible
-        binding.showsRecycler.isVisible = !binding.showsRecycler.isVisible
+    fun resetEmptyState() {
+        _showEmptyStateLiveData.value = !_showEmptyStateLiveData.value!!
     }
 }
