@@ -24,11 +24,20 @@ A click on the LOGIN button takes the user to the next screen - the shows screen
 <img src="README_images/shows_screen_empty_state.png" width="30%" height="30%"/>
 </p>
 This is the Shows screen where a list of shows is displayed as seen in the first image. <br /> <br />
+If the user click on a show card, a new screen is shown where details about that particular show are displayed. <br /> <br />
 When the user clicks on the SHOW/HIDE EMPTY STATE button several times, 
 depending on the previous state, the shows empty state will be shown/hidden accordingly. 
 The design of the empty state screen is shown in the second image <br /> <br />
-On the top right corner there is a logout button which when clicked, takes the user back to the login screen and requires him to login again. <br /> <br />
-If the user click on a show card, a new screen is shown where details about that particular show are displayed.
+On the top right corner, the user's profile photo is shown and when it is clicked, it opens a bottom sheet dialog whose design is shown in the following photo: <br /> <br />
+<img src="README_images/profile_photo_dialog" width="30%" height="30%"/> <br /> <br />
+In the bottom sheet dialog, the user's profile photo and email are displayed. Below them, there are two button: one for changing the profile photo and one for logging out. <br /> <br />
+If the user click on the button - Change profile photo, 
+a new bottom sheet dialog is opened where the user can choose whether to change the photo 
+by taking a photo directly from the Camera app or choose a photo from his/her gallery. This bottom sheet dialog is shown below: <br /> <br />
+<img src="README_images/change_profile_photo_method" width="30%" height="30%"/> <br /> <br />
+If the user clicks on the logout button from the previously shown bottom sheet dialog, an alert dialog will be shown where the user has to confirm their logout: <br /> <br />
+<img src="README_images/logout_alert_dialog" width="30%" height="30%"/> <br /> <br />
+If the user confirms their logout, he/she is taken back to the Login screen.
 
 ## Show Details Screen
 <p align="left">
