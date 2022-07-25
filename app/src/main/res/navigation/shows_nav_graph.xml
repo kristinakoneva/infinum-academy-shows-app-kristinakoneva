@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/shows_nav_graph"
+    app:startDestination="@id/showsFragment">
+
+
+<fragment
+    android:id="@+id/showsFragment"
+    android:name="infinumacademy.showsapp.kristinakoneva.ShowsFragment"
+    android:label="ShowsFragment"
+    tools:layout="@layout/fragment_shows">
+    <argument
+        android:name="username"
+        app:argType="string" />
+    <action
+        android:id="@+id/toShowDetailsFragment"
+        app:destination="@id/showDetailsFragment" />
+    <action
+        android:id="@+id/toLoginFragment"
+        app:destination="@id/main"
+        app:popUpTo="@id/main"
+        app:popUpToInclusive="true"/>
+</fragment>
+<fragment
+    android:id="@+id/showDetailsFragment"
+    android:name="infinumacademy.showsapp.kristinakoneva.ShowDetailsFragment"
+    android:label="ShowDetailsFragment"
+    tools:layout="@layout/fragment_show_details">
+    <argument
+        android:name="username"
+        app:argType="string" />
+    <argument
+        android:name="show"
+        app:argType="model.Show" />
+
+</fragment>
+</navigation>

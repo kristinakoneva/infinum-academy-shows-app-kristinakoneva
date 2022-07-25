@@ -1,23 +1,20 @@
 package infinumacademy.showsapp.kristinakoneva
 
+import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import infinumacademy.showsapp.kristinakoneva.databinding.ViewReviewItemBinding
 import model.Review
 
-class ReviewsAdapter (
+class ReviewsAdapter(
 
     private var items: List<Review>
 
-): RecyclerView.Adapter<ReviewsAdapter.ShowDetailsViewHolder>()
-{
+) : RecyclerView.Adapter<ReviewsAdapter.ShowDetailsViewHolder>() {
 
-    fun getAllItems(): List<Review>{
-        return items
-    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShowDetailsViewHolder {
-        val binding = ViewReviewItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val binding = ViewReviewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ShowDetailsViewHolder(binding)
     }
 
@@ -31,18 +28,20 @@ class ReviewsAdapter (
 
     fun addItem(review: Review) {
         items = items + review
-        notifyItemInserted(items.size-1)
+        notifyItemInserted(items.size - 1)
     }
 
-    inner class ShowDetailsViewHolder(private val binding: ViewReviewItemBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(item: Review){
+    fun getAllItems(): List<Review> {
+        return items
+    }
 
-            with(binding){
+    inner class ShowDetailsViewHolder(private val binding: ViewReviewItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: Review) {
+            with(binding) {
                 reviewRating.text = item.rating.toString()
-                if(item.reviewer==null){
-                    reviewUsername.text = "username"
-                }
-                else{
+                if (item.reviewer == null) {
+                    reviewUsername.text = Resources.getSystem().getString(R.string.username_placeholder)
+                } else {
                     reviewUsername.text = item.reviewer
                 }
                 reviewComment.text = item.comment
