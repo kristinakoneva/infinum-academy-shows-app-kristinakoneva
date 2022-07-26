@@ -1,6 +1,5 @@
 package infinumacademy.showsapp.kristinakoneva
 
-import android.content.res.Resources
 import androidx.core.view.isVisible
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

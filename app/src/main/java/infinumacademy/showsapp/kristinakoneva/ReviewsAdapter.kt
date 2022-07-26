@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import infinumacademy.showsapp.kristinakoneva.databinding.ViewReviewItemBinding
 import model.Review
-import model.Show
 
 class ReviewsAdapter(
 

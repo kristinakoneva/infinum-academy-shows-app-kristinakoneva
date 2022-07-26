@@ -104,6 +104,11 @@ class LoginFragment : Fragment() {
             val directions = LoginFragmentDirections.toShowsNavGraph(username)
             findNavController().navigate(directions)
         }
+
+        binding.btnRegister.setOnClickListener {
+            val directions = LoginFragmentDirections.toRegisterFragment()
+            findNavController().navigate(directions)
+        }
     }
 
     private fun extractUsername(): String {
