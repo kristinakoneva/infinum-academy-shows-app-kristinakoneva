@@ -40,4 +40,6 @@
     <string name="profile_photo_jpg">profile_photo.jpg</string>
     <string name="images">images</string>
     <string name="intent_type_image">image/*</string>
+    <string name="register">Register</string>
+    <string name="repeat_password">Repeat password</string>
 </resources>
