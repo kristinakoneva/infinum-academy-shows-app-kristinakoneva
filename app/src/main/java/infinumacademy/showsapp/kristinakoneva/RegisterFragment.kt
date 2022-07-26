@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentRegisterBinding
 
+
 class RegisterFragment : Fragment() {
 
     private var _binding: FragmentRegisterBinding? = null
@@ -15,6 +16,7 @@ class RegisterFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentRegisterBinding.inflate(inflater, container,false)
+
         return binding.root
     }
 
