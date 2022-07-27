@@ -37,14 +37,11 @@ class LoginFragment : Fragment() {
 
     private lateinit var sharedPreferences: SharedPreferences
 
-    companion object {
-        const val MIN_CHARS_FOR_PASSWORD = 6
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        sharedPreferences = requireContext().getSharedPreferences(SHOWS_APP, Context.MODE_PRIVATE)
+        sharedPreferences = requireContext().getSharedPreferences(Constants.SHOWS_APP, Context.MODE_PRIVATE)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -61,7 +58,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun checkRememberMe() {
-        binding.cbRememberMe.isChecked = sharedPreferences.getBoolean(REMEMBER_ME, false)
+        binding.cbRememberMe.isChecked = sharedPreferences.getBoolean(Constants.REMEMBER_ME, false)
         if (binding.cbRememberMe.isChecked) {
             val directions = LoginFragmentDirections.toShowsNavGraph(getString(R.string.username_placeholder))
             findNavController().navigate(directions)
@@ -70,14 +67,14 @@ class LoginFragment : Fragment() {
 
     private fun saveRememberMe() {
         sharedPreferences.edit {
-            putBoolean(REMEMBER_ME, binding.cbRememberMe.isChecked)
+            putBoolean(Constants.REMEMBER_ME, binding.cbRememberMe.isChecked)
         }
     }
 
     private fun saveUsernameAndEmail(username: String, email: String) {
         sharedPreferences.edit {
-            putString(USERNAME, username)
-            putString(EMAIL, email)
+            putString(Constants.USERNAME, username)
+            putString(Constants.EMAIL, email)
         }
     }
 
@@ -115,7 +112,7 @@ class LoginFragment : Fragment() {
 
     private fun validateLoginForm(email: String?, password: String?): Boolean {
         val isValidEmail = email != null && email.isNotBlank() && email.matches("^[a-z][a-z0-9\\.\\_]*@[a-z]+\\.[a-z]+".toRegex())
-        val isValidPassword = password != null && password.isNotBlank() && password.length >= MIN_CHARS_FOR_PASSWORD
+        val isValidPassword = password != null && password.isNotBlank() && password.length >= Constants.MIN_CHARS_FOR_PASSWORD
 
         setEmailError(isValidEmail)
         setPasswordError(isValidPassword)

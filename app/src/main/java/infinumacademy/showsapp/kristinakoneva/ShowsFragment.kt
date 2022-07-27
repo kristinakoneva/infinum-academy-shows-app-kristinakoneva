@@ -68,7 +68,7 @@ class ShowsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        sharedPreferences = requireContext().getSharedPreferences(SHOWS_APP, Context.MODE_PRIVATE)
+        sharedPreferences = requireContext().getSharedPreferences(Constants.SHOWS_APP, Context.MODE_PRIVATE)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -112,9 +112,9 @@ class ShowsFragment : Fragment() {
         dialog.setContentView(bottomSheetBinding.root)
 
         // User Interface
-        if (sharedPreferences.getBoolean(PROFILE_PHOTO_CHANGED, false)) {
+        if (sharedPreferences.getBoolean(Constants.PROFILE_PHOTO_CHANGED, false)) {
             try {
-                val f = File(sharedPreferences.getString(PROFILE_PHOTO, getString(R.string.default_text))!!)
+                val f = File(sharedPreferences.getString(Constants.PROFILE_PHOTO, getString(R.string.default_text))!!)
                 val b = BitmapFactory.decodeStream(FileInputStream(f))
                 bottomSheetBinding.profilePhoto.load(b) {
                     transformations(CircleCropTransformation())
@@ -123,7 +123,7 @@ class ShowsFragment : Fragment() {
                 e.printStackTrace()
             }
         }
-        bottomSheetBinding.emailAddress.text = sharedPreferences.getString(EMAIL, getString(R.string.example_email))
+        bottomSheetBinding.emailAddress.text = sharedPreferences.getString(Constants.EMAIL, getString(R.string.example_email))
 
         // Listeners
         bottomSheetBinding.btnChangeProfilePhoto.setOnClickListener {
@@ -165,9 +165,9 @@ class ShowsFragment : Fragment() {
 
         builder.setPositiveButton(getString(R.string.logout)) { dialog, _ ->
             sharedPreferences.edit {
-                putBoolean(REMEMBER_ME, false)
-                putString(USERNAME, getString(R.string.username_placeholder))
-                putBoolean(PROFILE_PHOTO_CHANGED, false)
+                putBoolean(Constants.REMEMBER_ME, false)
+                putString(Constants.USERNAME, getString(R.string.username_placeholder))
+                putBoolean(Constants.PROFILE_PHOTO_CHANGED, false)
             }
             dialog.dismiss()
             bottomSheetDialog.dismiss()
@@ -296,8 +296,8 @@ class ShowsFragment : Fragment() {
 
                     val ppPath = saveToInternalStorage(bitmap)
                     sharedPreferences.edit {
-                        putString(PROFILE_PHOTO, ppPath)
-                        putBoolean(PROFILE_PHOTO_CHANGED, true)
+                        putString(Constants.PROFILE_PHOTO, ppPath)
+                        putBoolean(Constants.PROFILE_PHOTO_CHANGED, true)
                     }
 
                 }
@@ -307,8 +307,8 @@ class ShowsFragment : Fragment() {
                     val bitmap = MediaStore.Images.Media.getBitmap(requireContext().contentResolver, data?.data)
                     val ppPath = saveToInternalStorage(bitmap)
                     sharedPreferences.edit {
-                        putString(PROFILE_PHOTO, ppPath)
-                        putBoolean(PROFILE_PHOTO_CHANGED, true)
+                        putString(Constants.PROFILE_PHOTO, ppPath)
+                        putBoolean(Constants.PROFILE_PHOTO_CHANGED, true)
                     }
 
                 }
@@ -372,9 +372,9 @@ class ShowsFragment : Fragment() {
     }
 
     private fun showProfilePhoto() {
-        val isPhotoChanged = sharedPreferences.getBoolean(PROFILE_PHOTO_CHANGED, false)
+        val isPhotoChanged = sharedPreferences.getBoolean(Constants.PROFILE_PHOTO_CHANGED, false)
         if (isPhotoChanged) {
-            loadImageFromStorage(sharedPreferences.getString(PROFILE_PHOTO, getString(R.string.default_text))!!)
+            loadImageFromStorage(sharedPreferences.getString(Constants.PROFILE_PHOTO, getString(R.string.default_text))!!)
         }
     }
 
