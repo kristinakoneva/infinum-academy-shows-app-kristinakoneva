@@ -32,7 +32,7 @@ class RegisterFragment : Fragment() {
         ApiModule.initRetrofit(requireContext())
         sessionManager = SessionManager(requireContext())
 
-        sharedPreferences = requireContext().getSharedPreferences(SHOWS_APP, Context.MODE_PRIVATE)
+        sharedPreferences = requireContext().getSharedPreferences(Constants.SHOWS_APP, Context.MODE_PRIVATE)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
