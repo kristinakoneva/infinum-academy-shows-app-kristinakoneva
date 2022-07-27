@@ -9,11 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.edit
+import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentLoginBinding
 import networking.ApiModule
 import networking.SessionManager
@@ -30,6 +32,7 @@ class LoginFragment : Fragment() {
 
     private lateinit var sessionManager: SessionManager
 
+    private val args by navArgs<LoginFragmentArgs>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +66,13 @@ class LoginFragment : Fragment() {
         checkRememberMe()
         // observeLiveDataForValidation()
         initListeners()
+        checkComingFromRegister()
+    }
+
+    private fun checkComingFromRegister(){
+        if(args.comingFromRegister){
+            binding.btnRegister.isVisible = false
+        }
     }
 
     private fun checkRememberMe() {

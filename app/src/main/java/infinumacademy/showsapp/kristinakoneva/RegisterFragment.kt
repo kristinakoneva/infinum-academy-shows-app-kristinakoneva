@@ -26,6 +26,7 @@ class RegisterFragment : Fragment() {
 
     private val viewModel by viewModels<RegisterViewModel>()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -46,7 +47,7 @@ class RegisterFragment : Fragment() {
 
         viewModel.getRegistrationResultLiveData().observe(viewLifecycleOwner){ registrationSuccessful ->
             if(registrationSuccessful){
-                val directions = RegisterFragmentDirections.toLoginFragment()
+                val directions = RegisterFragmentDirections.toLoginFragment(comingFromRegister = true)
                 findNavController().navigate(directions)
             }
             else{
