@@ -35,11 +35,7 @@ class ReviewsAdapter(
         fun bind(item: Review) {
             with(binding) {
                 reviewRating.text = item.rating.toString()
-                if (item.reviewer == null) {
-                    reviewUsername.text = Resources.getSystem().getString(R.string.username_placeholder)
-                } else {
-                    reviewUsername.text = item.reviewer
-                }
+                reviewUsername.text = item.user.email
                 reviewComment.text = item.comment
             }
 

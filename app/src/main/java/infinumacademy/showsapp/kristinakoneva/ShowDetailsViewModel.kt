@@ -1,10 +1,15 @@
 package infinumacademy.showsapp.kristinakoneva
 
+import android.telecom.Call
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import model.Review
-
+import model.ReviewsResponse
+import model.Show
+import networking.ApiModule
+import retrofit2.Callback
+import retrofit2.Response
 
 class ShowDetailsViewModel : ViewModel() {
 
@@ -12,10 +17,10 @@ class ShowDetailsViewModel : ViewModel() {
     val reviewsListLiveData: LiveData<List<Review>> = _reviewsListLiveData
 
 
-    fun addReviewToList(rating: Double, comment: String, username: String) {
-        val review = Review(rating, comment, username)
-        _reviewsListLiveData.value = _reviewsListLiveData.value?.plus(review)
-    }
+    //fun addReviewToList(rating: Double, comment: String, username: String) {
+   //     val review = Review(rating, comment, username)
+    //    _reviewsListLiveData.value = _reviewsListLiveData.value?.plus(review)
+   // }
 
     fun getAverageReviewsRating(): Double {
         return if(_reviewsListLiveData.value != null){
@@ -27,6 +32,21 @@ class ShowDetailsViewModel : ViewModel() {
         } else{
             0.0
         }
+    }
+
+    fun fetchReviewsAboutShow(show: Show){
+        ApiModule.retrofit.fetchReviewsAboutShow(Integer.parseInt(show.id)).enqueue(object: Callback<ReviewsResponse>{
+            override fun onResponse(call: retrofit2.Call<ReviewsResponse>, response: Response<ReviewsResponse>) {
+                if(response.isSuccessful){
+                    _reviewsListLiveData.value = response.body()?.reviews
+                }
+            }
+
+            override fun onFailure(call: retrofit2.Call<ReviewsResponse>, t: Throwable) {
+               // TODO("Not yet implemented")
+            }
+
+        })
     }
 
 
