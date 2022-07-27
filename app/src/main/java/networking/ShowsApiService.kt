@@ -1,5 +1,7 @@
 package networking
 
+import model.CreateReviewRequest
+import model.CreateReviewResponse
 import model.LoginRequest
 import model.LoginResponse
 import model.RegisterRequest
@@ -24,4 +26,7 @@ interface ShowsApiService {
 
     @GET("/shows/{show_id}/reviews")
     fun fetchReviewsAboutShow(@Path("show_id") showId: Int): Call<ReviewsResponse>
+
+    @POST("/reviews")
+    fun createReview(@Body request: CreateReviewRequest): Call<CreateReviewResponse>
 }

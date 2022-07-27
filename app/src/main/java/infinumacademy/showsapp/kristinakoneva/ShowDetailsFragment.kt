@@ -117,13 +117,13 @@ class ShowDetailsFragment : Fragment() {
 
     private fun initAddReviewButton() {
         binding.btnWriteReview.setOnClickListener {
-            //showAddReviewBottomSheet()
+            showAddReviewBottomSheet()
         }
 
         setReviewsStatus()
     }
 
-    /*
+
     private fun showAddReviewBottomSheet() {
         val dialog = BottomSheetDialog(requireContext())
         val bottomSheetBinding = DialogAddReviewBinding.inflate(layoutInflater)
@@ -137,7 +137,11 @@ class ShowDetailsFragment : Fragment() {
         }
 
         bottomSheetBinding.btnSubmitReview.setOnClickListener {
-            addReviewToList(bottomSheetBinding.rbRating.rating.toDouble(), bottomSheetBinding.etComment.text.toString())
+            val rating = bottomSheetBinding.rbRating.rating.toInt()
+            val comment = bottomSheetBinding.etComment.text.toString()
+            val showId = args.show.id.toInt()
+            viewModel.addReview(rating,comment,showId)
+            populateRecyclerView()
             showReviews()
             setReviewsStatus()
             dialog.dismiss()
@@ -145,17 +149,6 @@ class ShowDetailsFragment : Fragment() {
 
         dialog.show()
     }
-
-     */
-
-    /*
-    private fun addReviewToList(rating: Double, comment: String) {
-        val username = sharedPreferences.getString(Constants.USERNAME, getString(R.string.username_placeholder))
-        viewModel.addReviewToList(rating, comment, username!!)
-        populateRecyclerView()
-        setReviewsStatus()
-    }
-        */
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

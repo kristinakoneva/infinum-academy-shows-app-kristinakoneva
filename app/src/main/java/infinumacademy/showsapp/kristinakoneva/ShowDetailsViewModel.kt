@@ -4,6 +4,8 @@ import android.telecom.Call
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import model.CreateReviewRequest
+import model.CreateReviewResponse
 import model.Review
 import model.ReviewsResponse
 import model.Show
@@ -33,12 +35,31 @@ class ShowDetailsViewModel : ViewModel() {
             0.0
         }
     }
+    fun addReview(rating: Int, comment: String?, showId: Int){
+        val request = CreateReviewRequest(
+            rating = rating,
+            comment = comment,
+            showId = showId
+        )
+        ApiModule.retrofit.createReview(request).enqueue(object: Callback<CreateReviewResponse>{
+            override fun onResponse(call: retrofit2.Call<CreateReviewResponse>, response: Response<CreateReviewResponse>) {
+                if(response.isSuccessful){
+                    _reviewsListLiveData.value = _reviewsListLiveData.value!! + response.body()!!.review
+                }
+            }
+
+            override fun onFailure(call: retrofit2.Call<CreateReviewResponse>, t: Throwable) {
+                // TODO("Not yet implemented")
+            }
+
+        })
+    }
 
     fun fetchReviewsAboutShow(show: Show){
         ApiModule.retrofit.fetchReviewsAboutShow(Integer.parseInt(show.id)).enqueue(object: Callback<ReviewsResponse>{
             override fun onResponse(call: retrofit2.Call<ReviewsResponse>, response: Response<ReviewsResponse>) {
                 if(response.isSuccessful){
-                    _reviewsListLiveData.value = response.body()?.reviews
+                    _reviewsListLiveData.value = response.body()!!.reviews
                 }
             }
 
