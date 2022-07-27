@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.edit
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
@@ -20,23 +21,9 @@ class LoginFragment : Fragment() {
 
     private val binding get() = _binding!!
 
-    private val emailLiveData = MutableLiveData<String>()
-    private val passwordLiveData = MutableLiveData<String>()
-    private val isValidLiveData = MediatorLiveData<Boolean>().apply {
-        this.value = false
-
-        addSource(emailLiveData) { email ->
-            val password = passwordLiveData.value
-            this.value = validateLoginForm(email, password)
-        }
-        addSource(passwordLiveData) { password ->
-            val email = emailLiveData.value
-            this.value = validateLoginForm(email, password)
-        }
-    }
+    private val viewModel by viewModels<LoginViewModel>()
 
     private lateinit var sharedPreferences: SharedPreferences
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,14 +67,16 @@ class LoginFragment : Fragment() {
 
     private fun observeLiveDataForValidation() {
         binding.tilEmail.editText?.doOnTextChanged { text, _, _, _ ->
-            emailLiveData.value = text?.toString()
+            viewModel.onEmailTextChanged(text?.toString())
+            setEmailError()
         }
 
         binding.tilPassword.editText?.doOnTextChanged { text, _, _, _ ->
-            passwordLiveData.value = text?.toString()
+            viewModel.onPasswordTextChanges(text?.toString())
+            setPasswordError()
         }
 
-        isValidLiveData.observe(viewLifecycleOwner) { isValid ->
+        viewModel.isValidLiveData.observe(viewLifecycleOwner) { isValid ->
             binding.btnLogin.isEnabled = isValid
         }
     }
@@ -110,25 +99,20 @@ class LoginFragment : Fragment() {
         return username
     }
 
-    private fun validateLoginForm(email: String?, password: String?): Boolean {
-        val isValidEmail = email != null && email.isNotBlank() && email.matches("^[a-z][a-z0-9\\.\\_]*@[a-z]+\\.[a-z]+".toRegex())
-        val isValidPassword = password != null && password.isNotBlank() && password.length >= Constants.MIN_CHARS_FOR_PASSWORD
-
-        setEmailError(isValidEmail)
-        setPasswordError(isValidPassword)
-
-        return isValidEmail && isValidPassword
-    }
-
-    private fun setEmailError(isValidEmail: Boolean) {
-        if (!isValidEmail) {
-            binding.etEmail.error = getString(R.string.invalid_email_error_message)
+    private fun setEmailError() {
+        viewModel.isValidEmail.observe(viewLifecycleOwner) { isValid ->
+            if (!isValid) {
+                binding.etEmail.error = getString(R.string.invalid_email_error_message)
+            }
         }
+
     }
 
-    private fun setPasswordError(isValidPassword: Boolean) {
-        if (!isValidPassword) {
-            binding.etPassword.error = getString(R.string.invalid_password_error_message)
+    private fun setPasswordError() {
+        viewModel.isValidPassword.observe(viewLifecycleOwner) { isValid ->
+            if (!isValid) {
+                binding.etPassword.error = getString(R.string.invalid_password_error_message)
+            }
         }
     }
 
