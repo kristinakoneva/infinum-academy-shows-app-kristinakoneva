@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentShowDetailsBinding
 import model.Review
-import model.Show
 
 class ShowDetailsViewModel : ViewModel() {
 

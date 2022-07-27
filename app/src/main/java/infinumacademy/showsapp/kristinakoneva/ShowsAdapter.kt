@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import infinumacademy.showsapp.kristinakoneva.databinding.ViewShowItemBinding
-import model.Show
 
 class ShowsAdapter(
     private var items: List<Show>,

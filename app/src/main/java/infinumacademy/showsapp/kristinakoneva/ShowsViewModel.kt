@@ -3,7 +3,6 @@ package infinumacademy.showsapp.kristinakoneva
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import model.Show
 
 class ShowsViewModel : ViewModel() {
 
