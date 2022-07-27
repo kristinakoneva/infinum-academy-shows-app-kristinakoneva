@@ -12,7 +12,21 @@ class AuthInterceptor (context: Context) : Interceptor {
 
         // If token has been saved, add it to the request
         sessionManager.fetchAuthToken()?.let {
-            requestBuilder.addHeader("Authorization", "Bearer $it")
+            //requestBuilder.addHeader("Authorization", "Bearer $it")
+            requestBuilder.addHeader("access-token", it)
+            requestBuilder.addHeader("token-type","Bearer")
+        }
+        sessionManager.fetchClient()?.let{
+            requestBuilder.addHeader("client",it)
+        }
+        sessionManager.fetchExpiry()?.let{
+            requestBuilder.addHeader("expiry",it)
+        }
+        sessionManager.fetchUID()?.let{
+            requestBuilder.addHeader("uid",it)
+        }
+        sessionManager.fetchContentType()?.let{
+            requestBuilder.addHeader("content-type",it)
         }
 
         return chain.proceed(requestBuilder.build())

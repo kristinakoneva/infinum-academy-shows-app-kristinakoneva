@@ -3,7 +3,9 @@ package infinumacademy.showsapp.kristinakoneva
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import infinumacademy.showsapp.kristinakoneva.databinding.ViewShowItemBinding
+import model.Show
 
 class ShowsAdapter(
     private var items: List<Show>,
@@ -30,8 +32,8 @@ class ShowsAdapter(
 
     inner class ShowsViewHolder(private val binding: ViewShowItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Show) {
-            binding.showName.text = item.name
-            binding.showImage.setImageResource(item.imageResourceId)
+            binding.showName.text = item.title
+            binding.showImage.load(item.imageUrl)
             binding.showCardContainer.setOnClickListener {
                 onItemClickCallback(item)
             }

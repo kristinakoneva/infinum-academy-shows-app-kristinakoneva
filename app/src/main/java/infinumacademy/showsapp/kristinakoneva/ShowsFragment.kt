@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.core.content.edit
@@ -34,6 +35,8 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
 import model.Show
+import networking.ApiModule
+import networking.SessionManager
 
 class ShowsFragment : Fragment() {
 
@@ -49,10 +52,15 @@ class ShowsFragment : Fragment() {
 
     private lateinit var sharedPreferences: SharedPreferences
 
+    private lateinit var sessionManager: SessionManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        ApiModule.initRetrofit(requireContext())
+        sessionManager = SessionManager(requireContext())
         sharedPreferences = requireContext().getSharedPreferences(Constants.SHOWS_APP, Context.MODE_PRIVATE)
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -63,6 +71,7 @@ class ShowsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.fetchShows()
         showProfilePhoto()
         initShowsRecycler()
         displayState()
@@ -129,14 +138,12 @@ class ShowsFragment : Fragment() {
 
 
         bottomSheetBinding.imgBtnCamera.setOnClickListener {
-            //cameraCheckPermission()
             takeImage()
             showProfilePhoto()
             dialog.dismiss()
         }
 
         bottomSheetBinding.imgBtnGallery.setOnClickListener {
-            //galleryCheckPermission()
             selectImageFromGallery()
             showProfilePhoto()
             dialog.dismiss()
@@ -168,8 +175,15 @@ class ShowsFragment : Fragment() {
     }
 
     private fun showShows() {
-        viewModel.showsListLiveData.observe(viewLifecycleOwner) { showsList ->
-            adapter.addAllItems(showsList)
+        viewModel.listShowsResultLiveData.observe(viewLifecycleOwner) {isSuccessful->
+            if(isSuccessful){
+                viewModel.showsListLiveData.observe(viewLifecycleOwner) { showsList ->
+                    adapter.addAllItems(showsList)
+                }
+            }else{
+                Toast.makeText(requireContext(), "Fetching shows was unsuccessful", Toast.LENGTH_SHORT).show()
+            }
+
         }
         binding.showsEmptyState.isVisible = false
         binding.showsRecycler.isVisible = true

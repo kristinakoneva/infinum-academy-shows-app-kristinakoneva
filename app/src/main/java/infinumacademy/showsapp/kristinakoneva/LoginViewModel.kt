@@ -76,9 +76,19 @@ class LoginViewModel: ViewModel() {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 loginResultLiveData.value = response.isSuccessful
 
-                val token = response.headers()["access-token"].toString()
+
                 if(response.isSuccessful){
+                    val token = response.headers()["access-token"].toString()
+                    val client = response.headers()["client"].toString()
+                    val expiry = response.headers()["expiry"].toString()
+                    val uid = response.headers()["uid"].toString()
+                    val contentType = response.headers()["content-type"].toString()
+
                     sessionManager.saveAuthToken(token)
+                    sessionManager.saveClient(client)
+                    sessionManager.saveExpiry(expiry)
+                    sessionManager.saveUID(uid)
+                    sessionManager.saveContentType(contentType)
                 }
             }
 

@@ -1,8 +1,11 @@
 package model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+@Parcelize
 @Serializable
 data class Show(
     @SerialName("id") val id: String,
@@ -11,4 +14,4 @@ data class Show(
     @SerialName("image_url") val imageUrl: String,
     @SerialName("no_of_reviews") val noOfReviews: Int,
     @SerialName("title") val title: String
-)
+) : Parcelable

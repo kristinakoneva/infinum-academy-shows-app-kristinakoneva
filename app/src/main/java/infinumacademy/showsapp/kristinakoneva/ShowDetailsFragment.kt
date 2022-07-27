@@ -62,9 +62,9 @@ class ShowDetailsFragment : Fragment() {
     }
 
     private fun displayShow(show: Show) {
-        binding.showName.text = show.name
+        binding.showName.text = show.title
         binding.showDesc.text = show.description
-        binding.showImg.setImageResource(show.imageResourceId)
+        binding.showImg.load(show.imageUrl)
     }
 
     private fun showReviews(){

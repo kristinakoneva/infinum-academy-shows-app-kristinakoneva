@@ -18,5 +18,5 @@ interface ShowsApiService {
     fun login(@Body request: LoginRequest): Call<LoginResponse>
 
     @GET("/shows")
-    fun listShows(): Call<ShowsResponse>
+    fun fetchShows(): Call<ShowsResponse>
 }
