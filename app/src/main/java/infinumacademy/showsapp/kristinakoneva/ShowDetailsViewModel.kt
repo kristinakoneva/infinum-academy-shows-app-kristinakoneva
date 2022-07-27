@@ -18,11 +18,15 @@ class ShowDetailsViewModel : ViewModel() {
     }
 
     fun getAverageReviewsRating(): Double {
-        var total = 0.0
-        for (review in _reviewsListLiveData.value!!) {
-            total += review.rating
+        return if(_reviewsListLiveData.value != null){
+            var total = 0.0
+            for (review in _reviewsListLiveData.value!!) {
+                total += review.rating
+            }
+            total / _reviewsListLiveData.value!!.size.toDouble()
+        } else{
+            0.0
         }
-        return total / _reviewsListLiveData.value!!.size.toDouble()
     }
 
 
