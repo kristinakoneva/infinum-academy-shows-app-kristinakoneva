@@ -1,10 +1,9 @@
 package infinumacademy.showsapp.kristinakoneva
 
-import androidx.core.view.isVisible
+
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import infinumacademy.showsapp.kristinakoneva.databinding.FragmentShowsBinding
 import model.Show
 
 class ShowsViewModel : ViewModel() {

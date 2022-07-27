@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -21,6 +22,7 @@ import infinumacademy.showsapp.kristinakoneva.databinding.FragmentShowDetailsBin
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
+import model.Show
 
 class ShowDetailsFragment : Fragment() {
 
@@ -51,21 +53,35 @@ class ShowDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        viewModel.showReviews(binding)
-        viewModel.displayShow(binding, args.show)
+        showReviews()
+        displayShow(args.show)
         initBackButtonFromToolbar()
         initReviewsRecycler()
         initAddReviewButton()
         setReviewsStatus()
     }
 
-    // the whole method setReviewsStatus() should be moved to the ShowDetailsViewModel,
-    // but I cannot find a way to get this kind of formatted string inside the view model class:
-    // getString(R.string.review_status, numOfReviews, averageRating.toFloat())
+    private fun displayShow(show: Show) {
+        binding.showName.text = show.name
+        binding.showDesc.text = show.description
+        binding.showImg.setImageResource(show.imageResourceId)
+    }
+
+    private fun showReviews(){
+        viewModel.reviewsListLiveData.observe(viewLifecycleOwner){reviewsList->
+            binding.groupShowReviews.isVisible = reviewsList.isNotEmpty()
+            binding.noReviews.isVisible = reviewsList.isEmpty()
+        }
+    }
     private fun setReviewsStatus() {
         val numOfReviews = viewModel.reviewsListLiveData.value?.size
-        val averageRating = viewModel.getAverageReviewsRating()
-        viewModel.setReviewsStatus(binding, getString(R.string.review_status, numOfReviews, averageRating.toFloat()))
+        val averageRating = viewModel.getAverageReviewsRating().toFloat()
+        viewModel.reviewsListLiveData.observe(viewLifecycleOwner){ reviewsList->
+            if(reviewsList.isNotEmpty()){
+                binding.ratingStatus.rating = String.format("%.2f", averageRating).toFloat()
+                binding.reviewsStatus.text = getString(R.string.review_status, numOfReviews, averageRating)
+            }
+        }
     }
 
     private fun initBackButtonFromToolbar() {
@@ -120,7 +136,7 @@ class ShowDetailsFragment : Fragment() {
 
         bottomSheetBinding.btnSubmitReview.setOnClickListener {
             addReviewToList(bottomSheetBinding.rbRating.rating.toDouble(), bottomSheetBinding.etComment.text.toString())
-            viewModel.showReviews(binding)
+            showReviews()
             setReviewsStatus()
             dialog.dismiss()
         }
