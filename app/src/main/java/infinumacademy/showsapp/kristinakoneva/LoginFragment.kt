@@ -7,12 +7,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.edit
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentLoginBinding
+import networking.ApiModule
+import networking.SessionManager
 
 class LoginFragment : Fragment() {
 
@@ -20,6 +24,7 @@ class LoginFragment : Fragment() {
 
     private val binding get() = _binding!!
 
+    /*
     private val emailLiveData = MutableLiveData<String>()
     private val passwordLiveData = MutableLiveData<String>()
     private val isValidLiveData = MediatorLiveData<Boolean>().apply {
@@ -33,17 +38,27 @@ class LoginFragment : Fragment() {
             val email = emailLiveData.value
             this.value = validateLoginForm(email, password)
         }
-    }
+    } */
 
     private lateinit var sharedPreferences: SharedPreferences
+
+    private val viewModel by viewModels<LoginViewModel>()
+
+    private lateinit var sessionManager: SessionManager
+
+    /*
 
     companion object {
         const val MIN_CHARS_FOR_PASSWORD = 6
     }
+        */
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
+        ApiModule.initRetrofit(requireContext())
+        sessionManager = SessionManager(requireContext())
         sharedPreferences = requireContext().getSharedPreferences(SHOWS_APP, Context.MODE_PRIVATE)
     }
 
@@ -55,8 +70,20 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.getLoginResultLiveData().observe(viewLifecycleOwner) { loginSuccessful ->
+            if (loginSuccessful) {
+                val username = extractUsername()
+                saveData()
+                val directions = LoginFragmentDirections.toShowsNavGraph(username)
+                findNavController().navigate(directions)
+            } else {
+                Toast.makeText(requireContext(), "Login unsuccessful", Toast.LENGTH_SHORT).show()
+            }
+
+        }
+
         checkRememberMe()
-        observeLiveDataForValidation()
+        // observeLiveDataForValidation()
         initListeners()
     }
 
@@ -81,6 +108,8 @@ class LoginFragment : Fragment() {
         }
     }
 
+    /*
+
     private fun observeLiveDataForValidation() {
         binding.tilEmail.editText?.doOnTextChanged { text, _, _, _ ->
             emailLiveData.value = text?.toString()
@@ -93,16 +122,24 @@ class LoginFragment : Fragment() {
         isValidLiveData.observe(viewLifecycleOwner) { isValid ->
             binding.btnLogin.isEnabled = isValid
         }
+    }*/
+
+    private fun saveData() {
+        saveRememberMe()
+        val username = extractUsername()
+        val email = binding.etEmail.text.toString()
+        saveUsernameAndEmail(username, email)
     }
 
     private fun initListeners() {
         binding.btnLogin.setOnClickListener {
-            saveRememberMe()
-            val username = extractUsername()
-            val email = binding.etEmail.text.toString()
-            saveUsernameAndEmail(username, email)
-            val directions = LoginFragmentDirections.toShowsNavGraph(username)
-            findNavController().navigate(directions)
+
+            viewModel.onLoginButtonClicked(
+                email = binding.etEmail.text.toString(),
+                password = binding.etPassword.text.toString(),
+                sessionManager = sessionManager
+            )
+
         }
 
         binding.btnRegister.setOnClickListener {
@@ -117,6 +154,7 @@ class LoginFragment : Fragment() {
         val username = parts[0]
         return username
     }
+    /*
 
     private fun validateLoginForm(email: String?, password: String?): Boolean {
         val isValidEmail = email != null && email.isNotBlank() && email.matches("^[a-z][a-z0-9\\.\\_]*@[a-z]+\\.[a-z]+".toRegex())
@@ -139,7 +177,7 @@ class LoginFragment : Fragment() {
             binding.etPassword.error = getString(R.string.invalid_password_error_message)
         }
     }
-
+    */
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

@@ -29,15 +29,15 @@ class RegisterViewModel: ViewModel() {
                 override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
                     registrationResultLiveData.value = response.isSuccessful
 
-                    //GET /users/me
-                    //val token = response.headers()["access-token"] ???
-                    //if(response.isSuccessful){
-                      //  sessionManager.saveAuthToken(token)
-                   // }
+                    val token = response.headers()["access-token"].toString()
+                    if(response.isSuccessful){
+                        sessionManager.saveAuthToken(token)
+                    }
                 }
 
                 override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
                     registrationResultLiveData.value = false
+
                 }
             })
 

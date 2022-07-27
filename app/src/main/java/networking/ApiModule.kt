@@ -1,6 +1,7 @@
 package networking
 
 import android.content.Context
+import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -15,7 +16,7 @@ object ApiModule {
 
     fun initRetrofit(context: Context) {
         val okhttp = OkHttpClient.Builder()
-            .addInterceptor(AuthInterceptor(context))
+            .addInterceptor(AuthInterceptor(context)).addInterceptor(ChuckerInterceptor.Builder(context).build())
             .build()
 
         retrofit = Retrofit.Builder()
