@@ -58,12 +58,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_marginStart="23dp"
+        android:layout_marginStart="24dp"
         android:text="@string/shows"
         android:textColor="@color/black"
         android:textStyle="bold"
         android:textSize="36sp"
         />
+    <com.google.android.material.chip.Chip
+        android:id="@+id/chipTopRated"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/top_rated"
+        android:backgroundTint="@color/purple"
+        android:textColor="@color/white"/>
 
     <com.google.android.material.button.MaterialButton
         app:layout_constraintStart_toStartOf="parent"
@@ -71,7 +82,7 @@
         android:id="@+id/btnShowHideEmptyState"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="23dp"
+        android:layout_marginStart="24dp"
         android:text="@string/show_hide_empty_state"
         android:textColor="@color/white"
         android:textSize="14sp"
