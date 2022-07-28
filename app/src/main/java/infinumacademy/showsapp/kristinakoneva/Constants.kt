@@ -6,6 +6,4 @@ object Constants {
     const val REMEMBER_ME = "REMEMBER_ME"
     const val EMAIL = "EMAIL"
     const val SHOWS_APP = "ShowsApp"
-    const val PROFILE_PHOTO = "PROFILE_PHOTO"
-    const val PROFILE_PHOTO_CHANGED = "PROFILE_PHOTO_CHANGED"
 }
