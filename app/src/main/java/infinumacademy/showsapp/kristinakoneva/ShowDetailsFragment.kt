@@ -58,8 +58,8 @@ class ShowDetailsFragment : Fragment() {
         initBackButtonFromToolbar()
         initReviewsRecycler()
         initAddReviewButton()
-        setReviewsStatus()
         viewModel.fetchReviewsAboutShow(args.show)
+        setReviewsStatus()
     }
 
     private fun displayShow(show: Show) {

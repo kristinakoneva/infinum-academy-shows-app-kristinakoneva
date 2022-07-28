@@ -13,8 +13,8 @@ import retrofit2.Response
 
 class ShowsViewModel : ViewModel() {
 
-    private val _showsListLiveData = MutableLiveData<Array<Show>>()
-    val showsListLiveData: LiveData<Array<Show>> = _showsListLiveData
+    private val _showsListLiveData = MutableLiveData<List<Show>>()
+    val showsListLiveData: LiveData<List<Show>> = _showsListLiveData
 
     private val _showEmptyStateLiveData = MutableLiveData(false)
     val showEmptyStateLiveData: LiveData<Boolean> = _showEmptyStateLiveData

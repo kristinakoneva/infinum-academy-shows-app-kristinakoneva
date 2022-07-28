@@ -8,7 +8,7 @@ import infinumacademy.showsapp.kristinakoneva.databinding.ViewShowItemBinding
 import model.Show
 
 class ShowsAdapter(
-    private var items: Array<Show>,
+    private var items: List<Show>,
     private val onItemClickCallback: (Show) -> Unit
 ) : RecyclerView.Adapter<ShowsAdapter.ShowsViewHolder>() {
 
@@ -21,7 +21,7 @@ class ShowsAdapter(
         holder.bind(items[position])
     }
 
-    fun addAllItems(shows: Array<Show>) {
+    fun addAllItems(shows: List<Show>) {
         items = shows
         notifyDataSetChanged()
     }
@@ -34,6 +34,7 @@ class ShowsAdapter(
         fun bind(item: Show) {
             binding.showName.text = item.title
             binding.showImage.load(item.imageUrl)
+            binding.showDescription.text = item.description
             binding.showCardContainer.setOnClickListener {
                 onItemClickCallback(item)
             }

@@ -24,7 +24,8 @@
                 android:id="@+id/showImage"
                 android:layout_width="match_parent"
                 android:layout_height="193dp"
-                tools:src="@drawable/purple_ellipse"/>
+                tools:src="@drawable/purple_ellipse"
+                android:scaleType="centerCrop"/>
 
             <TextView
                 android:id="@+id/showName"
@@ -38,6 +39,7 @@
                 tools:text="Show"/>
 
             <TextView
+                android:id="@+id/showDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"

@@ -29,9 +29,10 @@
 
             <TextView
                 android:id="@+id/showName"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
                 android:textColor="@color/black"
                 android:textSize="36sp"
                 android:textStyle="bold"
@@ -41,7 +42,7 @@
 
             <ImageView
                 android:id="@+id/showImg"
-                android:layout_width="wrap_content"
+                android:layout_width="wrap_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="20dp"

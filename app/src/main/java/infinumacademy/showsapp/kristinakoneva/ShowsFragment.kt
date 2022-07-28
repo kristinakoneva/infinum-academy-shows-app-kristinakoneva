@@ -191,13 +191,13 @@ class ShowsFragment : Fragment() {
     }
 
     private fun hideShows() {
-        adapter.addAllItems(emptyArray())
+        adapter.addAllItems(emptyList())
         binding.showsEmptyState.isVisible = true
         binding.showsRecycler.isVisible = false
     }
 
     private fun initShowsRecycler() {
-        adapter = ShowsAdapter(emptyArray()) { show ->
+        adapter = ShowsAdapter(emptyList()) { show ->
             showDetailsAbout(show)
         }
 
