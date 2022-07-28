@@ -53,12 +53,18 @@ class ShowDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-
+        displayLoadingScreen()
         initBackButtonFromToolbar()
         initReviewsRecycler()
         initAddReviewButton()
         showReviews()
         displayShow()
+    }
+
+    private fun displayLoadingScreen(){
+        viewModel.apiCallInProgress.observe(viewLifecycleOwner){isApiInProgress ->
+            binding.loadingProgressOverlay.isVisible = isApiInProgress
+        }
     }
 
     private fun displayShow() {
