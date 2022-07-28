@@ -38,6 +38,7 @@ class LoginFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
 
+
         ApiModule.initRetrofit(requireContext())
         sessionManager = SessionManager(requireContext())
         sharedPreferences = requireContext().getSharedPreferences(Constants.SHOWS_APP, Context.MODE_PRIVATE)
@@ -81,6 +82,13 @@ class LoginFragment : Fragment() {
         if (binding.cbRememberMe.isChecked) {
             val directions = LoginFragmentDirections.toShowsNavGraph(getString(R.string.username_placeholder))
             findNavController().navigate(directions)
+        }else{
+            sessionManager.clearSession()
+            sharedPreferences.edit {
+                putBoolean(Constants.REMEMBER_ME, false)
+                putString(Constants.USERNAME, getString(R.string.username_placeholder))
+                putBoolean(Constants.PROFILE_PHOTO_CHANGED, false)
+            }
         }
     }
 

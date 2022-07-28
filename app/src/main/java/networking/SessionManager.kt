@@ -16,7 +16,13 @@ class SessionManager(context: Context) {
     }
 
     fun clearSession(){
-        // TODO: implement
+        val editor = prefs.edit()
+        editor.putString(USER_TOKEN,null)
+        editor.putString(CLIENT,null)
+        editor.putString(EXPIRY,null)
+        editor.putString(UID,null)
+        editor.putString(CONTENT_TYPE,null)
+        editor.apply()
     }
 
     /**
