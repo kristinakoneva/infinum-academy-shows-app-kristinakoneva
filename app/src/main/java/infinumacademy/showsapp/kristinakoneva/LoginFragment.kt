@@ -54,9 +54,8 @@ class LoginFragment : Fragment() {
 
         viewModel.getLoginResultLiveData().observe(viewLifecycleOwner) { loginSuccessful ->
             if (loginSuccessful) {
-                val username = extractUsername()
                 saveData()
-                val directions = LoginFragmentDirections.toShowsNavGraph(username)
+                val directions = LoginFragmentDirections.toShowsNavGraph()
                 findNavController().navigate(directions)
             } else {
                 Toast.makeText(requireContext(), "Login unsuccessful", Toast.LENGTH_SHORT).show()
@@ -87,7 +86,7 @@ class LoginFragment : Fragment() {
     private fun checkRememberMe() {
         binding.cbRememberMe.isChecked = sharedPreferences.getBoolean(Constants.REMEMBER_ME, false)
         if (binding.cbRememberMe.isChecked) {
-            val directions = LoginFragmentDirections.toShowsNavGraph(getString(R.string.username_placeholder))
+            val directions = LoginFragmentDirections.toShowsNavGraph()
             findNavController().navigate(directions)
         }else{
             sessionManager.clearSession()

@@ -49,8 +49,6 @@ class ShowsFragment : Fragment() {
 
     private val viewModel by viewModels<ShowsViewModel>()
 
-    private val args by navArgs<ShowsFragmentArgs>()
-
     private lateinit var sharedPreferences: SharedPreferences
 
     private lateinit var sessionManager: SessionManager
@@ -229,8 +227,7 @@ class ShowsFragment : Fragment() {
     }
 
     private fun showDetailsAbout(show: Show) {
-        val username = args.username
-        val directions = ShowsFragmentDirections.toShowDetailsFragment(username, show, show.id.toInt())
+        val directions = ShowsFragmentDirections.toShowDetailsFragment(show.id.toInt())
         findNavController().navigate(directions)
     }
 

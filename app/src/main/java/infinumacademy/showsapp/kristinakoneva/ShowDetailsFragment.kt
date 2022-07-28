@@ -158,7 +158,7 @@ class ShowDetailsFragment : Fragment() {
         bottomSheetBinding.btnSubmitReview.setOnClickListener {
             val rating = bottomSheetBinding.rbRating.rating.toInt()
             val comment = bottomSheetBinding.etComment.text.toString()
-            val showId = args.show.id.toInt()
+            val showId = args.showId
             viewModel.addReview(rating,comment,showId)
             displayShow()
             populateRecyclerView()
