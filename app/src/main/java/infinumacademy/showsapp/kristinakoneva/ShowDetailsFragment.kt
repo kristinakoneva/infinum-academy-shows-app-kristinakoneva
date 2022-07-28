@@ -83,12 +83,8 @@ class ShowDetailsFragment : Fragment() {
         viewModel.showLiveData.observe(viewLifecycleOwner){show->
             val numOfReviews = show.noOfReviews
             val averageRating = show.averageRating
-            viewModel.reviewsListLiveData.observe(viewLifecycleOwner){ reviewsList->
-                if(reviewsList.isNotEmpty()){
-                    binding.ratingStatus.rating = String.format("%.2f", averageRating).toFloat()
-                    binding.reviewsStatus.text = getString(R.string.review_status, numOfReviews, averageRating)
-                }
-            }
+            binding.ratingStatus.rating = String.format("%.2f", averageRating).toFloat()
+            binding.reviewsStatus.text = getString(R.string.review_status, numOfReviews, averageRating)
         }
     }
 
@@ -138,8 +134,6 @@ class ShowDetailsFragment : Fragment() {
         binding.btnWriteReview.setOnClickListener {
             showAddReviewBottomSheet()
         }
-        showReviews()
-        displayShow()
     }
 
 
@@ -160,9 +154,9 @@ class ShowDetailsFragment : Fragment() {
             val comment = bottomSheetBinding.etComment.text.toString()
             val showId = args.show.id.toInt()
             viewModel.addReview(rating,comment,showId)
+            displayShow()
             populateRecyclerView()
             showReviews()
-            setReviewsStatus()
             dialog.dismiss()
         }
 

@@ -188,7 +188,6 @@ class ShowsFragment : Fragment() {
     }
 
     private fun showShows() {
-        // binding.loadingProgressOverlay.isVisible = true
         viewModel.showTopRatedLiveData.observe(viewLifecycleOwner){showTopRatedShows->
             if(showTopRatedShows){
                 viewModel.topRatedShowsListLiveData.observe(viewLifecycleOwner){topRatedShows->
@@ -199,7 +198,6 @@ class ShowsFragment : Fragment() {
                     if(isSuccessful){
                         viewModel.showsListLiveData.observe(viewLifecycleOwner) { showsList ->
                             adapter.addAllItems(showsList)
-                            // binding.loadingProgressOverlay.isVisible = false
                         }
                     }else{
                         // Toast.makeText(requireContext(), "Fetching shows was unsuccessful", Toast.LENGTH_SHORT).show()
