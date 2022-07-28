@@ -26,6 +26,12 @@ class ShowsViewModel : ViewModel() {
     private val _topRatedShowsListLiveData = MutableLiveData<List<Show>>()
     val topRatedShowsListLiveData: LiveData<List<Show>> = _topRatedShowsListLiveData
 
+    private val _showTopRatedLiveData = MutableLiveData(false)
+    val showTopRatedLiveData: LiveData<Boolean> = _showTopRatedLiveData
+
+    fun updateShowTopRated(isChecked: Boolean){
+        _showTopRatedLiveData.value = isChecked
+    }
 
     fun fetchShows(){
         ApiModule.retrofit.fetchShows().enqueue(object: Callback<ShowsResponse>{

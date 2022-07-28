@@ -75,6 +75,7 @@ class ShowsFragment : Fragment() {
         showProfilePhoto()
         initShowsRecycler()
         viewModel.fetchShows()
+        viewModel.fetchTopRatedShows()
         displayState()
         initListeners()
     }
@@ -98,7 +99,10 @@ class ShowsFragment : Fragment() {
         binding.btnDialogChangeProfilePicOrLogout.setOnClickListener {
             openDialogForChangingProfilePicOrLoggingOut()
         }
-        
+
+        binding.chipTopRated.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.updateShowTopRated(isChecked)
+        }
     }
 
     private fun openDialogForChangingProfilePicOrLoggingOut() {
@@ -178,17 +182,25 @@ class ShowsFragment : Fragment() {
 
     private fun showShows() {
         // binding.loadingProgressOverlay.isVisible = true
-        viewModel.listShowsResultLiveData.observe(viewLifecycleOwner) {isSuccessful->
-            if(isSuccessful){
-                viewModel.showsListLiveData.observe(viewLifecycleOwner) { showsList ->
-                    adapter.addAllItems(showsList)
-                    // binding.loadingProgressOverlay.isVisible = false
+        viewModel.showTopRatedLiveData.observe(viewLifecycleOwner){showTopRatedShows->
+            if(showTopRatedShows){
+                viewModel.topRatedShowsListLiveData.observe(viewLifecycleOwner){topRatedShows->
+                    adapter.addAllItems(topRatedShows)
                 }
             }else{
-                // Toast.makeText(requireContext(), "Fetching shows was unsuccessful", Toast.LENGTH_SHORT).show()
+                viewModel.listShowsResultLiveData.observe(viewLifecycleOwner) {isSuccessful->
+                    if(isSuccessful){
+                        viewModel.showsListLiveData.observe(viewLifecycleOwner) { showsList ->
+                            adapter.addAllItems(showsList)
+                            // binding.loadingProgressOverlay.isVisible = false
+                        }
+                    }else{
+                        // Toast.makeText(requireContext(), "Fetching shows was unsuccessful", Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
-
         }
+
         binding.showsEmptyState.isVisible = false
         binding.showsRecycler.isVisible = true
     }
