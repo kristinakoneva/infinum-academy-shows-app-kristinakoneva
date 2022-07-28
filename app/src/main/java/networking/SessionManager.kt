@@ -15,6 +15,10 @@ class SessionManager(context: Context) {
         const val CONTENT_TYPE = "CONTENT-TYPE"
     }
 
+    fun clearSession(){
+        // TODO: implement
+    }
+
     /**
      * Function to save auth token
      */
