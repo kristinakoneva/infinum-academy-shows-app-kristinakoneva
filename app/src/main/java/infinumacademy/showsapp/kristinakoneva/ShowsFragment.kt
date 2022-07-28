@@ -176,13 +176,15 @@ class ShowsFragment : Fragment() {
     }
 
     private fun showShows() {
+        // binding.loadingProgressOverlay.isVisible = true
         viewModel.listShowsResultLiveData.observe(viewLifecycleOwner) {isSuccessful->
             if(isSuccessful){
                 viewModel.showsListLiveData.observe(viewLifecycleOwner) { showsList ->
                     adapter.addAllItems(showsList)
+                    // binding.loadingProgressOverlay.isVisible = false
                 }
             }else{
-                Toast.makeText(requireContext(), "Fetching shows was unsuccessful", Toast.LENGTH_SHORT).show()
+                // Toast.makeText(requireContext(), "Fetching shows was unsuccessful", Toast.LENGTH_SHORT).show()
             }
 
         }
