@@ -2,7 +2,6 @@ package infinumacademy.showsapp.kristinakoneva
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,14 +14,9 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
-import coil.transform.CircleCropTransformation
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import infinumacademy.showsapp.kristinakoneva.databinding.DialogAddReviewBinding
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentShowDetailsBinding
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileNotFoundException
-import model.Show
 
 class ShowDetailsFragment : Fragment() {
 
@@ -61,15 +55,15 @@ class ShowDetailsFragment : Fragment() {
         displayShow()
     }
 
-    private fun displayLoadingScreen(){
-        viewModel.apiCallInProgress.observe(viewLifecycleOwner){isApiInProgress ->
+    private fun displayLoadingScreen() {
+        viewModel.apiCallInProgress.observe(viewLifecycleOwner) { isApiInProgress ->
             binding.loadingProgressOverlay.isVisible = isApiInProgress
         }
     }
 
     private fun displayShow() {
         viewModel.getShow(args.showId)
-        viewModel.showLiveData.observe(viewLifecycleOwner){ show->
+        viewModel.showLiveData.observe(viewLifecycleOwner) { show ->
             binding.showName.text = show.title
             binding.showDesc.text = show.description
             binding.showImg.load(show.imageUrl)
@@ -77,16 +71,16 @@ class ShowDetailsFragment : Fragment() {
         setReviewsStatus()
     }
 
-    private fun showReviews(){
+    private fun showReviews() {
         viewModel.fetchReviewsAboutShow(args.showId)
-        viewModel.showLiveData.observe(viewLifecycleOwner){show->
-            binding.groupShowReviews.isVisible = show.noOfReviews!=0
-            binding.noReviews.isVisible = show.noOfReviews==0
+        viewModel.showLiveData.observe(viewLifecycleOwner) { show ->
+            binding.groupShowReviews.isVisible = show.noOfReviews != 0
+            binding.noReviews.isVisible = show.noOfReviews == 0
         }
     }
 
-    private fun setReviewsStatus(){
-        viewModel.showLiveData.observe(viewLifecycleOwner){show->
+    private fun setReviewsStatus() {
+        viewModel.showLiveData.observe(viewLifecycleOwner) { show ->
             val numOfReviews = show.noOfReviews
             val averageRating = show.averageRating
             binding.ratingStatus.rating = String.format("%.2f", averageRating).toFloat()
@@ -142,7 +136,6 @@ class ShowDetailsFragment : Fragment() {
         }
     }
 
-
     private fun showAddReviewBottomSheet() {
         val dialog = BottomSheetDialog(requireContext())
         val bottomSheetBinding = DialogAddReviewBinding.inflate(layoutInflater)
@@ -159,7 +152,7 @@ class ShowDetailsFragment : Fragment() {
             val rating = bottomSheetBinding.rbRating.rating.toInt()
             val comment = bottomSheetBinding.etComment.text.toString()
             val showId = args.showId
-            viewModel.addReview(rating,comment,showId)
+            viewModel.addReview(rating, comment, showId)
             displayShow()
             populateRecyclerView()
             showReviews()
@@ -168,6 +161,7 @@ class ShowDetailsFragment : Fragment() {
 
         dialog.show()
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

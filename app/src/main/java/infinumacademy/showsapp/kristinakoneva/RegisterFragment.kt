@@ -26,7 +26,6 @@ class RegisterFragment : Fragment() {
 
     private val viewModel by viewModels<RegisterViewModel>()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -37,7 +36,7 @@ class RegisterFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        _binding = FragmentRegisterBinding.inflate(inflater, container,false)
+        _binding = FragmentRegisterBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -45,19 +44,18 @@ class RegisterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        viewModel.getRegistrationResultLiveData().observe(viewLifecycleOwner){ registrationSuccessful ->
-            if(registrationSuccessful){
+        viewModel.getRegistrationResultLiveData().observe(viewLifecycleOwner) { registrationSuccessful ->
+            if (registrationSuccessful) {
                 val directions = RegisterFragmentDirections.toLoginFragment(comingFromRegister = true)
                 findNavController().navigate(directions)
-            }
-            else{
+            } else {
                 Toast.makeText(requireContext(), "Registration unsuccessful", Toast.LENGTH_SHORT).show()
             }
         }
         initListeners()
     }
 
-    private fun initListeners(){
+    private fun initListeners() {
         binding.btnRegister.setOnClickListener {
             viewModel.onRegisterButtonClicked(
                 email = binding.etEmail.text.toString(),

@@ -24,8 +24,8 @@
                 android:id="@+id/showImage"
                 android:layout_width="match_parent"
                 android:layout_height="193dp"
-                tools:src="@drawable/purple_ellipse"
-                android:scaleType="centerCrop"/>
+                android:scaleType="centerCrop"
+                tools:src="@drawable/purple_ellipse"/>
 
             <TextView
                 android:id="@+id/showName"

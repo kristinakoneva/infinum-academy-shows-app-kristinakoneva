@@ -1,6 +1,5 @@
 package infinumacademy.showsapp.kristinakoneva
 
-
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,46 +24,46 @@ class ShowDetailsViewModel : ViewModel() {
     private val _apiCallInProgress = MutableLiveData(false)
     val apiCallInProgress: LiveData<Boolean> = _apiCallInProgress
 
-
     fun getAverageReviewsRating(): Double {
-        return if(_reviewsListLiveData.value != null){
+        return if (_reviewsListLiveData.value != null) {
             var total = 0.0
             for (review in _reviewsListLiveData.value!!) {
                 total += review.rating
             }
             total / _reviewsListLiveData.value!!.size.toDouble()
-        } else{
+        } else {
             0.0
         }
     }
 
-    fun getShow(showId: Int){
+    fun getShow(showId: Int) {
         _apiCallInProgress.value = true
-        ApiModule.retrofit.displayShow(showId).enqueue(object: Callback<DisplayShowResponse>{
+        ApiModule.retrofit.displayShow(showId).enqueue(object : Callback<DisplayShowResponse> {
             override fun onResponse(call: retrofit2.Call<DisplayShowResponse>, response: Response<DisplayShowResponse>) {
-                if(response.isSuccessful){
+                if (response.isSuccessful) {
                     _showLiveData.value = response.body()!!.show
                     _apiCallInProgress.value = false
                 }
             }
 
             override fun onFailure(call: retrofit2.Call<DisplayShowResponse>, t: Throwable) {
-               // TODO("Not yet implemented")
+                // TODO("Not yet implemented")
                 _apiCallInProgress.value = false
             }
 
         })
     }
-    fun addReview(rating: Int, comment: String?, showId: Int){
+
+    fun addReview(rating: Int, comment: String?, showId: Int) {
         _apiCallInProgress.value = true
         val request = CreateReviewRequest(
             rating = rating,
             comment = comment,
             showId = showId
         )
-        ApiModule.retrofit.createReview(request).enqueue(object: Callback<CreateReviewResponse>{
+        ApiModule.retrofit.createReview(request).enqueue(object : Callback<CreateReviewResponse> {
             override fun onResponse(call: retrofit2.Call<CreateReviewResponse>, response: Response<CreateReviewResponse>) {
-                if(response.isSuccessful){
+                if (response.isSuccessful) {
                     _reviewsListLiveData.value = _reviewsListLiveData.value!! + response.body()!!.review
                 }
                 _apiCallInProgress.value = false
@@ -78,18 +77,18 @@ class ShowDetailsViewModel : ViewModel() {
         })
     }
 
-    fun fetchReviewsAboutShow(showId: Int){
+    fun fetchReviewsAboutShow(showId: Int) {
         _apiCallInProgress.value = true
-        ApiModule.retrofit.fetchReviewsAboutShow(showId).enqueue(object: Callback<ReviewsResponse>{
+        ApiModule.retrofit.fetchReviewsAboutShow(showId).enqueue(object : Callback<ReviewsResponse> {
             override fun onResponse(call: retrofit2.Call<ReviewsResponse>, response: Response<ReviewsResponse>) {
-                if(response.isSuccessful){
+                if (response.isSuccessful) {
                     _reviewsListLiveData.value = response.body()!!.reviews
                 }
                 _apiCallInProgress.value = false
             }
 
             override fun onFailure(call: retrofit2.Call<ReviewsResponse>, t: Throwable) {
-               // TODO("Not yet implemented")
+                // TODO("Not yet implemented")
                 _apiCallInProgress.value = false
             }
 

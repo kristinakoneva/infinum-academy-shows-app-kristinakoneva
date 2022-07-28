@@ -1,11 +1,10 @@
 package model
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ShowsResponse (
+data class ShowsResponse(
     @SerialName("shows") val shows: List<Show>,
     @SerialName("meta") val meta: Meta
 )

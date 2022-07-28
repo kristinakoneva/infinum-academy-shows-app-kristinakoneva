@@ -1,6 +1,5 @@
 package infinumacademy.showsapp.kristinakoneva
 
-
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,7 +11,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class LoginViewModel: ViewModel() {
+class LoginViewModel : ViewModel() {
 
     /*
 
@@ -66,23 +65,23 @@ class LoginViewModel: ViewModel() {
         MutableLiveData<Boolean>()
     }
 
-    fun getLoginResultLiveData(): LiveData<Boolean>{
+    fun getLoginResultLiveData(): LiveData<Boolean> {
         return loginResultLiveData
     }
 
-    fun onLoginButtonClicked(email: String, password: String, sessionManager: SessionManager){
+    fun onLoginButtonClicked(email: String, password: String, sessionManager: SessionManager) {
         _apiCallInProgress.value = true
         val loginRequest = LoginRequest(
             email = email,
             password = password
         )
 
-        ApiModule.retrofit.login(loginRequest).enqueue(object: Callback<LoginResponse>{
+        ApiModule.retrofit.login(loginRequest).enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 loginResultLiveData.value = response.isSuccessful
 
 
-                if(response.isSuccessful){
+                if (response.isSuccessful) {
                     val token = response.headers()["access-token"].toString()
                     val client = response.headers()["client"].toString()
                     val expiry = response.headers()["expiry"].toString()

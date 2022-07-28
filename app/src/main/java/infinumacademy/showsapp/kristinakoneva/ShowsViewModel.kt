@@ -1,6 +1,5 @@
 package infinumacademy.showsapp.kristinakoneva
 
-
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -32,16 +31,16 @@ class ShowsViewModel : ViewModel() {
     private val _apiCallInProgress = MutableLiveData(false)
     val apiCallInProgress: LiveData<Boolean> = _apiCallInProgress
 
-    fun updateShowTopRated(isChecked: Boolean){
+    fun updateShowTopRated(isChecked: Boolean) {
         _showTopRatedLiveData.value = isChecked
     }
 
-    fun fetchShows(){
+    fun fetchShows() {
         _apiCallInProgress.value = true
-        ApiModule.retrofit.fetchShows().enqueue(object: Callback<ShowsResponse>{
+        ApiModule.retrofit.fetchShows().enqueue(object : Callback<ShowsResponse> {
             override fun onResponse(call: Call<ShowsResponse>, response: Response<ShowsResponse>) {
                 _listShowsResultLiveData.value = response.isSuccessful
-                if(response.isSuccessful){
+                if (response.isSuccessful) {
                     _showsListLiveData.value = response.body()!!.shows
                 }
                 _apiCallInProgress.value = false
@@ -59,18 +58,18 @@ class ShowsViewModel : ViewModel() {
         _showEmptyStateLiveData.value = !_showEmptyStateLiveData.value!!
     }
 
-    fun fetchTopRatedShows(){
+    fun fetchTopRatedShows() {
         _apiCallInProgress.value = true
-        ApiModule.retrofit.fetchTopRatedShows().enqueue(object: Callback<TopRatedShowsResponse>{
+        ApiModule.retrofit.fetchTopRatedShows().enqueue(object : Callback<TopRatedShowsResponse> {
             override fun onResponse(call: Call<TopRatedShowsResponse>, response: Response<TopRatedShowsResponse>) {
-                if(response.isSuccessful){
+                if (response.isSuccessful) {
                     _topRatedShowsListLiveData.value = response.body()!!.shows
                 }
                 _apiCallInProgress.value = false
             }
 
             override fun onFailure(call: Call<TopRatedShowsResponse>, t: Throwable) {
-                 // TODO("Not yet implemented")
+                // TODO("Not yet implemented")
                 _apiCallInProgress.value = false
             }
 

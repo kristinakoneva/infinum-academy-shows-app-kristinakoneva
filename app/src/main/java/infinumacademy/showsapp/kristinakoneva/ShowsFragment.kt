@@ -21,7 +21,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import coil.transform.CircleCropTransformation
@@ -79,12 +78,12 @@ class ShowsFragment : Fragment() {
         displayState()
         initListeners()
     }
-    private fun displayLoadingScreen(){
-        viewModel.apiCallInProgress.observe(viewLifecycleOwner){isApiInProgress ->
+
+    private fun displayLoadingScreen() {
+        viewModel.apiCallInProgress.observe(viewLifecycleOwner) { isApiInProgress ->
             binding.loadingProgressOverlay.isVisible = isApiInProgress
         }
     }
-
 
     private fun displayState() {
         viewModel.showEmptyStateLiveData.observe(viewLifecycleOwner) { showEmptyState ->
@@ -118,7 +117,7 @@ class ShowsFragment : Fragment() {
 
         // User Interface
         val profilePhotoPath = getProfilePhotoPath()
-        if (profilePhotoPath!=null) {
+        if (profilePhotoPath != null) {
             try {
                 val f = File(profilePhotoPath)
                 val b = BitmapFactory.decodeStream(FileInputStream(f))
@@ -128,6 +127,8 @@ class ShowsFragment : Fragment() {
             } catch (e: FileNotFoundException) {
                 e.printStackTrace()
             }
+        } else {
+            bottomSheetBinding.profilePhoto.load(R.drawable.profile_photo)
         }
         bottomSheetBinding.emailAddress.text = sharedPreferences.getString(Constants.EMAIL, getString(R.string.example_email))
 
@@ -172,8 +173,7 @@ class ShowsFragment : Fragment() {
         builder.setPositiveButton(getString(R.string.logout)) { dialog, _ ->
             sharedPreferences.edit {
                 putBoolean(Constants.REMEMBER_ME, false)
-                putString(Constants.USERNAME, getString(R.string.username_placeholder))
-                putString(Constants.EMAIL,null)
+                putString(Constants.EMAIL, null)
             }
             dialog.dismiss()
             bottomSheetDialog.dismiss()
@@ -188,18 +188,18 @@ class ShowsFragment : Fragment() {
     }
 
     private fun showShows() {
-        viewModel.showTopRatedLiveData.observe(viewLifecycleOwner){showTopRatedShows->
-            if(showTopRatedShows){
-                viewModel.topRatedShowsListLiveData.observe(viewLifecycleOwner){topRatedShows->
+        viewModel.showTopRatedLiveData.observe(viewLifecycleOwner) { showTopRatedShows ->
+            if (showTopRatedShows) {
+                viewModel.topRatedShowsListLiveData.observe(viewLifecycleOwner) { topRatedShows ->
                     adapter.addAllItems(topRatedShows)
                 }
-            }else{
-                viewModel.listShowsResultLiveData.observe(viewLifecycleOwner) {isSuccessful->
-                    if(isSuccessful){
+            } else {
+                viewModel.listShowsResultLiveData.observe(viewLifecycleOwner) { isSuccessful ->
+                    if (isSuccessful) {
                         viewModel.showsListLiveData.observe(viewLifecycleOwner) { showsList ->
                             adapter.addAllItems(showsList)
                         }
-                    }else{
+                    } else {
                         // Toast.makeText(requireContext(), "Fetching shows was unsuccessful", Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -265,26 +265,28 @@ class ShowsFragment : Fragment() {
             e.printStackTrace()
         }
     }
+
     private fun getProfilePhotoPath(): String? {
-        val email = sharedPreferences.getString(Constants.EMAIL,null)
-        val profilePhotoPath = sharedPreferences.getString(email,null)
+        val email = sharedPreferences.getString(Constants.EMAIL, null)
+        val profilePhotoPath = sharedPreferences.getString(email, null)
         return profilePhotoPath
     }
 
     private fun showProfilePhoto() {
         val profilePhotoPath = getProfilePhotoPath()
-        if (profilePhotoPath!=null) {
+        if (profilePhotoPath != null) {
             loadImageFromStorage(profilePhotoPath)
-        }else{
+        } else {
             binding.btnDialogChangeProfilePicOrLogout.load(R.drawable.btn_profile_photo)
         }
     }
-    private fun saveProfilePhoto(uri: Uri){
+
+    private fun saveProfilePhoto(uri: Uri) {
         val bitmap = getBitmapFromURI(requireContext(), uri)
-        val email = sharedPreferences.getString(Constants.EMAIL,null)
+        val email = sharedPreferences.getString(Constants.EMAIL, null)
         val ppPath = saveToInternalStorage(bitmap!!, email!!)
         sharedPreferences.edit {
-            putString(email,ppPath)
+            putString(email, ppPath)
         }
     }
 

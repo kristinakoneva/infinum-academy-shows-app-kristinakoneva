@@ -11,7 +11,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class RegisterViewModel: ViewModel() {
+class RegisterViewModel : ViewModel() {
     private val registrationResultLiveData: MutableLiveData<Boolean> by lazy { MutableLiveData<Boolean>() }
 
     fun getRegistrationResultLiveData(): LiveData<Boolean> {
@@ -25,12 +25,12 @@ class RegisterViewModel: ViewModel() {
             passwordConfirmation = password
         )
         ApiModule.retrofit.register(registerRequest)
-            .enqueue(object: Callback<RegisterResponse>{
+            .enqueue(object : Callback<RegisterResponse> {
                 override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
                     registrationResultLiveData.value = response.isSuccessful
 
                     val token = response.headers()["access-token"].toString()
-                    if(response.isSuccessful){
+                    if (response.isSuccessful) {
                         sessionManager.saveAuthToken(token)
                     }
                 }
@@ -42,5 +42,5 @@ class RegisterViewModel: ViewModel() {
             })
 
 
-            }
+    }
 }

@@ -29,6 +29,7 @@
             android:textSize="40sp"/>
 
     </FrameLayout>
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/showDetailsToolbar"
         android:layout_width="match_parent"

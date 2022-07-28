@@ -74,13 +74,13 @@
         android:text="@string/top_rated"
         android:backgroundTint="@color/top_rated_chip_background_selector"
         android:textColor="@color/top_rated_chip_text_selector"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
         android:checkable="true"
         android:checked="false"
         android:textStyle="bold"
         app:chipStrokeColor="@color/purple"
         app:chipStrokeWidth="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
         />
 
     <com.google.android.material.button.MaterialButton

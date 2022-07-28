@@ -8,7 +8,6 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 
-
 object ApiModule {
     private const val BASE_URL = "https://tv-shows.infinum.academy/"
 

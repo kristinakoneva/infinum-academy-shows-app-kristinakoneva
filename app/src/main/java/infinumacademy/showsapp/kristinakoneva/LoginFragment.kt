@@ -71,14 +71,14 @@ class LoginFragment : Fragment() {
         checkComingFromRegister()
     }
 
-    private fun displayLoadingScreen(){
-        viewModel.apiCallInProgress.observe(viewLifecycleOwner){isApiInProgress ->
+    private fun displayLoadingScreen() {
+        viewModel.apiCallInProgress.observe(viewLifecycleOwner) { isApiInProgress ->
             binding.loadingProgressOverlay.isVisible = isApiInProgress
         }
     }
 
-    private fun checkComingFromRegister(){
-        if(args.comingFromRegister){
+    private fun checkComingFromRegister() {
+        if (args.comingFromRegister) {
             binding.btnRegister.isVisible = false
         }
     }
@@ -88,12 +88,11 @@ class LoginFragment : Fragment() {
         if (binding.cbRememberMe.isChecked) {
             val directions = LoginFragmentDirections.toShowsNavGraph()
             findNavController().navigate(directions)
-        }else{
+        } else {
             sessionManager.clearSession()
             sharedPreferences.edit {
                 putBoolean(Constants.REMEMBER_ME, false)
-                putString(Constants.USERNAME, getString(R.string.username_placeholder))
-                putString(Constants.EMAIL,null)
+                putString(Constants.EMAIL, null)
             }
         }
     }
@@ -104,9 +103,9 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private fun saveUsernameAndEmail(username: String, email: String) {
+    private fun saveEmail() {
+        val email = binding.etEmail.text.toString()
         sharedPreferences.edit {
-            putString(Constants.USERNAME, username)
             putString(Constants.EMAIL, email)
         }
     }
@@ -131,14 +130,12 @@ class LoginFragment : Fragment() {
 
     private fun saveData() {
         saveRememberMe()
-        val username = extractUsername()
-        val email = binding.etEmail.text.toString()
-        saveUsernameAndEmail(username, email)
+        saveEmail()
     }
 
     private fun initListeners() {
         binding.btnLogin.setOnClickListener {
-            synchronized(this){
+            synchronized(this) {
                 viewModel.onLoginButtonClicked(
                     email = binding.etEmail.text.toString(),
                     password = binding.etPassword.text.toString(),
@@ -154,12 +151,6 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private fun extractUsername(): String {
-        val email = binding.etEmail.text.toString()
-        val parts = email.split("@")
-        val username = parts[0]
-        return username
-    }
     /*
 
      private fun setEmailError() {
@@ -178,6 +169,7 @@ class LoginFragment : Fragment() {
         }
     }
     */
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

@@ -4,7 +4,7 @@ import android.content.Context
 import okhttp3.Interceptor
 import okhttp3.Response
 
-class AuthInterceptor (context: Context) : Interceptor {
+class AuthInterceptor(context: Context) : Interceptor {
     private val sessionManager = SessionManager(context)
 
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -14,19 +14,19 @@ class AuthInterceptor (context: Context) : Interceptor {
         sessionManager.fetchAuthToken()?.let {
             //requestBuilder.addHeader("Authorization", "Bearer $it")
             requestBuilder.addHeader("access-token", it)
-            requestBuilder.addHeader("token-type","Bearer")
+            requestBuilder.addHeader("token-type", "Bearer")
         }
-        sessionManager.fetchClient()?.let{
-            requestBuilder.addHeader("client",it)
+        sessionManager.fetchClient()?.let {
+            requestBuilder.addHeader("client", it)
         }
-        sessionManager.fetchExpiry()?.let{
-            requestBuilder.addHeader("expiry",it)
+        sessionManager.fetchExpiry()?.let {
+            requestBuilder.addHeader("expiry", it)
         }
-        sessionManager.fetchUID()?.let{
-            requestBuilder.addHeader("uid",it)
+        sessionManager.fetchUID()?.let {
+            requestBuilder.addHeader("uid", it)
         }
-        sessionManager.fetchContentType()?.let{
-            requestBuilder.addHeader("content-type",it)
+        sessionManager.fetchContentType()?.let {
+            requestBuilder.addHeader("content-type", it)
         }
 
         return chain.proceed(requestBuilder.build())

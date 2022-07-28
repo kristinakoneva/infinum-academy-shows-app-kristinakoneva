@@ -15,13 +15,13 @@ class SessionManager(context: Context) {
         const val CONTENT_TYPE = "CONTENT-TYPE"
     }
 
-    fun clearSession(){
+    fun clearSession() {
         val editor = prefs.edit()
-        editor.putString(USER_TOKEN,null)
-        editor.putString(CLIENT,null)
-        editor.putString(EXPIRY,null)
-        editor.putString(UID,null)
-        editor.putString(CONTENT_TYPE,null)
+        editor.putString(USER_TOKEN, null)
+        editor.putString(CLIENT, null)
+        editor.putString(EXPIRY, null)
+        editor.putString(UID, null)
+        editor.putString(CONTENT_TYPE, null)
         editor.apply()
     }
 
@@ -41,7 +41,7 @@ class SessionManager(context: Context) {
         return prefs.getString(USER_TOKEN, null)
     }
 
-    fun saveClient(client: String){
+    fun saveClient(client: String) {
         val editor = prefs.edit()
         editor.putString(CLIENT, client)
         editor.apply()
@@ -51,7 +51,7 @@ class SessionManager(context: Context) {
         return prefs.getString(CLIENT, null)
     }
 
-    fun saveExpiry(expiry: String){
+    fun saveExpiry(expiry: String) {
         val editor = prefs.edit()
         editor.putString(EXPIRY, expiry)
         editor.apply()
@@ -61,7 +61,7 @@ class SessionManager(context: Context) {
         return prefs.getString(EXPIRY, null)
     }
 
-    fun saveUID(uid: String){
+    fun saveUID(uid: String) {
         val editor = prefs.edit()
         editor.putString(UID, uid)
         editor.apply()
@@ -71,7 +71,7 @@ class SessionManager(context: Context) {
         return prefs.getString(UID, null)
     }
 
-    fun saveContentType(contentType: String){
+    fun saveContentType(contentType: String) {
         val editor = prefs.edit()
         editor.putString(CONTENT_TYPE, contentType)
         editor.apply()
