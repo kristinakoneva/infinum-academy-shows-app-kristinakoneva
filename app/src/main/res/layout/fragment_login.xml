@@ -49,6 +49,7 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <ScrollView
+        android:id="@+id/scrollViewLogin"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -143,24 +144,37 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/cbRememberMe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:buttonTint="@color/white"
+                android:text="@string/remember_me_checkbox_message"
+                android:textColor="@color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tilPassword"
+                />
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnLogin"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="24dp"
                 android:layout_marginEnd="24dp"
-                android:layout_marginTop="52dp"
+                android:layout_marginTop="24dp"
                 android:backgroundTint="@color/login_button_background_color"
                 android:textColor="@color/login_button_text_color"
                 android:textStyle="bold"
                 android:text="@string/login"
                 android:enabled="false"
+                android:textAllCaps="false"
+                android:textSize="17sp"
                 app:cornerRadius="21.5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.521"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tilPassword"
+                app:layout_constraintTop_toBottomOf="@+id/cbRememberMe"
                 />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

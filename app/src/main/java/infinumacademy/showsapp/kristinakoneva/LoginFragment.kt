@@ -1,11 +1,15 @@
 package infinumacademy.showsapp.kristinakoneva
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.edit
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
@@ -17,23 +21,14 @@ class LoginFragment : Fragment() {
 
     private val binding get() = _binding!!
 
-    private val emailLiveData = MutableLiveData<String>()
-    private val passwordLiveData = MutableLiveData<String>()
-    private val isValidLiveData = MediatorLiveData<Boolean>().apply {
-        this.value = false
+    private val viewModel by viewModels<LoginViewModel>()
 
-        addSource(emailLiveData) { email ->
-            val password = passwordLiveData.value
-            this.value = validateLoginForm(email, password)
-        }
-        addSource(passwordLiveData) { password ->
-            val email = emailLiveData.value
-            this.value = validateLoginForm(email, password)
-        }
-    }
+    private lateinit var sharedPreferences: SharedPreferences
 
-    companion object {
-        const val MIN_CHARS_FOR_PASSWORD = 6
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        sharedPreferences = requireContext().getSharedPreferences(Constants.SHOWS_APP, Context.MODE_PRIVATE)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -44,28 +39,54 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        checkRememberMe()
         observeLiveDataForValidation()
         initListeners()
+    }
 
+    private fun checkRememberMe() {
+        binding.cbRememberMe.isChecked = sharedPreferences.getBoolean(Constants.REMEMBER_ME, false)
+        if (binding.cbRememberMe.isChecked) {
+            val directions = LoginFragmentDirections.toShowsNavGraph(getString(R.string.username_placeholder))
+            findNavController().navigate(directions)
+        }
+    }
+
+    private fun saveRememberMe() {
+        sharedPreferences.edit {
+            putBoolean(Constants.REMEMBER_ME, binding.cbRememberMe.isChecked)
+        }
+    }
+
+    private fun saveUsernameAndEmail(username: String, email: String) {
+        sharedPreferences.edit {
+            putString(Constants.USERNAME, username)
+            putString(Constants.EMAIL, email)
+        }
     }
 
     private fun observeLiveDataForValidation() {
         binding.tilEmail.editText?.doOnTextChanged { text, _, _, _ ->
-            emailLiveData.value = text?.toString()
+            viewModel.onEmailTextChanged(text?.toString())
+            setEmailError()
         }
 
         binding.tilPassword.editText?.doOnTextChanged { text, _, _, _ ->
-            passwordLiveData.value = text?.toString()
+            viewModel.onPasswordTextChanges(text?.toString())
+            setPasswordError()
         }
 
-        isValidLiveData.observe(viewLifecycleOwner) { isValid ->
+        viewModel.isValidLiveData.observe(viewLifecycleOwner) { isValid ->
             binding.btnLogin.isEnabled = isValid
         }
     }
 
     private fun initListeners() {
         binding.btnLogin.setOnClickListener {
+            saveRememberMe()
             val username = extractUsername()
+            val email = binding.etEmail.text.toString()
+            saveUsernameAndEmail(username, email)
             val directions = LoginFragmentDirections.toShowsNavGraph(username)
             findNavController().navigate(directions)
         }
@@ -78,25 +99,20 @@ class LoginFragment : Fragment() {
         return username
     }
 
-    private fun validateLoginForm(email: String?, password: String?): Boolean {
-        val isValidEmail = email != null && email.isNotBlank() && email.matches("^[a-z][a-z0-9\\.\\_]*@[a-z]+\\.[a-z]+".toRegex())
-        val isValidPassword = password != null && password.isNotBlank() && password.length >= MIN_CHARS_FOR_PASSWORD
-
-        setEmailError(isValidEmail)
-        setPasswordError(isValidPassword)
-
-        return isValidEmail && isValidPassword
-    }
-
-    private fun setEmailError(isValidEmail: Boolean) {
-        if (!isValidEmail) {
-            binding.etEmail.error = getString(R.string.invalid_email_error_message)
+    private fun setEmailError() {
+        viewModel.isValidEmail.observe(viewLifecycleOwner) { isValid ->
+            if (!isValid) {
+                binding.etEmail.error = getString(R.string.invalid_email_error_message)
+            }
         }
+
     }
 
-    private fun setPasswordError(isValidPassword: Boolean) {
-        if (!isValidPassword) {
-            binding.etPassword.error = getString(R.string.invalid_password_error_message)
+    private fun setPasswordError() {
+        viewModel.isValidPassword.observe(viewLifecycleOwner) { isValid ->
+            if (!isValid) {
+                binding.etPassword.error = getString(R.string.invalid_password_error_message)
+            }
         }
     }
 

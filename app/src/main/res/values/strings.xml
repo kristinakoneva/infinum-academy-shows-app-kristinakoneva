@@ -20,8 +20,24 @@
     <string name="shows_empty_state_message">Your shows are not showing. Get it?</string>
     <string name="invalid_email_error_message">Invalid email address!</string>
     <string name="invalid_password_error_message">Invalid password!</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="review_status">%d REVIEWS, %.2f AVERAGE</string>
     <string name="username_placeholder">username</string>
+    <string name="remember_me_checkbox_message">Remember me</string>
+    <string name="example_email">username@gmail.com</string>
+    <string name="change_profile_photo_button_text">Change profile photo</string>
+    <string name="logout_button_text">Logout</string>
+    <string name="logout">Logout</string>
+    <string name="cancel">Cancel</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="logging_out_alert_message">Are you sure that you want to log out?</string>
+    <string name="gallery_denied_permission_message">You have denied the storage permission to select an image.</string>
+    <string name="data">data</string>
+    <string name="denied_permissions_message">It looks like you have turned off the permissions required for this feature. They can be enabled under App settings.</string>
+    <string name="go_to_settings">GO TO SETTINGS</string>
+    <string name="default_text">default_text</string>
+    <string name="profile_photo_jpg">profile_photo.jpg</string>
+    <string name="images">images</string>
+    <string name="intent_type_image">image/*</string>
 </resources>
