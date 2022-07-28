@@ -74,9 +74,9 @@ class ShowsFragment : Fragment() {
 
         showProfilePhoto()
         initShowsRecycler()
+        viewModel.fetchShows()
         displayState()
         initListeners()
-        viewModel.fetchShows()
     }
 
     private fun displayState() {
@@ -191,13 +191,13 @@ class ShowsFragment : Fragment() {
     }
 
     private fun hideShows() {
-        adapter.addAllItems(emptyList())
+        adapter.addAllItems(emptyArray())
         binding.showsEmptyState.isVisible = true
         binding.showsRecycler.isVisible = false
     }
 
     private fun initShowsRecycler() {
-        adapter = ShowsAdapter(emptyList()) { show ->
+        adapter = ShowsAdapter(emptyArray()) { show ->
             showDetailsAbout(show)
         }
 

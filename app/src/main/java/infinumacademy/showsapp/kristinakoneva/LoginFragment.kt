@@ -63,6 +63,7 @@ class LoginFragment : Fragment() {
 
         }
 
+
         checkRememberMe()
         // observeLiveDataForValidation()
         initListeners()
@@ -123,12 +124,15 @@ class LoginFragment : Fragment() {
 
     private fun initListeners() {
         binding.btnLogin.setOnClickListener {
-
-            viewModel.onLoginButtonClicked(
-                email = binding.etEmail.text.toString(),
-                password = binding.etPassword.text.toString(),
-                sessionManager = sessionManager
-            )
+            // binding.loadingProgressOverlay.isVisible = true
+            synchronized(this){
+                viewModel.onLoginButtonClicked(
+                    email = binding.etEmail.text.toString(),
+                    password = binding.etPassword.text.toString(),
+                    sessionManager = sessionManager
+                )
+            }
+            // binding.loadingProgressOverlay.isVisible = false
 
         }
 

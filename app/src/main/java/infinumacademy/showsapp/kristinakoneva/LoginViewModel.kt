@@ -1,8 +1,9 @@
 package infinumacademy.showsapp.kristinakoneva
 
-import androidx.lifecycle.ViewModel
+import android.app.ProgressDialog
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import model.LoginRequest
 import model.LoginResponse
 import networking.ApiModule
@@ -10,8 +11,6 @@ import networking.SessionManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import androidx.lifecycle.MediatorLiveData
-
 
 class LoginViewModel: ViewModel() {
 
@@ -72,6 +71,7 @@ class LoginViewModel: ViewModel() {
             email = email,
             password = password
         )
+
         ApiModule.retrofit.login(loginRequest).enqueue(object: Callback<LoginResponse>{
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 loginResultLiveData.value = response.isSuccessful
