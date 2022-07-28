@@ -19,8 +19,8 @@ class ShowDetailsViewModel : ViewModel() {
     private val _reviewsListLiveData = MutableLiveData<List<Review>>(listOf())
     val reviewsListLiveData: LiveData<List<Review>> = _reviewsListLiveData
 
-    private val _show = MutableLiveData<Show>()
-    val show: LiveData<Show> = _show
+    private val _showLiveData = MutableLiveData<Show>()
+    val showLiveData: LiveData<Show> = _showLiveData
 
 
     fun getAverageReviewsRating(): Double {
@@ -39,7 +39,7 @@ class ShowDetailsViewModel : ViewModel() {
         ApiModule.retrofit.displayShow(showId).enqueue(object: Callback<DisplayShowResponse>{
             override fun onResponse(call: retrofit2.Call<DisplayShowResponse>, response: Response<DisplayShowResponse>) {
                 if(response.isSuccessful){
-                    _show.value = response.body()!!.show
+                    _showLiveData.value = response.body()!!.show
                 }
             }
 

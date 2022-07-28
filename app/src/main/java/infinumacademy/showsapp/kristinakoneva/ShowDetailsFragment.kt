@@ -63,7 +63,7 @@ class ShowDetailsFragment : Fragment() {
 
     private fun displayShow() {
         viewModel.getShow(args.showId)
-        viewModel.show.observe(viewLifecycleOwner){ show->
+        viewModel.showLiveData.observe(viewLifecycleOwner){ show->
             binding.showName.text = show.title
             binding.showDesc.text = show.description
             binding.showImg.load(show.imageUrl)
@@ -73,14 +73,14 @@ class ShowDetailsFragment : Fragment() {
 
     private fun showReviews(){
         viewModel.fetchReviewsAboutShow(args.showId)
-        viewModel.show.observe(viewLifecycleOwner){show->
+        viewModel.showLiveData.observe(viewLifecycleOwner){show->
             binding.groupShowReviews.isVisible = show.noOfReviews!=0
             binding.noReviews.isVisible = show.noOfReviews==0
         }
     }
 
     private fun setReviewsStatus(){
-        viewModel.show.observe(viewLifecycleOwner){show->
+        viewModel.showLiveData.observe(viewLifecycleOwner){show->
             val numOfReviews = show.noOfReviews
             val averageRating = show.averageRating
             viewModel.reviewsListLiveData.observe(viewLifecycleOwner){ reviewsList->

@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import model.Show
 import model.ShowsResponse
+import model.TopRatedShowsResponse
 import networking.ApiModule
 import retrofit2.Call
 import retrofit2.Callback
@@ -22,6 +23,8 @@ class ShowsViewModel : ViewModel() {
     private val _listShowsResultLiveData = MutableLiveData(false)
     val listShowsResultLiveData: LiveData<Boolean> = _listShowsResultLiveData
 
+    private val _topRatedShowsListLiveData = MutableLiveData<List<Show>>()
+    val topRatedShowsListLiveData: LiveData<List<Show>> = _topRatedShowsListLiveData
 
 
     fun fetchShows(){
@@ -42,5 +45,20 @@ class ShowsViewModel : ViewModel() {
 
     fun resetEmptyState() {
         _showEmptyStateLiveData.value = !_showEmptyStateLiveData.value!!
+    }
+
+    fun fetchTopRatedShows(){
+        ApiModule.retrofit.fetchTopRatedShows().enqueue(object: Callback<TopRatedShowsResponse>{
+            override fun onResponse(call: Call<TopRatedShowsResponse>, response: Response<TopRatedShowsResponse>) {
+                if(response.isSuccessful){
+                    _topRatedShowsListLiveData.value = response.body()!!.shows
+                }
+            }
+
+            override fun onFailure(call: Call<TopRatedShowsResponse>, t: Throwable) {
+                 // TODO("Not yet implemented")
+            }
+
+        })
     }
 }

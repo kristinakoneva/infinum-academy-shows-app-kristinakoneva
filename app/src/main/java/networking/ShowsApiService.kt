@@ -9,6 +9,7 @@ import model.RegisterRequest
 import model.RegisterResponse
 import model.ReviewsResponse
 import model.ShowsResponse
+import model.TopRatedShowsResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -33,4 +34,7 @@ interface ShowsApiService {
 
     @GET("/shows/{id}")
     fun displayShow(@Path("id") showId: Int): Call<DisplayShowResponse>
+
+    @GET("/shows/top_rated")
+    fun fetchTopRatedShows(): Call<TopRatedShowsResponse>
 }

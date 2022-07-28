@@ -98,6 +98,7 @@ class ShowsFragment : Fragment() {
         binding.btnDialogChangeProfilePicOrLogout.setOnClickListener {
             openDialogForChangingProfilePicOrLoggingOut()
         }
+        
     }
 
     private fun openDialogForChangingProfilePicOrLoggingOut() {
