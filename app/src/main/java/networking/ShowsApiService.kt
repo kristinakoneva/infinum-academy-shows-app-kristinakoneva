@@ -2,6 +2,7 @@ package networking
 
 import model.CreateReviewRequest
 import model.CreateReviewResponse
+import model.DisplayShowResponse
 import model.LoginRequest
 import model.LoginResponse
 import model.RegisterRequest
@@ -29,4 +30,7 @@ interface ShowsApiService {
 
     @POST("/reviews")
     fun createReview(@Body request: CreateReviewRequest): Call<CreateReviewResponse>
+
+    @GET("/shows/{id}")
+    fun displayShow(@Path("id") showId: Int): Call<DisplayShowResponse>
 }

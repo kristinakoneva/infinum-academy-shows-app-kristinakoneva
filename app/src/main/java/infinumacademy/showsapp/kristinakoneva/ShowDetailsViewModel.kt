@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import model.CreateReviewRequest
 import model.CreateReviewResponse
+import model.DisplayShowResponse
 import model.Review
 import model.ReviewsResponse
 import model.Show
@@ -18,11 +19,9 @@ class ShowDetailsViewModel : ViewModel() {
     private val _reviewsListLiveData = MutableLiveData<List<Review>>(listOf())
     val reviewsListLiveData: LiveData<List<Review>> = _reviewsListLiveData
 
+    private val _show = MutableLiveData<Show>()
+    val show: LiveData<Show> = _show
 
-    //fun addReviewToList(rating: Double, comment: String, username: String) {
-   //     val review = Review(rating, comment, username)
-    //    _reviewsListLiveData.value = _reviewsListLiveData.value?.plus(review)
-   // }
 
     fun getAverageReviewsRating(): Double {
         return if(_reviewsListLiveData.value != null){
@@ -34,6 +33,21 @@ class ShowDetailsViewModel : ViewModel() {
         } else{
             0.0
         }
+    }
+
+    fun getShow(showId: Int){
+        ApiModule.retrofit.displayShow(showId).enqueue(object: Callback<DisplayShowResponse>{
+            override fun onResponse(call: retrofit2.Call<DisplayShowResponse>, response: Response<DisplayShowResponse>) {
+                if(response.isSuccessful){
+                    _show.value = response.body()!!.show
+                }
+            }
+
+            override fun onFailure(call: retrofit2.Call<DisplayShowResponse>, t: Throwable) {
+               // TODO("Not yet implemented")
+            }
+
+        })
     }
     fun addReview(rating: Int, comment: String?, showId: Int){
         val request = CreateReviewRequest(
@@ -55,8 +69,8 @@ class ShowDetailsViewModel : ViewModel() {
         })
     }
 
-    fun fetchReviewsAboutShow(show: Show){
-        ApiModule.retrofit.fetchReviewsAboutShow(Integer.parseInt(show.id)).enqueue(object: Callback<ReviewsResponse>{
+    fun fetchReviewsAboutShow(showId: Int){
+        ApiModule.retrofit.fetchReviewsAboutShow(showId).enqueue(object: Callback<ReviewsResponse>{
             override fun onResponse(call: retrofit2.Call<ReviewsResponse>, response: Response<ReviewsResponse>) {
                 if(response.isSuccessful){
                     _reviewsListLiveData.value = response.body()!!.reviews

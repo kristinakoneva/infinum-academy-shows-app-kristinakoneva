@@ -35,6 +35,9 @@
     <argument
         android:name="show"
         app:argType="model.Show"/>
+    <argument
+        android:name="showId"
+        app:argType="integer" />
 
 
 </fragment>

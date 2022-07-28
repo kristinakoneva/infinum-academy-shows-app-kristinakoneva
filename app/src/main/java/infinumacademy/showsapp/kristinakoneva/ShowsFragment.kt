@@ -208,7 +208,7 @@ class ShowsFragment : Fragment() {
 
     private fun showDetailsAbout(show: Show) {
         val username = args.username
-        val directions = ShowsFragmentDirections.toShowDetailsFragment(username, show)
+        val directions = ShowsFragmentDirections.toShowDetailsFragment(username, show, show.id.toInt())
         findNavController().navigate(directions)
     }
 

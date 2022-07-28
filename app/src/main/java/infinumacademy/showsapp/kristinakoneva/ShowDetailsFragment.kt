@@ -53,27 +53,46 @@ class ShowDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        showReviews()
-        displayShow(args.show)
+
         initBackButtonFromToolbar()
         initReviewsRecycler()
         initAddReviewButton()
-        viewModel.fetchReviewsAboutShow(args.show)
+        showReviews()
+        displayShow()
+    }
+
+    private fun displayShow() {
+        viewModel.getShow(args.showId)
+        viewModel.show.observe(viewLifecycleOwner){ show->
+            binding.showName.text = show.title
+            binding.showDesc.text = show.description
+            binding.showImg.load(show.imageUrl)
+        }
         setReviewsStatus()
     }
 
-    private fun displayShow(show: Show) {
-        binding.showName.text = show.title
-        binding.showDesc.text = show.description
-        binding.showImg.load(show.imageUrl)
-    }
-
     private fun showReviews(){
-        viewModel.reviewsListLiveData.observe(viewLifecycleOwner){reviewsList->
-            binding.groupShowReviews.isVisible = reviewsList.isNotEmpty()
-            binding.noReviews.isVisible = reviewsList.isEmpty()
+        viewModel.fetchReviewsAboutShow(args.showId)
+        viewModel.show.observe(viewLifecycleOwner){show->
+            binding.groupShowReviews.isVisible = show.noOfReviews!=0
+            binding.noReviews.isVisible = show.noOfReviews==0
         }
     }
+
+    private fun setReviewsStatus(){
+        viewModel.show.observe(viewLifecycleOwner){show->
+            val numOfReviews = show.noOfReviews
+            val averageRating = show.averageRating
+            viewModel.reviewsListLiveData.observe(viewLifecycleOwner){ reviewsList->
+                if(reviewsList.isNotEmpty()){
+                    binding.ratingStatus.rating = String.format("%.2f", averageRating).toFloat()
+                    binding.reviewsStatus.text = getString(R.string.review_status, numOfReviews, averageRating)
+                }
+            }
+        }
+    }
+
+    /*
     private fun setReviewsStatus() {
         val numOfReviews = viewModel.reviewsListLiveData.value?.size
         val averageRating = viewModel.getAverageReviewsRating().toFloat()
@@ -83,7 +102,7 @@ class ShowDetailsFragment : Fragment() {
                 binding.reviewsStatus.text = getString(R.string.review_status, numOfReviews, averageRating)
             }
         }
-    }
+    }*/
 
     private fun initBackButtonFromToolbar() {
         binding.showDetailsToolbar.setNavigationOnClickListener {
@@ -119,8 +138,8 @@ class ShowDetailsFragment : Fragment() {
         binding.btnWriteReview.setOnClickListener {
             showAddReviewBottomSheet()
         }
-
-        setReviewsStatus()
+        showReviews()
+        displayShow()
     }
 
 
