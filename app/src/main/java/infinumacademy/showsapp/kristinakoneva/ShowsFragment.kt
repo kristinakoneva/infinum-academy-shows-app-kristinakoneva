@@ -72,6 +72,7 @@ class ShowsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
+        displayLoadingScreen()
         showProfilePhoto()
         initShowsRecycler()
         viewModel.fetchShows()
@@ -79,6 +80,12 @@ class ShowsFragment : Fragment() {
         displayState()
         initListeners()
     }
+    private fun displayLoadingScreen(){
+        viewModel.apiCallInProgress.observe(viewLifecycleOwner){isApiInProgress ->
+            binding.loadingProgressOverlay.isVisible = isApiInProgress
+        }
+    }
+
 
     private fun displayState() {
         viewModel.showEmptyStateLiveData.observe(viewLifecycleOwner) { showEmptyState ->

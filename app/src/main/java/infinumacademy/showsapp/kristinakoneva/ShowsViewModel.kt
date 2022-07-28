@@ -29,21 +29,27 @@ class ShowsViewModel : ViewModel() {
     private val _showTopRatedLiveData = MutableLiveData(false)
     val showTopRatedLiveData: LiveData<Boolean> = _showTopRatedLiveData
 
+    private val _apiCallInProgress = MutableLiveData(false)
+    val apiCallInProgress: LiveData<Boolean> = _apiCallInProgress
+
     fun updateShowTopRated(isChecked: Boolean){
         _showTopRatedLiveData.value = isChecked
     }
 
     fun fetchShows(){
+        _apiCallInProgress.value = true
         ApiModule.retrofit.fetchShows().enqueue(object: Callback<ShowsResponse>{
             override fun onResponse(call: Call<ShowsResponse>, response: Response<ShowsResponse>) {
                 _listShowsResultLiveData.value = response.isSuccessful
                 if(response.isSuccessful){
                     _showsListLiveData.value = response.body()!!.shows
                 }
+                _apiCallInProgress.value = false
             }
 
             override fun onFailure(call: Call<ShowsResponse>, t: Throwable) {
                 _listShowsResultLiveData.value = false
+                _apiCallInProgress.value = false
             }
 
         })
