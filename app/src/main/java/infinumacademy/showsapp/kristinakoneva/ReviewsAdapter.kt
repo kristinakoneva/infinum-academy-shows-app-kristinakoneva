@@ -31,11 +31,17 @@ class ReviewsAdapter(
         notifyDataSetChanged()
     }
 
+    private fun extractUsername(email: String): String {
+        val parts = email.split("@")
+        val username = parts[0]
+        return username
+    }
+
     inner class ShowDetailsViewHolder(private val binding: ViewReviewItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Review) {
             with(binding) {
                 reviewRating.text = item.rating.toString()
-                reviewUsername.text = item.user.email
+                reviewUsername.text = extractUsername(item.user.email)
                 reviewComment.text = item.comment
             }
 
