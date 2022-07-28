@@ -60,15 +60,18 @@ class ShowsViewModel : ViewModel() {
     }
 
     fun fetchTopRatedShows(){
+        _apiCallInProgress.value = true
         ApiModule.retrofit.fetchTopRatedShows().enqueue(object: Callback<TopRatedShowsResponse>{
             override fun onResponse(call: Call<TopRatedShowsResponse>, response: Response<TopRatedShowsResponse>) {
                 if(response.isSuccessful){
                     _topRatedShowsListLiveData.value = response.body()!!.shows
                 }
+                _apiCallInProgress.value = false
             }
 
             override fun onFailure(call: Call<TopRatedShowsResponse>, t: Throwable) {
                  // TODO("Not yet implemented")
+                _apiCallInProgress.value = false
             }
 
         })

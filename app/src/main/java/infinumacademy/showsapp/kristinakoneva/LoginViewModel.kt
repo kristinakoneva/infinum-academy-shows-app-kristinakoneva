@@ -1,6 +1,6 @@
 package infinumacademy.showsapp.kristinakoneva
 
-import android.app.ProgressDialog
+
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -58,6 +58,10 @@ class LoginViewModel: ViewModel() {
 
 
      */
+
+    private val _apiCallInProgress = MutableLiveData(false)
+    val apiCallInProgress: LiveData<Boolean> = _apiCallInProgress
+
     private val loginResultLiveData: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
     }
@@ -67,6 +71,7 @@ class LoginViewModel: ViewModel() {
     }
 
     fun onLoginButtonClicked(email: String, password: String, sessionManager: SessionManager){
+        _apiCallInProgress.value = true
         val loginRequest = LoginRequest(
             email = email,
             password = password
@@ -90,10 +95,12 @@ class LoginViewModel: ViewModel() {
                     sessionManager.saveUID(uid)
                     sessionManager.saveContentType(contentType)
                 }
+                _apiCallInProgress.value = false
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                 loginResultLiveData.value = false
+                _apiCallInProgress.value = false
             }
 
         })

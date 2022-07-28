@@ -65,10 +65,17 @@ class LoginFragment : Fragment() {
         }
 
 
+        displayLoadingScreen()
         checkRememberMe()
         // observeLiveDataForValidation()
         initListeners()
         checkComingFromRegister()
+    }
+
+    private fun displayLoadingScreen(){
+        viewModel.apiCallInProgress.observe(viewLifecycleOwner){isApiInProgress ->
+            binding.loadingProgressOverlay.isVisible = isApiInProgress
+        }
     }
 
     private fun checkComingFromRegister(){
@@ -132,7 +139,6 @@ class LoginFragment : Fragment() {
 
     private fun initListeners() {
         binding.btnLogin.setOnClickListener {
-            // binding.loadingProgressOverlay.isVisible = true
             synchronized(this){
                 viewModel.onLoginButtonClicked(
                     email = binding.etEmail.text.toString(),
@@ -140,7 +146,6 @@ class LoginFragment : Fragment() {
                     sessionManager = sessionManager
                 )
             }
-            // binding.loadingProgressOverlay.isVisible = false
 
         }
 
