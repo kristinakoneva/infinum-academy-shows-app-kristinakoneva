@@ -84,11 +84,7 @@ class LoginViewModel : ViewModel() {
                     val uid = response.headers()["uid"].toString()
                     val contentType = response.headers()["content-type"].toString()
 
-                    sessionManager.saveAuthToken(token)
-                    sessionManager.saveClient(client)
-                    sessionManager.saveExpiry(expiry)
-                    sessionManager.saveUID(uid)
-                    sessionManager.saveContentType(contentType)
+                    sessionManager.saveSession(token,client,expiry,uid,contentType)
                 }
                 _apiCallInProgress.value = false
             }

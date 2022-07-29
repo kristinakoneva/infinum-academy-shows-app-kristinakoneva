@@ -15,6 +15,14 @@ class SessionManager(context: Context) {
         const val CONTENT_TYPE = "CONTENT-TYPE"
     }
 
+    fun saveSession(token: String, client: String, expiry: String, uid: String, contentType: String) {
+        saveAuthToken(token)
+        saveClient(client)
+        saveExpiry(expiry)
+        saveUID(uid)
+        saveContentType(contentType)
+    }
+
     fun clearSession() {
         val editor = prefs.edit()
         editor.putString(USER_TOKEN, null)
@@ -25,23 +33,17 @@ class SessionManager(context: Context) {
         editor.apply()
     }
 
-    /**
-     * Function to save auth token
-     */
-    fun saveAuthToken(token: String) {
+    private fun saveAuthToken(token: String) {
         val editor = prefs.edit()
         editor.putString(USER_TOKEN, token)
         editor.apply()
     }
 
-    /**
-     * Function to fetch auth token
-     */
     fun fetchAuthToken(): String? {
         return prefs.getString(USER_TOKEN, null)
     }
 
-    fun saveClient(client: String) {
+    private fun saveClient(client: String) {
         val editor = prefs.edit()
         editor.putString(CLIENT, client)
         editor.apply()
@@ -51,7 +53,7 @@ class SessionManager(context: Context) {
         return prefs.getString(CLIENT, null)
     }
 
-    fun saveExpiry(expiry: String) {
+    private fun saveExpiry(expiry: String) {
         val editor = prefs.edit()
         editor.putString(EXPIRY, expiry)
         editor.apply()
@@ -61,7 +63,7 @@ class SessionManager(context: Context) {
         return prefs.getString(EXPIRY, null)
     }
 
-    fun saveUID(uid: String) {
+    private fun saveUID(uid: String) {
         val editor = prefs.edit()
         editor.putString(UID, uid)
         editor.apply()
@@ -71,7 +73,7 @@ class SessionManager(context: Context) {
         return prefs.getString(UID, null)
     }
 
-    fun saveContentType(contentType: String) {
+    private fun saveContentType(contentType: String) {
         val editor = prefs.edit()
         editor.putString(CONTENT_TYPE, contentType)
         editor.apply()
