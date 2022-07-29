@@ -50,4 +50,5 @@
     <string name="unsuccessful_login_msg">Login unsuccessful</string>
     <string name="error_fetching_show_msg">Fetching show was unsuccessful</string>
     <string name="error_fetching_reviews_msg">Fetching reviews about show was unsuccessful</string>
+    <string name="passwords_do_not_match_error_message">Password and repeat password do not match!</string>
 </resources>

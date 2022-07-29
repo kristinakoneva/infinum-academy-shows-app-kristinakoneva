@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import infinumacademy.showsapp.kristinakoneva.Constants
@@ -56,6 +57,7 @@ class RegisterFragment : Fragment() {
             }
         }
 
+        observeLiveDataForValidation()
         displayLoadingScreen()
         initListeners()
     }
@@ -73,6 +75,51 @@ class RegisterFragment : Fragment() {
     private fun displayLoadingScreen() {
         viewModel.apiCallInProgress.observe(viewLifecycleOwner) { isApiInProgress ->
             binding.loadingProgressOverlay.isVisible = isApiInProgress
+        }
+    }
+
+    private fun observeLiveDataForValidation() {
+        binding.tilEmail.editText?.doOnTextChanged { text, _, _, _ ->
+            viewModel.onEmailTextChanged(text?.toString())
+            setEmailError()
+        }
+
+        binding.tilPassword.editText?.doOnTextChanged { text, _, _, _ ->
+            viewModel.onPasswordTextChanges(text?.toString())
+            setPasswordError()
+        }
+
+        binding.tilRepeatPassword.editText?.doOnTextChanged { text, _, _, _ ->
+            viewModel.onRepeatPasswordTextChanges(text?.toString())
+            setRepeatPasswordError()
+        }
+
+        viewModel.isValidLiveData.observe(viewLifecycleOwner) { isValid ->
+            binding.btnRegister.isEnabled = isValid
+        }
+    }
+
+    private fun setEmailError() {
+        viewModel.isValidEmail.observe(viewLifecycleOwner) { isValid ->
+            if (!isValid) {
+                binding.etEmail.error = getString(R.string.invalid_email_error_message)
+            }
+        }
+    }
+
+    private fun setPasswordError() {
+        viewModel.isValidPassword.observe(viewLifecycleOwner) { isValid ->
+            if (!isValid) {
+                binding.etPassword.error = getString(R.string.invalid_password_error_message)
+            }
+        }
+    }
+
+    private fun setRepeatPasswordError() {
+        viewModel.isValidRepeatPassword.observe(viewLifecycleOwner) { isValid ->
+            if (!isValid) {
+                binding.etRepeatPassword.error = getString(R.string.passwords_do_not_match_error_message)
+            }
         }
     }
 

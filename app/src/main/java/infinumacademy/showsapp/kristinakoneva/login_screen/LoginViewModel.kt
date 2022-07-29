@@ -1,8 +1,10 @@
 package infinumacademy.showsapp.kristinakoneva.login_screen
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import infinumacademy.showsapp.kristinakoneva.Constants
 import model.LoginRequest
 import model.LoginResponse
 import networking.ApiModule
@@ -12,8 +14,6 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class LoginViewModel : ViewModel() {
-
-    /*
 
     private val emailLiveData = MutableLiveData<String?>()
     private val passwordLiveData = MutableLiveData<String?>()
@@ -31,10 +31,10 @@ class LoginViewModel : ViewModel() {
     }
     val isValidLiveData: LiveData<Boolean> = _isValidLiveData
 
-    private val _isValidEmail = MutableLiveData<Boolean>(false)
+    private val _isValidEmail = MutableLiveData(false)
     val isValidEmail: LiveData<Boolean> = _isValidEmail
 
-    private val _isValidPassword = MutableLiveData<Boolean>(false)
+    private val _isValidPassword = MutableLiveData(false)
     val isValidPassword: LiveData<Boolean> = _isValidPassword
 
     private fun validateLoginForm(email: String?, password: String?): Boolean {
@@ -54,9 +54,6 @@ class LoginViewModel : ViewModel() {
     fun onPasswordTextChanges(password: String?) {
         passwordLiveData.value = password
     }
-
-
-     */
 
     private val _apiCallInProgress = MutableLiveData(false)
     val apiCallInProgress: LiveData<Boolean> = _apiCallInProgress

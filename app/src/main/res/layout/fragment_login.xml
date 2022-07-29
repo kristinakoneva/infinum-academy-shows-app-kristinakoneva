@@ -191,7 +191,7 @@
                 android:textColor="@color/login_button_text_color"
                 android:textStyle="bold"
                 android:text="@string/login"
-                android:enabled="true"
+                android:enabled="false"
                 android:textAllCaps="false"
                 android:textSize="17sp"
                 app:cornerRadius="21.5dp"

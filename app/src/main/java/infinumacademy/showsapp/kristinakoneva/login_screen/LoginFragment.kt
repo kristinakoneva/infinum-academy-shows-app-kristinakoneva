@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.edit
 import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -65,7 +66,7 @@ class LoginFragment : Fragment() {
 
         displayLoadingScreen()
         checkRememberMe()
-        // observeLiveDataForValidation()
+        observeLiveDataForValidation()
         initListeners()
         checkComingFromRegister()
     }
@@ -109,8 +110,6 @@ class LoginFragment : Fragment() {
         }
     }
 
-    /*
-
     private fun observeLiveDataForValidation() {
         binding.tilEmail.editText?.doOnTextChanged { text, _, _, _ ->
             viewModel.onEmailTextChanged(text?.toString())
@@ -125,7 +124,7 @@ class LoginFragment : Fragment() {
         viewModel.isValidLiveData.observe(viewLifecycleOwner) { isValid ->
             binding.btnLogin.isEnabled = isValid
         }
-    }*/
+    }
 
     private fun saveData() {
         saveRememberMe()
@@ -150,9 +149,7 @@ class LoginFragment : Fragment() {
         }
     }
 
-    /*
-
-     private fun setEmailError() {
+    private fun setEmailError() {
         viewModel.isValidEmail.observe(viewLifecycleOwner) { isValid ->
             if (!isValid) {
                 binding.etEmail.error = getString(R.string.invalid_email_error_message)
@@ -167,7 +164,6 @@ class LoginFragment : Fragment() {
             }
         }
     }
-    */
 
     override fun onDestroyView() {
         super.onDestroyView()
