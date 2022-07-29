@@ -3,6 +3,8 @@ package infinumacademy.showsapp.kristinakoneva
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import coil.transform.CircleCropTransformation
 import infinumacademy.showsapp.kristinakoneva.databinding.ViewReviewItemBinding
 import model.Review
 
@@ -42,6 +44,11 @@ class ReviewsAdapter(
                 reviewRating.text = item.rating.toString()
                 reviewUsername.text = extractUsername(item.user.email)
                 reviewComment.text = item.comment
+                if (item.user.imageUrl != null) {
+                    profilePhoto.load(item.user.imageUrl) {
+                        transformations(CircleCropTransformation())
+                    }
+                }
             }
 
         }
