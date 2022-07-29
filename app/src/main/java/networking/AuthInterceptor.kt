@@ -1,6 +1,7 @@
 package networking
 
 import android.content.Context
+import infinumacademy.showsapp.kristinakoneva.Constants
 import okhttp3.Interceptor
 import okhttp3.Response
 
@@ -11,20 +12,20 @@ class AuthInterceptor(context: Context) : Interceptor {
         val requestBuilder = chain.request().newBuilder()
 
         sessionManager.fetchAuthToken()?.let {
-            requestBuilder.addHeader("access-token", it)
-            requestBuilder.addHeader("token-type", "Bearer")
+            requestBuilder.addHeader(Constants.ACCESS_TOKEN, it)
+            requestBuilder.addHeader(Constants.TOKEN_TYPE, Constants.BEARER)
         }
         sessionManager.fetchClient()?.let {
-            requestBuilder.addHeader("client", it)
+            requestBuilder.addHeader(Constants.CLIENT, it)
         }
         sessionManager.fetchExpiry()?.let {
-            requestBuilder.addHeader("expiry", it)
+            requestBuilder.addHeader(Constants.EXPIRY, it)
         }
         sessionManager.fetchUID()?.let {
-            requestBuilder.addHeader("uid", it)
+            requestBuilder.addHeader(Constants.UID, it)
         }
         sessionManager.fetchContentType()?.let {
-            requestBuilder.addHeader("content-type", it)
+            requestBuilder.addHeader(Constants.CONTENT_TYPE, it)
         }
 
         return chain.proceed(requestBuilder.build())

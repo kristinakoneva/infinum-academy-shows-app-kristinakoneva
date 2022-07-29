@@ -78,11 +78,11 @@ class LoginViewModel : ViewModel() {
                 loginResultLiveData.value = response.isSuccessful
 
                 if (response.isSuccessful) {
-                    val token = response.headers()["access-token"].toString()
-                    val client = response.headers()["client"].toString()
-                    val expiry = response.headers()["expiry"].toString()
-                    val uid = response.headers()["uid"].toString()
-                    val contentType = response.headers()["content-type"].toString()
+                    val token = response.headers()[Constants.ACCESS_TOKEN].toString()
+                    val client = response.headers()[Constants.CLIENT].toString()
+                    val expiry = response.headers()[Constants.EXPIRY].toString()
+                    val uid = response.headers()[Constants.UID].toString()
+                    val contentType = response.headers()[Constants.CONTENT_TYPE].toString()
 
                     sessionManager.saveSession(token,client,expiry,uid,contentType)
                 }
