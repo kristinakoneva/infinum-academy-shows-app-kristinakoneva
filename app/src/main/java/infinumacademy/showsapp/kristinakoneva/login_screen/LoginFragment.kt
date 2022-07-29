@@ -80,6 +80,7 @@ class LoginFragment : Fragment() {
     private fun checkComingFromRegister() {
         if (args.comingFromRegister) {
             binding.btnRegister.isVisible = false
+            binding.tvLoginTitle.text = getString(R.string.registration_successful)
         }
     }
 
