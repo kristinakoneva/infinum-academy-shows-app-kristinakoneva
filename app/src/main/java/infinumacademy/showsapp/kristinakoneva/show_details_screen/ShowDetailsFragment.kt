@@ -1,4 +1,4 @@
-package infinumacademy.showsapp.kristinakoneva
+package infinumacademy.showsapp.kristinakoneva.show_details_screen
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import infinumacademy.showsapp.kristinakoneva.Constants
+import infinumacademy.showsapp.kristinakoneva.R
 import infinumacademy.showsapp.kristinakoneva.databinding.DialogAddReviewBinding
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentShowDetailsBinding
 

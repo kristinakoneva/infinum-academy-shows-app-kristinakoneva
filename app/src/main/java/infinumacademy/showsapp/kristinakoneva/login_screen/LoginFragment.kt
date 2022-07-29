@@ -1,4 +1,4 @@
-package infinumacademy.showsapp.kristinakoneva
+package infinumacademy.showsapp.kristinakoneva.login_screen
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -10,12 +10,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.edit
 import androidx.core.view.isVisible
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import infinumacademy.showsapp.kristinakoneva.Constants
+import infinumacademy.showsapp.kristinakoneva.R
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentLoginBinding
 import networking.ApiModule
 import networking.SessionManager

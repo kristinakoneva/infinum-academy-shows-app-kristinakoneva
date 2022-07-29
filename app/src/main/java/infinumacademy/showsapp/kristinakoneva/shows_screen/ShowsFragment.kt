@@ -1,4 +1,4 @@
-package infinumacademy.showsapp.kristinakoneva
+package infinumacademy.showsapp.kristinakoneva.shows_screen
 
 import android.app.AlertDialog
 import android.content.Context
@@ -6,7 +6,6 @@ import android.content.ContextWrapper
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Matrix
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,7 +16,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.core.content.edit
 import androidx.core.view.isVisible
-import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -26,6 +24,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import infinumacademy.showsapp.kristinakoneva.BuildConfig
+import infinumacademy.showsapp.kristinakoneva.Constants
+import infinumacademy.showsapp.kristinakoneva.R
 import infinumacademy.showsapp.kristinakoneva.databinding.DialogChangeProfilePhotoOrLogoutBinding
 import infinumacademy.showsapp.kristinakoneva.databinding.DialogChooseChangingPofilePhotoMethodBinding
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentShowsBinding

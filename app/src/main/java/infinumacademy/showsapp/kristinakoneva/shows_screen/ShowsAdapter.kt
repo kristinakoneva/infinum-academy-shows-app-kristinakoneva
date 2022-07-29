@@ -1,4 +1,4 @@
-package infinumacademy.showsapp.kristinakoneva
+package infinumacademy.showsapp.kristinakoneva.shows_screen
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

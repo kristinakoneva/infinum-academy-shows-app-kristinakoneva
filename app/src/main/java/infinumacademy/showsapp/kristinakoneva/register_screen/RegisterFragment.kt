@@ -1,4 +1,4 @@
-package infinumacademy.showsapp.kristinakoneva
+package infinumacademy.showsapp.kristinakoneva.register_screen
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -11,6 +11,8 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import infinumacademy.showsapp.kristinakoneva.Constants
+import infinumacademy.showsapp.kristinakoneva.R
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentRegisterBinding
 import networking.ApiModule
 import networking.SessionManager
