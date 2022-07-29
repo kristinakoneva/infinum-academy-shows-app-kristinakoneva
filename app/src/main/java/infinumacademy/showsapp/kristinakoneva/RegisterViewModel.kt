@@ -14,11 +14,15 @@ import retrofit2.Response
 class RegisterViewModel : ViewModel() {
     private val registrationResultLiveData: MutableLiveData<Boolean> by lazy { MutableLiveData<Boolean>() }
 
+    private val _apiCallInProgress = MutableLiveData(false)
+    val apiCallInProgress: LiveData<Boolean> = _apiCallInProgress
+
     fun getRegistrationResultLiveData(): LiveData<Boolean> {
         return registrationResultLiveData
     }
 
     fun onRegisterButtonClicked(email: String, password: String, sessionManager: SessionManager) {
+        _apiCallInProgress.value = true
         val registerRequest = RegisterRequest(
             email = email,
             password = password,
@@ -28,7 +32,7 @@ class RegisterViewModel : ViewModel() {
             .enqueue(object : Callback<RegisterResponse> {
                 override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
                     registrationResultLiveData.value = response.isSuccessful
-
+                    _apiCallInProgress.value = false
                     val token = response.headers()["access-token"].toString()
                     if (response.isSuccessful) {
                         sessionManager.saveAuthToken(token)
@@ -36,6 +40,7 @@ class RegisterViewModel : ViewModel() {
                 }
 
                 override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
+                    _apiCallInProgress.value = false
                     registrationResultLiveData.value = false
                 }
             })

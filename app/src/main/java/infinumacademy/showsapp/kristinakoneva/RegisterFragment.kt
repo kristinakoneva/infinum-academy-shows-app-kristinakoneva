@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentRegisterBinding
@@ -52,6 +53,8 @@ class RegisterFragment : Fragment() {
                 Toast.makeText(requireContext(), getString(R.string.unsuccessful_registration_msg), Toast.LENGTH_SHORT).show()
             }
         }
+
+        displayLoadingScreen()
         initListeners()
     }
 
@@ -62,6 +65,12 @@ class RegisterFragment : Fragment() {
                 password = binding.etPassword.text.toString(),
                 sessionManager = sessionManager
             )
+        }
+    }
+
+    private fun displayLoadingScreen() {
+        viewModel.apiCallInProgress.observe(viewLifecycleOwner) { isApiInProgress ->
+            binding.loadingProgressOverlay.isVisible = isApiInProgress
         }
     }
 
