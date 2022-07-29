@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -51,7 +52,6 @@ class ShowDetailsFragment : Fragment() {
         initBackButtonFromToolbar()
         initReviewsRecycler()
         initAddReviewButton()
-        showReviews()
         displayShow()
     }
 
@@ -63,12 +63,20 @@ class ShowDetailsFragment : Fragment() {
 
     private fun displayShow() {
         viewModel.getShow(args.showId)
-        viewModel.showLiveData.observe(viewLifecycleOwner) { show ->
-            binding.showName.text = show.title
-            binding.showDesc.text = show.description
-            binding.showImg.load(show.imageUrl)
+        viewModel.getShowResultLiveData.observe(viewLifecycleOwner) { isSuccessful ->
+            if (isSuccessful) {
+                viewModel.showLiveData.observe(viewLifecycleOwner) { show ->
+                    binding.showName.text = show.title
+                    binding.showDesc.text = show.description
+                    binding.showImg.load(show.imageUrl)
+                }
+            } else {
+                Toast.makeText(requireContext(), getString(R.string.error_fetching_show_msg), Toast.LENGTH_SHORT).show()
+            }
         }
+
         setReviewsStatus()
+        showReviews()
     }
 
     private fun showReviews() {
@@ -80,12 +88,19 @@ class ShowDetailsFragment : Fragment() {
     }
 
     private fun setReviewsStatus() {
-        viewModel.showLiveData.observe(viewLifecycleOwner) { show ->
-            val numOfReviews = show.noOfReviews
-            val averageRating = show.averageRating
-            binding.ratingStatus.rating = String.format("%.2f", averageRating).toFloat()
-            binding.reviewsStatus.text = getString(R.string.review_status, numOfReviews, averageRating)
+        viewModel.getShowResultLiveData.observe(viewLifecycleOwner) { isSuccessful ->
+            if (isSuccessful) {
+                viewModel.showLiveData.observe(viewLifecycleOwner) { show ->
+                    val numOfReviews = show.noOfReviews
+                    val averageRating = show.averageRating
+                    binding.ratingStatus.rating = String.format("%.2f", averageRating).toFloat()
+                    binding.reviewsStatus.text = getString(R.string.review_status, numOfReviews, averageRating)
+                }
+            } else {
+                Toast.makeText(requireContext(), getString(R.string.error_fetching_show_msg), Toast.LENGTH_SHORT).show()
+            }
         }
+
     }
 
     /*
@@ -107,9 +122,16 @@ class ShowDetailsFragment : Fragment() {
     }
 
     private fun populateRecyclerView() {
-        viewModel.reviewsListLiveData.observe(viewLifecycleOwner) { reviewsList ->
-            adapter.addAllItems(reviewsList)
+        viewModel.fetchReviewsLiveData.observe(viewLifecycleOwner) { isSuccessful ->
+            if (isSuccessful) {
+                viewModel.reviewsListLiveData.observe(viewLifecycleOwner) { reviewsList ->
+                    adapter.addAllItems(reviewsList)
+                }
+            } else {
+                Toast.makeText(requireContext(), getString(R.string.error_fetching_reviews_msg), Toast.LENGTH_SHORT).show()
+            }
         }
+
     }
 
     private fun initReviewsRecycler() {
@@ -153,9 +175,8 @@ class ShowDetailsFragment : Fragment() {
             val comment = bottomSheetBinding.etComment.text.toString()
             val showId = args.showId
             viewModel.addReview(rating, comment, showId)
-            displayShow()
             populateRecyclerView()
-            showReviews()
+            displayShow()
             dialog.dismiss()
         }
 

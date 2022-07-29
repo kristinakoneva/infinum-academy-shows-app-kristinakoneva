@@ -37,7 +37,6 @@ class RegisterViewModel : ViewModel() {
 
                 override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
                     registrationResultLiveData.value = false
-
                 }
             })
 

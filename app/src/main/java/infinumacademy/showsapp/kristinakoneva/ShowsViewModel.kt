@@ -19,8 +19,11 @@ class ShowsViewModel : ViewModel() {
     private val _showEmptyStateLiveData = MutableLiveData(false)
     val showEmptyStateLiveData: LiveData<Boolean> = _showEmptyStateLiveData
 
-    private val _listShowsResultLiveData = MutableLiveData(false)
+    private val _listShowsResultLiveData = MutableLiveData(true)
     val listShowsResultLiveData: LiveData<Boolean> = _listShowsResultLiveData
+
+    private val _listTopRatedShowsResultLiveData = MutableLiveData(true)
+    val listTopRatedShowsResultLiveData: LiveData<Boolean> = _listTopRatedShowsResultLiveData
 
     private val _topRatedShowsListLiveData = MutableLiveData<List<Show>>()
     val topRatedShowsListLiveData: LiveData<List<Show>> = _topRatedShowsListLiveData
@@ -62,6 +65,7 @@ class ShowsViewModel : ViewModel() {
         _apiCallInProgress.value = true
         ApiModule.retrofit.fetchTopRatedShows().enqueue(object : Callback<TopRatedShowsResponse> {
             override fun onResponse(call: Call<TopRatedShowsResponse>, response: Response<TopRatedShowsResponse>) {
+                _listTopRatedShowsResultLiveData.value = response.isSuccessful
                 if (response.isSuccessful) {
                     _topRatedShowsListLiveData.value = response.body()!!.shows
                 }
@@ -69,7 +73,7 @@ class ShowsViewModel : ViewModel() {
             }
 
             override fun onFailure(call: Call<TopRatedShowsResponse>, t: Throwable) {
-                // TODO("Not yet implemented")
+                _listTopRatedShowsResultLiveData.value = false
                 _apiCallInProgress.value = false
             }
 

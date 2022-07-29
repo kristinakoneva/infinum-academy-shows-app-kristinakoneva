@@ -58,7 +58,7 @@ class LoginFragment : Fragment() {
                 val directions = LoginFragmentDirections.toShowsNavGraph()
                 findNavController().navigate(directions)
             } else {
-                Toast.makeText(requireContext(), "Login unsuccessful", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.unsuccessful_login_msg), Toast.LENGTH_SHORT).show()
             }
 
         }

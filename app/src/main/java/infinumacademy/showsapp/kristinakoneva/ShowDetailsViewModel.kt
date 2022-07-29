@@ -24,6 +24,13 @@ class ShowDetailsViewModel : ViewModel() {
     private val _apiCallInProgress = MutableLiveData(false)
     val apiCallInProgress: LiveData<Boolean> = _apiCallInProgress
 
+    private val _getShowResultLiveData = MutableLiveData(true)
+    val getShowResultLiveData: LiveData<Boolean> = _getShowResultLiveData
+
+    private val _fetchReviewsResultLiveData = MutableLiveData(true)
+    val fetchReviewsLiveData: LiveData<Boolean> = _fetchReviewsResultLiveData
+
+    /*
     fun getAverageReviewsRating(): Double {
         return if (_reviewsListLiveData.value != null) {
             var total = 0.0
@@ -34,12 +41,13 @@ class ShowDetailsViewModel : ViewModel() {
         } else {
             0.0
         }
-    }
+    }*/
 
     fun getShow(showId: Int) {
         _apiCallInProgress.value = true
         ApiModule.retrofit.displayShow(showId).enqueue(object : Callback<DisplayShowResponse> {
             override fun onResponse(call: retrofit2.Call<DisplayShowResponse>, response: Response<DisplayShowResponse>) {
+                _getShowResultLiveData.value = response.isSuccessful
                 if (response.isSuccessful) {
                     _showLiveData.value = response.body()!!.show
                     _apiCallInProgress.value = false
@@ -47,7 +55,7 @@ class ShowDetailsViewModel : ViewModel() {
             }
 
             override fun onFailure(call: retrofit2.Call<DisplayShowResponse>, t: Throwable) {
-                // TODO("Not yet implemented")
+                _getShowResultLiveData.value = false
                 _apiCallInProgress.value = false
             }
 
@@ -70,7 +78,6 @@ class ShowDetailsViewModel : ViewModel() {
             }
 
             override fun onFailure(call: retrofit2.Call<CreateReviewResponse>, t: Throwable) {
-                // TODO("Not yet implemented")
                 _apiCallInProgress.value = false
             }
 
@@ -81,6 +88,7 @@ class ShowDetailsViewModel : ViewModel() {
         _apiCallInProgress.value = true
         ApiModule.retrofit.fetchReviewsAboutShow(showId).enqueue(object : Callback<ReviewsResponse> {
             override fun onResponse(call: retrofit2.Call<ReviewsResponse>, response: Response<ReviewsResponse>) {
+                _fetchReviewsResultLiveData.value = response.isSuccessful
                 if (response.isSuccessful) {
                     _reviewsListLiveData.value = response.body()!!.reviews
                 }
@@ -88,7 +96,7 @@ class ShowDetailsViewModel : ViewModel() {
             }
 
             override fun onFailure(call: retrofit2.Call<ReviewsResponse>, t: Throwable) {
-                // TODO("Not yet implemented")
+                _fetchReviewsResultLiveData.value = false
                 _apiCallInProgress.value = false
             }
 

@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.core.content.edit
@@ -190,9 +191,17 @@ class ShowsFragment : Fragment() {
     private fun showShows() {
         viewModel.showTopRatedLiveData.observe(viewLifecycleOwner) { showTopRatedShows ->
             if (showTopRatedShows) {
-                viewModel.topRatedShowsListLiveData.observe(viewLifecycleOwner) { topRatedShows ->
-                    adapter.addAllItems(topRatedShows)
+                viewModel.listTopRatedShowsResultLiveData.observe(viewLifecycleOwner) { isSuccessful ->
+                    if (isSuccessful) {
+                        viewModel.topRatedShowsListLiveData.observe(viewLifecycleOwner) { topRatedShows ->
+                            adapter.addAllItems(topRatedShows)
+                        }
+                    } else {
+                        Toast.makeText(requireContext(), getString(R.string.error_fetching_top_rated_shows_msg), Toast.LENGTH_SHORT).show()
+                    }
+
                 }
+
             } else {
                 viewModel.listShowsResultLiveData.observe(viewLifecycleOwner) { isSuccessful ->
                     if (isSuccessful) {
@@ -200,7 +209,7 @@ class ShowsFragment : Fragment() {
                             adapter.addAllItems(showsList)
                         }
                     } else {
-                        // Toast.makeText(requireContext(), "Fetching shows was unsuccessful", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), getString(R.string.error_fetching_shows_msg), Toast.LENGTH_SHORT).show()
                     }
                 }
             }

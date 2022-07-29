@@ -80,7 +80,6 @@ class LoginViewModel : ViewModel() {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 loginResultLiveData.value = response.isSuccessful
 
-
                 if (response.isSuccessful) {
                     val token = response.headers()["access-token"].toString()
                     val client = response.headers()["client"].toString()
