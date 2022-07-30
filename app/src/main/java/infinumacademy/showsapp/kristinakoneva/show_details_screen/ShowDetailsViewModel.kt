@@ -21,6 +21,15 @@ class ShowDetailsViewModel : ViewModel() {
     private val _showLiveData = MutableLiveData<Show>()
     val showLiveData: LiveData<Show> = _showLiveData
 
+    private val _apiCallForFetchingShowInProgress = MutableLiveData(false)
+    // val apiCallForFetchingShowInProgress: LiveData<Boolean> = _apiCallForFetchingShowInProgress
+
+    private val _apiCallForFetchingReviewsInProgress = MutableLiveData(false)
+    // val apiCallForFetchingReviewsInProgress: LiveData<Boolean> = _apiCallForFetchingReviewsInProgress
+
+    private val _apiCallForCreatingReviewInProgress = MutableLiveData(false)
+    // val apiCallForCreatingReviewInProgress: LiveData<Boolean> = _apiCallForCreatingReviewInProgress
+
     private val _apiCallInProgress = MutableLiveData(false)
     val apiCallInProgress: LiveData<Boolean> = _apiCallInProgress
 
@@ -44,25 +53,29 @@ class ShowDetailsViewModel : ViewModel() {
     }*/
 
     fun getShow(showId: Int) {
+        _apiCallForFetchingShowInProgress.value = true
         _apiCallInProgress.value = true
         ApiModule.retrofit.displayShow(showId).enqueue(object : Callback<DisplayShowResponse> {
             override fun onResponse(call: retrofit2.Call<DisplayShowResponse>, response: Response<DisplayShowResponse>) {
                 _getShowResultLiveData.value = response.isSuccessful
                 if (response.isSuccessful) {
                     _showLiveData.value = response.body()?.show
-                    _apiCallInProgress.value = false
+                    _apiCallForFetchingShowInProgress.value = false
+                    _apiCallInProgress.value = _apiCallForFetchingReviewsInProgress.value!! || _apiCallForCreatingReviewInProgress.value!!
                 }
             }
 
             override fun onFailure(call: retrofit2.Call<DisplayShowResponse>, t: Throwable) {
                 _getShowResultLiveData.value = false
-                _apiCallInProgress.value = false
+                _apiCallForFetchingShowInProgress.value = false
+                _apiCallInProgress.value = _apiCallForFetchingReviewsInProgress.value!! || _apiCallForCreatingReviewInProgress.value!!
             }
 
         })
     }
 
     fun addReview(rating: Int, comment: String?, showId: Int) {
+        _apiCallForCreatingReviewInProgress.value = true
         _apiCallInProgress.value = true
         val request = CreateReviewRequest(
             rating = rating,
@@ -76,17 +89,20 @@ class ShowDetailsViewModel : ViewModel() {
                         _reviewsListLiveData.value = _reviewsListLiveData.value?.plus(review)
                     }
                 }
-                _apiCallInProgress.value = false
+                _apiCallForCreatingReviewInProgress.value = false
+                _apiCallInProgress.value = _apiCallForFetchingShowInProgress.value!! || _apiCallForFetchingReviewsInProgress.value!!
             }
 
             override fun onFailure(call: retrofit2.Call<CreateReviewResponse>, t: Throwable) {
-                _apiCallInProgress.value = false
+                _apiCallForCreatingReviewInProgress.value = false
+                _apiCallInProgress.value = _apiCallForFetchingShowInProgress.value!! || _apiCallForFetchingReviewsInProgress.value!!
             }
 
         })
     }
 
     fun fetchReviewsAboutShow(showId: Int) {
+        _apiCallForFetchingReviewsInProgress.value = true
         _apiCallInProgress.value = true
         ApiModule.retrofit.fetchReviewsAboutShow(showId).enqueue(object : Callback<ReviewsResponse> {
             override fun onResponse(call: retrofit2.Call<ReviewsResponse>, response: Response<ReviewsResponse>) {
@@ -94,16 +110,22 @@ class ShowDetailsViewModel : ViewModel() {
                 if (response.isSuccessful) {
                     _reviewsListLiveData.value = response.body()?.reviews
                 }
-                _apiCallInProgress.value = false
+                _apiCallForFetchingReviewsInProgress.value = false
+                _apiCallInProgress.value = _apiCallForFetchingShowInProgress.value!! || _apiCallForCreatingReviewInProgress.value!!
             }
 
             override fun onFailure(call: retrofit2.Call<ReviewsResponse>, t: Throwable) {
                 _fetchReviewsResultLiveData.value = false
-                _apiCallInProgress.value = false
+                _apiCallForFetchingReviewsInProgress.value = false
+                _apiCallInProgress.value = _apiCallForFetchingShowInProgress.value!! || _apiCallForCreatingReviewInProgress.value!!
             }
 
         })
     }
 
+    fun checkApiInProgress(){
+        _apiCallInProgress.value =
+            _apiCallForFetchingShowInProgress.value!! || _apiCallForFetchingReviewsInProgress.value!! || _apiCallForCreatingReviewInProgress.value!!
+    }
 
 }

@@ -34,6 +34,12 @@ class ShowsViewModel : ViewModel() {
     private val _apiCallInProgress = MutableLiveData(false)
     val apiCallInProgress: LiveData<Boolean> = _apiCallInProgress
 
+    private val _apiCallForFetchingShowsInProgress = MutableLiveData(false)
+    // val apiCallForFetchingShowsInProgress: LiveData<Boolean> = _apiCallForFetchingShowsInProgress
+
+    private val _apiCallForFetchingTopRatedShowsInProgress = MutableLiveData(false)
+    // val apiCallForFetchingTopRatedShowsInProgress: LiveData<Boolean> = _apiCallForFetchingTopRatedShowsInProgress
+
     init {
         fetchShows()
         fetchTopRatedShows()
@@ -45,18 +51,21 @@ class ShowsViewModel : ViewModel() {
 
     private fun fetchShows() {
         _apiCallInProgress.value = true
+        _apiCallForFetchingShowsInProgress.value = true
         ApiModule.retrofit.fetchShows().enqueue(object : Callback<ShowsResponse> {
             override fun onResponse(call: Call<ShowsResponse>, response: Response<ShowsResponse>) {
                 _listShowsResultLiveData.value = response.isSuccessful
                 if (response.isSuccessful) {
                     _showsListLiveData.value = response.body()?.shows
                 }
-                _apiCallInProgress.value = false
+                _apiCallForFetchingShowsInProgress.value = false
+                _apiCallInProgress.value = _apiCallForFetchingTopRatedShowsInProgress.value
             }
 
             override fun onFailure(call: Call<ShowsResponse>, t: Throwable) {
                 _listShowsResultLiveData.value = false
-                _apiCallInProgress.value = false
+                _apiCallForFetchingShowsInProgress.value = false
+                _apiCallInProgress.value = _apiCallForFetchingTopRatedShowsInProgress.value
             }
 
         })
@@ -68,18 +77,21 @@ class ShowsViewModel : ViewModel() {
 
     private fun fetchTopRatedShows() {
         _apiCallInProgress.value = true
+        _apiCallForFetchingTopRatedShowsInProgress.value = true
         ApiModule.retrofit.fetchTopRatedShows().enqueue(object : Callback<TopRatedShowsResponse> {
             override fun onResponse(call: Call<TopRatedShowsResponse>, response: Response<TopRatedShowsResponse>) {
                 _listTopRatedShowsResultLiveData.value = response.isSuccessful
                 if (response.isSuccessful) {
                     _topRatedShowsListLiveData.value = response.body()!!.shows
                 }
-                _apiCallInProgress.value = false
+                _apiCallForFetchingTopRatedShowsInProgress.value = false
+                _apiCallInProgress.value = _apiCallForFetchingShowsInProgress.value
             }
 
             override fun onFailure(call: Call<TopRatedShowsResponse>, t: Throwable) {
                 _listTopRatedShowsResultLiveData.value = false
-                _apiCallInProgress.value = false
+                _apiCallForFetchingTopRatedShowsInProgress.value = false
+                _apiCallInProgress.value = _apiCallForFetchingShowsInProgress.value
             }
 
         })
