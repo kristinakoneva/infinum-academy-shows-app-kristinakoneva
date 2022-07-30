@@ -44,7 +44,7 @@ class ShowsViewModel : ViewModel() {
             override fun onResponse(call: Call<ShowsResponse>, response: Response<ShowsResponse>) {
                 _listShowsResultLiveData.value = response.isSuccessful
                 if (response.isSuccessful) {
-                    _showsListLiveData.value = response.body()!!.shows
+                    _showsListLiveData.value = response.body()?.shows
                 }
                 _apiCallInProgress.value = false
             }

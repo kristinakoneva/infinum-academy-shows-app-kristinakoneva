@@ -49,7 +49,7 @@ class ShowDetailsViewModel : ViewModel() {
             override fun onResponse(call: retrofit2.Call<DisplayShowResponse>, response: Response<DisplayShowResponse>) {
                 _getShowResultLiveData.value = response.isSuccessful
                 if (response.isSuccessful) {
-                    _showLiveData.value = response.body()!!.show
+                    _showLiveData.value = response.body()?.show
                     _apiCallInProgress.value = false
                 }
             }
@@ -72,7 +72,9 @@ class ShowDetailsViewModel : ViewModel() {
         ApiModule.retrofit.createReview(request).enqueue(object : Callback<CreateReviewResponse> {
             override fun onResponse(call: retrofit2.Call<CreateReviewResponse>, response: Response<CreateReviewResponse>) {
                 if (response.isSuccessful) {
-                    _reviewsListLiveData.value = _reviewsListLiveData.value!! + response.body()!!.review
+                    response.body()?.review?.let { review ->
+                        _reviewsListLiveData.value = _reviewsListLiveData.value?.plus(review)
+                    }
                 }
                 _apiCallInProgress.value = false
             }
@@ -90,7 +92,7 @@ class ShowDetailsViewModel : ViewModel() {
             override fun onResponse(call: retrofit2.Call<ReviewsResponse>, response: Response<ReviewsResponse>) {
                 _fetchReviewsResultLiveData.value = response.isSuccessful
                 if (response.isSuccessful) {
-                    _reviewsListLiveData.value = response.body()!!.reviews
+                    _reviewsListLiveData.value = response.body()?.reviews
                 }
                 _apiCallInProgress.value = false
             }
