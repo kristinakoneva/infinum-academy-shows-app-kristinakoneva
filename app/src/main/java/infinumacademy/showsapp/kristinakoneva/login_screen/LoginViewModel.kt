@@ -8,6 +8,7 @@ import infinumacademy.showsapp.kristinakoneva.Constants
 import model.LoginRequest
 import model.LoginResponse
 import networking.ApiModule
+import networking.Session
 import networking.SessionManager
 import retrofit2.Call
 import retrofit2.Callback
@@ -84,7 +85,13 @@ class LoginViewModel : ViewModel() {
                     val uid = response.headers()[Constants.UID].toString()
                     val contentType = response.headers()[Constants.CONTENT_TYPE].toString()
 
-                    sessionManager.saveSession(token,client,expiry,uid,contentType)
+                    Session.accessToken = token
+                    Session.client = client
+                    Session.expiry = expiry
+                    Session.uid = uid
+                    Session.contentType = contentType
+
+                    sessionManager.saveSession(token, client, expiry, uid, contentType)
                 }
                 _apiCallInProgress.value = false
             }

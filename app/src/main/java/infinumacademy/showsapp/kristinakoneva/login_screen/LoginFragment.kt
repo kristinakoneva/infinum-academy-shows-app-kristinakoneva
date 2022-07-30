@@ -18,6 +18,7 @@ import infinumacademy.showsapp.kristinakoneva.Constants
 import infinumacademy.showsapp.kristinakoneva.R
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentLoginBinding
 import networking.ApiModule
+import networking.Session
 import networking.SessionManager
 
 class LoginFragment : Fragment() {
@@ -87,6 +88,11 @@ class LoginFragment : Fragment() {
     private fun checkRememberMe() {
         binding.cbRememberMe.isChecked = sharedPreferences.getBoolean(Constants.REMEMBER_ME, false)
         if (binding.cbRememberMe.isChecked) {
+            Session.accessToken = sessionManager.fetchAuthToken()
+            Session.uid = sessionManager.fetchUID()
+            Session.expiry = sessionManager.fetchExpiry()
+            Session.contentType = sessionManager.fetchContentType()
+            Session.client = sessionManager.fetchClient()
             val directions = LoginFragmentDirections.toShowsNavGraph()
             findNavController().navigate(directions)
         } else {
