@@ -75,8 +75,6 @@ class ShowsFragment : Fragment() {
         displayLoadingScreen()
         showProfilePhoto()
         initShowsRecycler()
-        viewModel.fetchShows()
-        viewModel.fetchTopRatedShows()
         displayState()
         initListeners()
     }

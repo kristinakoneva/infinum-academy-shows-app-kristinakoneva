@@ -34,11 +34,16 @@ class ShowsViewModel : ViewModel() {
     private val _apiCallInProgress = MutableLiveData(false)
     val apiCallInProgress: LiveData<Boolean> = _apiCallInProgress
 
+    init {
+        fetchShows()
+        fetchTopRatedShows()
+    }
+
     fun updateShowTopRated(isChecked: Boolean) {
         _showTopRatedLiveData.value = isChecked
     }
 
-    fun fetchShows() {
+    private fun fetchShows() {
         _apiCallInProgress.value = true
         ApiModule.retrofit.fetchShows().enqueue(object : Callback<ShowsResponse> {
             override fun onResponse(call: Call<ShowsResponse>, response: Response<ShowsResponse>) {
@@ -61,7 +66,7 @@ class ShowsViewModel : ViewModel() {
         _showEmptyStateLiveData.value = !_showEmptyStateLiveData.value!!
     }
 
-    fun fetchTopRatedShows() {
+    private fun fetchTopRatedShows() {
         _apiCallInProgress.value = true
         ApiModule.retrofit.fetchTopRatedShows().enqueue(object : Callback<TopRatedShowsResponse> {
             override fun onResponse(call: Call<TopRatedShowsResponse>, response: Response<TopRatedShowsResponse>) {
