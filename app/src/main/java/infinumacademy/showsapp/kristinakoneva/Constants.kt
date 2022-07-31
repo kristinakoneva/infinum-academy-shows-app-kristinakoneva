@@ -12,4 +12,5 @@ object Constants {
     const val CONTENT_TYPE = "content-type"
     const val TOKEN_TYPE = "token-type"
     const val BEARER = "Bearer"
+    const val USER_ID = "USER_ID"
 }

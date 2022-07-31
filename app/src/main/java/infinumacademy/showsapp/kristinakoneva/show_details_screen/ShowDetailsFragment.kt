@@ -2,14 +2,8 @@ package infinumacademy.showsapp.kristinakoneva.show_details_screen
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.net.ConnectivityManager
-import android.net.Network
-import android.net.NetworkCapabilities
-import android.net.NetworkRequest
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +12,6 @@ import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -77,7 +70,7 @@ class ShowDetailsFragment : Fragment() {
             }
         }
 
-        if (!(NetworkLiveData.isNetworkAvailable())){
+        if (!(NetworkLiveData.isNetworkAvailable())) {
             viewModel.fetchShowFromDatabase()
             viewModel.fetchReviewsFromDatabase()
         }
@@ -207,7 +200,23 @@ class ShowDetailsFragment : Fragment() {
         bottomSheetBinding.btnSubmitReview.setOnClickListener {
             val rating = bottomSheetBinding.rbRating.rating.toInt()
             val comment = bottomSheetBinding.etComment.text.toString()
-            viewModel.addReview(rating, comment)
+            if (NetworkLiveData.isNetworkAvailable()) {
+                viewModel.addReview(rating, comment)
+                viewModel.fetchShow()
+                viewModel.fetchReviewsAboutShow()
+            } else {
+                var userId = sharedPreferences.getString(Constants.USER_ID, "123")
+                if (userId == null) {
+                    userId = "123"
+                }
+                var userEmail = sharedPreferences.getString(Constants.EMAIL, "username@gmail.com")
+                if (userEmail == null) {
+                    userEmail = "username@gmail.com"
+                }
+                viewModel.addReviewToDatabase(rating, comment, userId, userEmail, null)
+                viewModel.fetchShowFromDatabase()
+                viewModel.fetchReviewsFromDatabase()
+            }
             populateRecyclerView()
             displayShow()
             dialog.dismiss()

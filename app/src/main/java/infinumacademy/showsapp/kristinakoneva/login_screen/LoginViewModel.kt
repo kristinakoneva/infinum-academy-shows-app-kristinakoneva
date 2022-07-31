@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import infinumacademy.showsapp.kristinakoneva.Constants
 import model.LoginRequest
 import model.LoginResponse
+import model.User
 import networking.ApiModule
 import networking.Session
 import networking.SessionManager
@@ -37,6 +38,8 @@ class LoginViewModel : ViewModel() {
 
     private val _isValidPassword = MutableLiveData(false)
     val isValidPassword: LiveData<Boolean> = _isValidPassword
+
+    var userInfo: User? = null
 
     private fun validateLoginForm(email: String?, password: String?): Boolean {
         val isValidEmail = email != null && email.isNotBlank() && email.matches("^[a-z][a-z0-9\\.\\_]*@[a-z]+\\.[a-z]+".toRegex())
@@ -76,9 +79,13 @@ class LoginViewModel : ViewModel() {
 
         ApiModule.retrofit.login(loginRequest).enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-                loginResultLiveData.value = response.isSuccessful
-
                 if (response.isSuccessful) {
+                    userInfo = User(
+                        response.body()?.user?.id ?: "0",
+                        response.body()?.user?.email ?: "username@gmail.com",
+                        response.body()?.user?.imageUrl
+                    )
+
                     val token = response.headers()[Constants.ACCESS_TOKEN].toString()
                     val client = response.headers()[Constants.CLIENT].toString()
                     val expiry = response.headers()[Constants.EXPIRY].toString()
@@ -93,6 +100,7 @@ class LoginViewModel : ViewModel() {
 
                     sessionManager.saveSession(token, client, expiry, uid, contentType)
                 }
+                loginResultLiveData.value = response.isSuccessful
                 _apiCallInProgress.value = false
             }
 

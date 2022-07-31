@@ -194,6 +194,7 @@ class ShowsFragment : Fragment() {
             sharedPreferences.edit {
                 putBoolean(Constants.REMEMBER_ME, false)
                 putString(Constants.EMAIL, null)
+                putString(Constants.USER_ID,null)
             }
             dialog.dismiss()
             bottomSheetDialog.dismiss()

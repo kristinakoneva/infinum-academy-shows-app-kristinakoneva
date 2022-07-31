@@ -17,6 +17,7 @@ import androidx.navigation.fragment.navArgs
 import infinumacademy.showsapp.kristinakoneva.Constants
 import infinumacademy.showsapp.kristinakoneva.R
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentLoginBinding
+import model.User
 import networking.ApiModule
 import networking.Session
 import networking.SessionManager
@@ -100,6 +101,7 @@ class LoginFragment : Fragment() {
             sharedPreferences.edit {
                 putBoolean(Constants.REMEMBER_ME, false)
                 putString(Constants.EMAIL, null)
+                putString(Constants.USER_ID, null)
             }
         }
     }
@@ -110,10 +112,12 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private fun saveEmail() {
-        val email = binding.etEmail.text.toString()
-        sharedPreferences.edit {
-            putString(Constants.EMAIL, email)
+    private fun saveUserInfo(user: User?) {
+        if (user != null) {
+            sharedPreferences.edit {
+                putString(Constants.EMAIL, user.email)
+                putString(Constants.USER_ID, user.id)
+            }
         }
     }
 
@@ -135,7 +139,7 @@ class LoginFragment : Fragment() {
 
     private fun saveData() {
         saveRememberMe()
-        saveEmail()
+        saveUserInfo(viewModel.userInfo)
     }
 
     private fun initListeners() {

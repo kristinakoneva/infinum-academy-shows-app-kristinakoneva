@@ -138,7 +138,7 @@ class ShowDetailsViewModel (
     private fun saveReviewsToDatabase(reviews: List<Review>?){
         Executors.newSingleThreadExecutor().execute{
             database.reviewDao().insertAllReviews(reviews?.map { review ->
-                    ReviewEntity(review.id,review.comment,review.rating,review.showId,review.user.id,review.user.email,review.user.imageUrl)
+                    ReviewEntity(review.id.toInt(),review.comment,review.rating,review.showId,review.user.id,review.user.email,review.user.imageUrl)
                 } ?: listOf())
         }
     }
@@ -152,12 +152,15 @@ class ShowDetailsViewModel (
     fun fetchReviewsFromDatabase(){
         reviewsListLiveData = database.reviewDao().getAllReviews(showId).map { list->
             list.map { reviewEntity->
-                Review(reviewEntity.id,reviewEntity.comment,reviewEntity.rating,reviewEntity.showId,User(reviewEntity.userId,reviewEntity.userEmail,reviewEntity.userImageUrl))
+                Review(reviewEntity.id.toString(),reviewEntity.comment,reviewEntity.rating,reviewEntity.showId,User(reviewEntity.userId,reviewEntity.userEmail,reviewEntity.userImageUrl))
             }
         }
     }
 
-    fun addReviewToDatabase(rating: Int, comment: String?){
+    fun addReviewToDatabase(rating: Int, comment: String?, userId: String, userEmail: String, userImageUrl: String?){
+        Executors.newSingleThreadExecutor().execute{
+            database.reviewDao().insertAllReviews(listOf(ReviewEntity(0,comment,rating,showId,userId,userEmail,userImageUrl)))
+        }
     }
 
 }
