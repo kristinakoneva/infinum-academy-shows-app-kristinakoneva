@@ -87,10 +87,13 @@ class ShowsFragment : Fragment() {
         NetworkLiveData.observe(viewLifecycleOwner) { isOnline ->
             if (isOnline) {
                 viewModel.fetchShows()
+                viewModel.fetchTopRatedShows()
             } else {
                 viewModel.fetchShowsFromDatabase()
             }
-
+        }
+        if (!(NetworkLiveData.isNetworkAvailable())){
+            viewModel.fetchShowsFromDatabase()
         }
 
         displayLoadingScreen()

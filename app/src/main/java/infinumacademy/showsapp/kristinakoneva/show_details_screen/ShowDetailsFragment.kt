@@ -75,7 +75,11 @@ class ShowDetailsFragment : Fragment() {
                 viewModel.fetchShowFromDatabase()
                 viewModel.fetchReviewsFromDatabase()
             }
+        }
 
+        if (!(NetworkLiveData.isNetworkAvailable())){
+            viewModel.fetchShowFromDatabase()
+            viewModel.fetchReviewsFromDatabase()
         }
 
         displayLoadingScreen()
@@ -162,7 +166,6 @@ class ShowDetailsFragment : Fragment() {
         viewModel.reviewsListLiveData.observe(viewLifecycleOwner) { reviewsList ->
             adapter.addAllItems(reviewsList)
         }
-
     }
 
     private fun initReviewsRecycler() {

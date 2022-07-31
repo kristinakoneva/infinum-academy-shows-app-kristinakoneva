@@ -152,8 +152,7 @@ class ShowDetailsViewModel (
     fun fetchReviewsFromDatabase(){
         reviewsListLiveData = database.reviewDao().getAllReviews(showId).map { list->
             list.map { reviewEntity->
-                val user = User(reviewEntity.userId,reviewEntity.userEmail,reviewEntity.userImageUrl)
-                Review(reviewEntity.id,reviewEntity.comment,reviewEntity.rating,reviewEntity.showId,user)
+                Review(reviewEntity.id,reviewEntity.comment,reviewEntity.rating,reviewEntity.showId,User(reviewEntity.userId,reviewEntity.userEmail,reviewEntity.userImageUrl))
             }
         }
     }

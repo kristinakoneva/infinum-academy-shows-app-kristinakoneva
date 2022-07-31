@@ -16,7 +16,6 @@ object NetworkLiveData: LiveData<Boolean>() {
     fun init(application: Application) {
         this.application = application
         networkRequest = NetworkRequest.Builder()
-            .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
             .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
             .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
             .build()
@@ -45,5 +44,12 @@ object NetworkLiveData: LiveData<Boolean>() {
                 postValue(false)
             }
         })
+    }
+
+    fun isNetworkAvailable(): Boolean {
+        val cm = application.getSystemService(
+            Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork = cm.activeNetworkInfo
+        return activeNetwork != null && activeNetwork.isConnected
     }
 }
