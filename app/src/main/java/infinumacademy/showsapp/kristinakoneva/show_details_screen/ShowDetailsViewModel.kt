@@ -3,6 +3,7 @@ package infinumacademy.showsapp.kristinakoneva.show_details_screen
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import db.ShowsAppDatabase
 import model.CreateReviewRequest
 import model.CreateReviewResponse
 import model.DisplayShowResponse
@@ -13,7 +14,9 @@ import networking.ApiModule
 import retrofit2.Callback
 import retrofit2.Response
 
-class ShowDetailsViewModel : ViewModel() {
+class ShowDetailsViewModel (
+    private val database: ShowsAppDatabase
+    ): ViewModel() {
 
     private val _reviewsListLiveData = MutableLiveData<List<Review>>(listOf())
     val reviewsListLiveData: LiveData<List<Review>> = _reviewsListLiveData
@@ -37,7 +40,7 @@ class ShowDetailsViewModel : ViewModel() {
     val getShowResultLiveData: LiveData<Boolean> = _getShowResultLiveData
 
     private val _fetchReviewsResultLiveData = MutableLiveData(true)
-    val fetchReviewsLiveData: LiveData<Boolean> = _fetchReviewsResultLiveData
+    val fetchReviewsResultLiveData: LiveData<Boolean> = _fetchReviewsResultLiveData
 
     /*
     fun getAverageReviewsRating(): Double {
@@ -53,16 +56,17 @@ class ShowDetailsViewModel : ViewModel() {
     }*/
 
     fun getShow(showId: Int) {
-        _apiCallForFetchingShowInProgress.value = true
-        _apiCallInProgress.value = true
+        _apiCallForFetchingShowInProgress.postValue(true)
+        _apiCallInProgress.postValue(true)
         ApiModule.retrofit.displayShow(showId).enqueue(object : Callback<DisplayShowResponse> {
             override fun onResponse(call: retrofit2.Call<DisplayShowResponse>, response: Response<DisplayShowResponse>) {
                 _getShowResultLiveData.value = response.isSuccessful
                 if (response.isSuccessful) {
                     _showLiveData.value = response.body()?.show
-                    _apiCallForFetchingShowInProgress.value = false
-                    _apiCallInProgress.value = _apiCallForFetchingReviewsInProgress.value!! || _apiCallForCreatingReviewInProgress.value!!
+                    saveShowToDatabase(response.body()?.show)
                 }
+                _apiCallForFetchingShowInProgress.value = false
+                _apiCallInProgress.value = _apiCallForFetchingReviewsInProgress.value!! || _apiCallForCreatingReviewInProgress.value!!
             }
 
             override fun onFailure(call: retrofit2.Call<DisplayShowResponse>, t: Throwable) {
@@ -102,13 +106,14 @@ class ShowDetailsViewModel : ViewModel() {
     }
 
     fun fetchReviewsAboutShow(showId: Int) {
-        _apiCallForFetchingReviewsInProgress.value = true
-        _apiCallInProgress.value = true
+        _apiCallForFetchingReviewsInProgress.postValue(true)
+        _apiCallInProgress.postValue(true)
         ApiModule.retrofit.fetchReviewsAboutShow(showId).enqueue(object : Callback<ReviewsResponse> {
             override fun onResponse(call: retrofit2.Call<ReviewsResponse>, response: Response<ReviewsResponse>) {
                 _fetchReviewsResultLiveData.value = response.isSuccessful
                 if (response.isSuccessful) {
                     _reviewsListLiveData.value = response.body()?.reviews
+                    saveReviewsToDatabase(response.body()?.reviews)
                 }
                 _apiCallForFetchingReviewsInProgress.value = false
                 _apiCallInProgress.value = _apiCallForFetchingShowInProgress.value!! || _apiCallForCreatingReviewInProgress.value!!
@@ -123,9 +128,12 @@ class ShowDetailsViewModel : ViewModel() {
         })
     }
 
-    fun checkApiInProgress(){
-        _apiCallInProgress.value =
-            _apiCallForFetchingShowInProgress.value!! || _apiCallForFetchingReviewsInProgress.value!! || _apiCallForCreatingReviewInProgress.value!!
+    private fun saveShowToDatabase(show: Show?){
+
+    }
+
+    private fun saveReviewsToDatabase(reviews: List<Review>?){
+
     }
 
 }

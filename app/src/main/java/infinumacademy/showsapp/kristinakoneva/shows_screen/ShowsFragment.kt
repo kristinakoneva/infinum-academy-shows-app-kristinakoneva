@@ -19,7 +19,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.FileProvider
 import androidx.core.content.edit
 import androidx.core.view.isVisible
@@ -48,7 +47,7 @@ import model.Show
 import networking.ApiModule
 import networking.SessionManager
 
-@RequiresApi(Build.VERSION_CODES.M)
+
 class ShowsFragment : Fragment() {
 
     private var _binding: FragmentShowsBinding? = null
@@ -110,7 +109,8 @@ class ShowsFragment : Fragment() {
         return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
+
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

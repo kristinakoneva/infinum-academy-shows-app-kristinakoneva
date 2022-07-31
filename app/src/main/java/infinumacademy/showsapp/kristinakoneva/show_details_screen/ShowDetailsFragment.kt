@@ -2,11 +2,17 @@ package infinumacademy.showsapp.kristinakoneva.show_details_screen
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -18,6 +24,7 @@ import coil.load
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import infinumacademy.showsapp.kristinakoneva.Constants
 import infinumacademy.showsapp.kristinakoneva.R
+import infinumacademy.showsapp.kristinakoneva.ShowsApplication
 import infinumacademy.showsapp.kristinakoneva.databinding.DialogAddReviewBinding
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentShowDetailsBinding
 
@@ -31,9 +38,40 @@ class ShowDetailsFragment : Fragment() {
 
     private val args by navArgs<ShowDetailsFragmentArgs>()
 
-    private val viewModel by viewModels<ShowDetailsViewModel>()
+    private val viewModel: ShowDetailsViewModel by viewModels{
+        ShowDetailsViewModelFactory((requireActivity().application as ShowsApplication).database)
+    }
 
     private lateinit var sharedPreferences: SharedPreferences
+
+    private val networkRequest = NetworkRequest.Builder()
+        .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+        .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+        .build()
+
+    private val networkCallback = object : ConnectivityManager.NetworkCallback() {
+        // network is available for use
+        override fun onAvailable(network: Network) {
+            super.onAvailable(network)
+            viewModel.getShow(args.showId)
+            viewModel.fetchReviewsAboutShow(args.showId)
+        }
+
+        // network capabilities have changed for the network
+        override fun onCapabilitiesChanged(
+            network: Network,
+            networkCapabilities: NetworkCapabilities
+        ) {
+            super.onCapabilitiesChanged(network, networkCapabilities)
+            val unmetered = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED)
+        }
+
+        // lost network connection
+        override fun onLost(network: Network) {
+            super.onLost(network)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,9 +84,17 @@ class ShowDetailsFragment : Fragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val connectivityManager = requireContext().getSystemService(ConnectivityManager::class.java) as ConnectivityManager
+        connectivityManager.registerNetworkCallback(networkRequest, networkCallback)
+
+        // no network connection
+        if (connectivityManager.activeNetwork == null) {
+
+        }
 
         displayLoadingScreen()
         initBackButtonFromToolbar()
@@ -64,7 +110,6 @@ class ShowDetailsFragment : Fragment() {
     }
 
     private fun displayShow() {
-        viewModel.getShow(args.showId)
         viewModel.getShowResultLiveData.observe(viewLifecycleOwner) { isSuccessful ->
             if (isSuccessful) {
                 viewModel.showLiveData.observe(viewLifecycleOwner) { show ->
@@ -82,7 +127,6 @@ class ShowDetailsFragment : Fragment() {
     }
 
     private fun showReviews() {
-        viewModel.fetchReviewsAboutShow(args.showId)
         viewModel.showLiveData.observe(viewLifecycleOwner) { show ->
             binding.groupShowReviews.isVisible = show.noOfReviews != 0
             binding.noReviews.isVisible = show.noOfReviews == 0
@@ -124,7 +168,7 @@ class ShowDetailsFragment : Fragment() {
     }
 
     private fun populateRecyclerView() {
-        viewModel.fetchReviewsLiveData.observe(viewLifecycleOwner) { isSuccessful ->
+        viewModel.fetchReviewsResultLiveData.observe(viewLifecycleOwner) { isSuccessful ->
             if (isSuccessful) {
                 viewModel.reviewsListLiveData.observe(viewLifecycleOwner) { reviewsList ->
                     adapter.addAllItems(reviewsList)
