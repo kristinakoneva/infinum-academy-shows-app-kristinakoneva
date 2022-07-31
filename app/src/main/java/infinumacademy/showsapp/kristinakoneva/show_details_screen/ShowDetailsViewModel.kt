@@ -60,9 +60,9 @@ class ShowDetailsViewModel : ViewModel() {
                 _getShowResultLiveData.value = response.isSuccessful
                 if (response.isSuccessful) {
                     _showLiveData.value = response.body()?.show
-                    _apiCallForFetchingShowInProgress.value = false
-                    _apiCallInProgress.value = _apiCallForFetchingReviewsInProgress.value!! || _apiCallForCreatingReviewInProgress.value!!
                 }
+                _apiCallForFetchingShowInProgress.value = false
+                _apiCallInProgress.value = _apiCallForFetchingReviewsInProgress.value!! || _apiCallForCreatingReviewInProgress.value!!
             }
 
             override fun onFailure(call: retrofit2.Call<DisplayShowResponse>, t: Throwable) {
@@ -123,9 +123,5 @@ class ShowDetailsViewModel : ViewModel() {
         })
     }
 
-    fun checkApiInProgress(){
-        _apiCallInProgress.value =
-            _apiCallForFetchingShowInProgress.value!! || _apiCallForFetchingReviewsInProgress.value!! || _apiCallForCreatingReviewInProgress.value!!
-    }
 
 }
