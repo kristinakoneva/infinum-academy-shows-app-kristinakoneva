@@ -9,7 +9,7 @@ import androidx.room.Query
 @Dao
 interface ReviewDao {
     @Query("SELECT * FROM review WHERE id IS :showId")
-    fun getAllReviews(showId: String): LiveData<List<ReviewEntity>>
+    fun getAllReviews(showId: Int): LiveData<List<ReviewEntity>>
 
     @Query("SELECT * FROM review WHERE id IS :id")
     fun getReview(id: String): LiveData<ReviewEntity>

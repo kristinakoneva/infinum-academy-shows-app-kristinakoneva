@@ -3,26 +3,33 @@ package infinumacademy.showsapp.kristinakoneva.show_details_screen
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
+import db.ReviewEntity
+import db.ShowEntity
 import db.ShowsAppDatabase
+import java.util.concurrent.Executors
 import model.CreateReviewRequest
 import model.CreateReviewResponse
 import model.DisplayShowResponse
 import model.Review
 import model.ReviewsResponse
 import model.Show
+import model.User
 import networking.ApiModule
+import networking.Session
 import retrofit2.Callback
 import retrofit2.Response
 
 class ShowDetailsViewModel (
-    private val database: ShowsAppDatabase
+    private val database: ShowsAppDatabase,
+    private val showId: Int
     ): ViewModel() {
 
     private val _reviewsListLiveData = MutableLiveData<List<Review>>(listOf())
-    val reviewsListLiveData: LiveData<List<Review>> = _reviewsListLiveData
+    var reviewsListLiveData: LiveData<List<Review>> = _reviewsListLiveData
 
     private val _showLiveData = MutableLiveData<Show>()
-    val showLiveData: LiveData<Show> = _showLiveData
+    var showLiveData: LiveData<Show> = _showLiveData
 
     private val _apiCallForFetchingShowInProgress = MutableLiveData(false)
     // val apiCallForFetchingShowInProgress: LiveData<Boolean> = _apiCallForFetchingShowInProgress
@@ -55,7 +62,7 @@ class ShowDetailsViewModel (
         }
     }*/
 
-    fun getShow(showId: Int) {
+    fun fetchShow() {
         _apiCallForFetchingShowInProgress.postValue(true)
         _apiCallInProgress.postValue(true)
         ApiModule.retrofit.displayShow(showId).enqueue(object : Callback<DisplayShowResponse> {
@@ -63,7 +70,6 @@ class ShowDetailsViewModel (
                 _getShowResultLiveData.value = response.isSuccessful
                 if (response.isSuccessful) {
                     _showLiveData.value = response.body()?.show
-                    saveShowToDatabase(response.body()?.show)
                 }
                 _apiCallForFetchingShowInProgress.value = false
                 _apiCallInProgress.value = _apiCallForFetchingReviewsInProgress.value!! || _apiCallForCreatingReviewInProgress.value!!
@@ -78,7 +84,7 @@ class ShowDetailsViewModel (
         })
     }
 
-    fun addReview(rating: Int, comment: String?, showId: Int) {
+    fun addReview(rating: Int, comment: String?) {
         _apiCallForCreatingReviewInProgress.value = true
         _apiCallInProgress.value = true
         val request = CreateReviewRequest(
@@ -105,7 +111,7 @@ class ShowDetailsViewModel (
         })
     }
 
-    fun fetchReviewsAboutShow(showId: Int) {
+    fun fetchReviewsAboutShow() {
         _apiCallForFetchingReviewsInProgress.postValue(true)
         _apiCallInProgress.postValue(true)
         ApiModule.retrofit.fetchReviewsAboutShow(showId).enqueue(object : Callback<ReviewsResponse> {
@@ -128,12 +134,31 @@ class ShowDetailsViewModel (
         })
     }
 
-    private fun saveShowToDatabase(show: Show?){
-
-    }
 
     private fun saveReviewsToDatabase(reviews: List<Review>?){
+        Executors.newSingleThreadExecutor().execute{
+            database.reviewDao().insertAllReviews(reviews?.map { review ->
+                    ReviewEntity(review.id,review.comment,review.rating,review.showId,review.user.id,review.user.email,review.user.imageUrl)
+                } ?: listOf())
+        }
+    }
 
+    fun fetchShowFromDatabase(){
+        showLiveData = database.showDao().getShow(showId.toString()).map { showEntity->
+            Show(showEntity.id,showEntity.averageRating,showEntity.description,showEntity.imageUrl,showEntity.noOfReviews,showEntity.title)
+        }
+    }
+
+    fun fetchReviewsFromDatabase(){
+        reviewsListLiveData = database.reviewDao().getAllReviews(showId).map { list->
+            list.map { reviewEntity->
+                val user = User(reviewEntity.userId,reviewEntity.userEmail,reviewEntity.userImageUrl)
+                Review(reviewEntity.id,reviewEntity.comment,reviewEntity.rating,reviewEntity.showId,user)
+            }
+        }
+    }
+
+    fun addReviewToDatabase(rating: Int, comment: String?){
     }
 
 }

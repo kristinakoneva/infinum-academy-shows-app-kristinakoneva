@@ -6,10 +6,10 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import db.ShowsAppDatabase
 import java.lang.IllegalArgumentException
 
-class ShowDetailsViewModelFactory(val database: ShowsAppDatabase): ViewModelProvider.NewInstanceFactory() {
+class ShowDetailsViewModelFactory(val database: ShowsAppDatabase, val showId: Int): ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
         if(modelClass.isAssignableFrom(ShowDetailsViewModel::class.java)){
-            return ShowDetailsViewModel(database) as T
+            return ShowDetailsViewModel(database, showId) as T
         }
         throw IllegalArgumentException("Cannot work with non ShowDetailsViewModel classes!")
     }

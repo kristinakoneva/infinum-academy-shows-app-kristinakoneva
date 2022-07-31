@@ -32,6 +32,7 @@ import coil.transform.CircleCropTransformation
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import infinumacademy.showsapp.kristinakoneva.BuildConfig
 import infinumacademy.showsapp.kristinakoneva.Constants
+import infinumacademy.showsapp.kristinakoneva.NetworkLiveData
 import infinumacademy.showsapp.kristinakoneva.R
 import infinumacademy.showsapp.kristinakoneva.ShowsApplication
 import infinumacademy.showsapp.kristinakoneva.databinding.DialogChangeProfilePhotoOrLogoutBinding
@@ -46,7 +47,6 @@ import java.io.OutputStream
 import model.Show
 import networking.ApiModule
 import networking.SessionManager
-
 
 class ShowsFragment : Fragment() {
 
@@ -64,36 +64,6 @@ class ShowsFragment : Fragment() {
 
     private lateinit var sessionManager: SessionManager
 
-    private val networkRequest = NetworkRequest.Builder()
-        .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-        .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
-        .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
-        .build()
-
-    private val networkCallback = object : ConnectivityManager.NetworkCallback() {
-        // network is available for use
-        override fun onAvailable(network: Network) {
-            super.onAvailable(network)
-            viewModel.fetchShows()
-            viewModel.fetchTopRatedShows()
-        }
-
-        // network capabilities have changed for the network
-        override fun onCapabilitiesChanged(
-            network: Network,
-            networkCapabilities: NetworkCapabilities
-        ) {
-            super.onCapabilitiesChanged(network, networkCapabilities)
-            val unmetered = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED)
-        }
-
-        // lost network connection
-        override fun onLost(network: Network) {
-            super.onLost(network)
-            viewModel.fetchShowsFromDatabase()
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -109,17 +79,18 @@ class ShowsFragment : Fragment() {
         return binding.root
     }
 
-
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val connectivityManager = requireContext().getSystemService(ConnectivityManager::class.java) as ConnectivityManager
-        connectivityManager.registerNetworkCallback(networkRequest, networkCallback)
 
-        // no network connection
-        if (connectivityManager.activeNetwork == null) {
-            viewModel.fetchShowsFromDatabase()
+        NetworkLiveData.observe(viewLifecycleOwner) { isOnline ->
+            if (isOnline) {
+                viewModel.fetchShows()
+            } else {
+                viewModel.fetchShowsFromDatabase()
+            }
+
         }
 
         displayLoadingScreen()

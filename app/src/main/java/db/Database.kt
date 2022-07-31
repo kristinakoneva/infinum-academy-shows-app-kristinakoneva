@@ -10,7 +10,7 @@ import androidx.room.RoomDatabase
         ShowEntity::class,
         ReviewEntity::class
     ],
-    version = 1
+    version = 2
 )
 abstract class ShowsAppDatabase: RoomDatabase() {
     companion object {

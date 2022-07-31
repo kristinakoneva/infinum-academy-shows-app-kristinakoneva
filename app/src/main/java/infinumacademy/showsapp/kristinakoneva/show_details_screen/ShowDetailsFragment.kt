@@ -8,6 +8,8 @@ import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +18,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -23,6 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import infinumacademy.showsapp.kristinakoneva.Constants
+import infinumacademy.showsapp.kristinakoneva.NetworkLiveData
 import infinumacademy.showsapp.kristinakoneva.R
 import infinumacademy.showsapp.kristinakoneva.ShowsApplication
 import infinumacademy.showsapp.kristinakoneva.databinding.DialogAddReviewBinding
@@ -38,40 +42,11 @@ class ShowDetailsFragment : Fragment() {
 
     private val args by navArgs<ShowDetailsFragmentArgs>()
 
-    private val viewModel: ShowDetailsViewModel by viewModels{
-        ShowDetailsViewModelFactory((requireActivity().application as ShowsApplication).database)
+    private val viewModel: ShowDetailsViewModel by viewModels {
+        ShowDetailsViewModelFactory((requireActivity().application as ShowsApplication).database, args.showId)
     }
 
     private lateinit var sharedPreferences: SharedPreferences
-
-    private val networkRequest = NetworkRequest.Builder()
-        .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-        .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
-        .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
-        .build()
-
-    private val networkCallback = object : ConnectivityManager.NetworkCallback() {
-        // network is available for use
-        override fun onAvailable(network: Network) {
-            super.onAvailable(network)
-            viewModel.getShow(args.showId)
-            viewModel.fetchReviewsAboutShow(args.showId)
-        }
-
-        // network capabilities have changed for the network
-        override fun onCapabilitiesChanged(
-            network: Network,
-            networkCapabilities: NetworkCapabilities
-        ) {
-            super.onCapabilitiesChanged(network, networkCapabilities)
-            val unmetered = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED)
-        }
-
-        // lost network connection
-        override fun onLost(network: Network) {
-            super.onLost(network)
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,19 +63,26 @@ class ShowDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val connectivityManager = requireContext().getSystemService(ConnectivityManager::class.java) as ConnectivityManager
-        connectivityManager.registerNetworkCallback(networkRequest, networkCallback)
 
-        // no network connection
-        if (connectivityManager.activeNetwork == null) {
+        NetworkLiveData.observe(viewLifecycleOwner) { isOnline ->
+            if (isOnline) {
+                //connected
+                viewModel.fetchShow()
+                viewModel.fetchReviewsAboutShow()
+
+            } else {
+                //connection gone
+                viewModel.fetchShowFromDatabase()
+                viewModel.fetchReviewsFromDatabase()
+            }
 
         }
 
         displayLoadingScreen()
+        displayShow()
         initBackButtonFromToolbar()
         initReviewsRecycler()
         initAddReviewButton()
-        displayShow()
     }
 
     private fun displayLoadingScreen() {
@@ -177,6 +159,9 @@ class ShowDetailsFragment : Fragment() {
                 Toast.makeText(requireContext(), getString(R.string.error_fetching_reviews_msg), Toast.LENGTH_SHORT).show()
             }
         }
+        viewModel.reviewsListLiveData.observe(viewLifecycleOwner) { reviewsList ->
+            adapter.addAllItems(reviewsList)
+        }
 
     }
 
@@ -219,8 +204,7 @@ class ShowDetailsFragment : Fragment() {
         bottomSheetBinding.btnSubmitReview.setOnClickListener {
             val rating = bottomSheetBinding.rbRating.rating.toInt()
             val comment = bottomSheetBinding.etComment.text.toString()
-            val showId = args.showId
-            viewModel.addReview(rating, comment, showId)
+            viewModel.addReview(rating, comment)
             populateRecyclerView()
             displayShow()
             dialog.dismiss()

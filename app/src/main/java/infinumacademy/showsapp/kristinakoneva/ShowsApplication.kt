@@ -9,4 +9,8 @@ class ShowsApplication : Application() {
         ShowsAppDatabase.getDatabase(this)
     }
 
+    override fun onCreate() {
+        super.onCreate()
+        NetworkLiveData.init(this)
+    }
 }
