@@ -83,20 +83,6 @@
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnShowHideEmptyState"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:text="@string/show_hide_empty_state"
-        android:textColor="@color/white"
-        android:textSize="14sp"
-        android:backgroundTint="@color/purple"
-        app:cornerRadius="21.5dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvShows"
-        />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/showsEmptyState"
         android:layout_width="match_parent"
@@ -105,7 +91,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnShowHideEmptyState">
+        app:layout_constraintTop_toBottomOf="@id/tvShows">
 
         <ImageView
             android:id="@+id/imageView"
@@ -149,7 +135,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnShowHideEmptyState"
+        app:layout_constraintTop_toBottomOf="@+id/tvShows"
         tools:listitem="@layout/view_show_item"
         />
 

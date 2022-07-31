@@ -6,13 +6,20 @@ import android.content.ContextWrapper
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.FileProvider
 import androidx.core.content.edit
 import androidx.core.view.isVisible
@@ -27,6 +34,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import infinumacademy.showsapp.kristinakoneva.BuildConfig
 import infinumacademy.showsapp.kristinakoneva.Constants
 import infinumacademy.showsapp.kristinakoneva.R
+import infinumacademy.showsapp.kristinakoneva.ShowsApplication
 import infinumacademy.showsapp.kristinakoneva.databinding.DialogChangeProfilePhotoOrLogoutBinding
 import infinumacademy.showsapp.kristinakoneva.databinding.DialogChooseChangingPofilePhotoMethodBinding
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentShowsBinding
@@ -40,6 +48,7 @@ import model.Show
 import networking.ApiModule
 import networking.SessionManager
 
+@RequiresApi(Build.VERSION_CODES.M)
 class ShowsFragment : Fragment() {
 
     private var _binding: FragmentShowsBinding? = null
@@ -48,14 +57,47 @@ class ShowsFragment : Fragment() {
 
     private lateinit var adapter: ShowsAdapter
 
-    private val viewModel by viewModels<ShowsViewModel>()
+    private val viewModel: ShowsViewModel by viewModels {
+        ShowsViewModelFactory((requireActivity().application as ShowsApplication).database)
+    }
 
     private lateinit var sharedPreferences: SharedPreferences
 
     private lateinit var sessionManager: SessionManager
 
+    private val networkRequest = NetworkRequest.Builder()
+        .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+        .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+        .build()
+
+    private val networkCallback = object : ConnectivityManager.NetworkCallback() {
+        // network is available for use
+        override fun onAvailable(network: Network) {
+            super.onAvailable(network)
+            viewModel.fetchShows()
+            viewModel.fetchTopRatedShows()
+        }
+
+        // network capabilities have changed for the network
+        override fun onCapabilitiesChanged(
+            network: Network,
+            networkCapabilities: NetworkCapabilities
+        ) {
+            super.onCapabilitiesChanged(network, networkCapabilities)
+            val unmetered = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED)
+        }
+
+        // lost network connection
+        override fun onLost(network: Network) {
+            super.onLost(network)
+            viewModel.fetchShowsFromDatabase()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 
         ApiModule.initRetrofit(requireContext())
         sessionManager = SessionManager(requireContext())
@@ -68,9 +110,17 @@ class ShowsFragment : Fragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val connectivityManager = requireContext().getSystemService(ConnectivityManager::class.java) as ConnectivityManager
+        connectivityManager.registerNetworkCallback(networkRequest, networkCallback)
+
+        // no network connection
+        if (connectivityManager.activeNetwork == null) {
+            viewModel.fetchShowsFromDatabase()
+        }
 
         displayLoadingScreen()
         showProfilePhoto()
@@ -86,6 +136,7 @@ class ShowsFragment : Fragment() {
     }
 
     private fun displayState() {
+
         viewModel.showEmptyStateLiveData.observe(viewLifecycleOwner) { showEmptyState ->
             if (showEmptyState) {
                 hideShows()
@@ -96,11 +147,6 @@ class ShowsFragment : Fragment() {
     }
 
     private fun initListeners() {
-        binding.btnShowHideEmptyState.setOnClickListener {
-            viewModel.resetEmptyState()
-            displayState()
-        }
-
         binding.btnDialogChangeProfilePicOrLogout.setOnClickListener {
             openDialogForChangingProfilePicOrLoggingOut()
         }
@@ -205,7 +251,8 @@ class ShowsFragment : Fragment() {
                 viewModel.listShowsResultLiveData.observe(viewLifecycleOwner) { isSuccessful ->
                     if (isSuccessful) {
                         viewModel.showsListLiveData.observe(viewLifecycleOwner) { showsList ->
-                            adapter.addAllItems(showsList)
+                            if (showsList != null)
+                                adapter.addAllItems(showsList)
                         }
                     } else {
                         Toast.makeText(requireContext(), getString(R.string.error_fetching_shows_msg), Toast.LENGTH_SHORT).show()

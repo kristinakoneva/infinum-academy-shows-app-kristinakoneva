@@ -10,11 +10,11 @@ import androidx.room.Query
 interface ShowDao {
 
     @Query("SELECT * FROM show")
-    fun getAllShows() : LiveData<List<ShowEntity>>
+    fun getAllShows(): LiveData<List<ShowEntity>>
 
     @Query("SELECT * FROM show WHERE id IS :showId")
-    fun getShow(showId: Int) : LiveData<ShowEntity>
+    fun getShow(showId: String): LiveData<ShowEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAllShows(superheroes: List<ShowEntity>)
+    fun insertAllShows(shows: List<ShowEntity>)
 }

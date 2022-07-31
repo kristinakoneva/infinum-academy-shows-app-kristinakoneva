@@ -9,10 +9,10 @@ import androidx.room.Query
 @Dao
 interface ReviewDao {
     @Query("SELECT * FROM review WHERE id IS :showId")
-    fun getAllReviews(showId: Int) : LiveData<List<ReviewEntity>>
+    fun getAllReviews(showId: String): LiveData<List<ReviewEntity>>
 
-    @Query("SELECT * FROM review WHERE id IS :reviewId")
-    fun getReview(reviewId: String) : LiveData<ReviewEntity>
+    @Query("SELECT * FROM review WHERE id IS :id")
+    fun getReview(id: String): LiveData<ReviewEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAllReviews(reviews: List<ReviewEntity>)
