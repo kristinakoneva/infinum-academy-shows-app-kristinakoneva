@@ -77,7 +77,7 @@ class ShowsViewModel(
             override fun onResponse(call: Call<TopRatedShowsResponse>, response: Response<TopRatedShowsResponse>) {
                 _listTopRatedShowsResultLiveData.value = response.isSuccessful
                 if (response.isSuccessful) {
-                    _topRatedShowsListLiveData.value = response.body()!!.shows
+                    _topRatedShowsListLiveData.value = response.body()?.shows
                 }
                 _apiCallForFetchingTopRatedShowsInProgress.value = false
                 _apiCallInProgress.value = _apiCallForFetchingShowsInProgress.value

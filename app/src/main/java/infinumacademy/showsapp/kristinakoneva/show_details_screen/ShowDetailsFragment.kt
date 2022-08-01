@@ -83,8 +83,8 @@ class ShowDetailsFragment : Fragment() {
     }
 
     private fun displayLoadingScreen() {
-        viewModel.apiCallInProgress.observe(viewLifecycleOwner) { apiInProgress ->
-            binding.loadingProgressOverlay.isVisible = apiInProgress
+        viewModel.apiCallInProgress.observe(viewLifecycleOwner) { isApiInProgress ->
+            binding.loadingProgressOverlayContainer.loadingProgressOverlay.isVisible = isApiInProgress
         }
     }
 

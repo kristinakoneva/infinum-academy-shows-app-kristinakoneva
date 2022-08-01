@@ -13,4 +13,5 @@ object Constants {
     const val TOKEN_TYPE = "token-type"
     const val BEARER = "Bearer"
     const val USER_ID = "USER_ID"
+    const val EMAIL_REGEX = "^[a-z][a-z0-9\\.\\_]*@[a-z]+\\.[a-z]+"
 }

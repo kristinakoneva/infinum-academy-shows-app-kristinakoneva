@@ -8,6 +8,8 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 
+private val json = Json { ignoreUnknownKeys = true }
+
 object ApiModule {
     private const val BASE_URL = "https://tv-shows.infinum.academy/"
 
@@ -20,7 +22,7 @@ object ApiModule {
 
         retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .client(okhttp)
             .build()
             .create(ShowsApiService::class.java)
