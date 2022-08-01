@@ -259,8 +259,20 @@ class ShowsFragment : Fragment() {
     }
 
     private fun showDetailsAbout(show: Show) {
-        val directions = ShowsFragmentDirections.toShowDetailsFragment(show.id.toInt())
-        findNavController().navigate(directions)
+        if (!NetworkLiveData.isNetworkAvailable()) {
+            viewModel.getShowsFromDB().observe(viewLifecycleOwner) { list ->
+                // prevent the user from entering ShowDetails screen if there is no internet connection and the database is empty
+                if (list.isNullOrEmpty()) {
+                    displayState()
+                } else {
+                    val directions = ShowsFragmentDirections.toShowDetailsFragment(show.id.toInt())
+                    findNavController().navigate(directions)
+                }
+            }
+        } else {
+            val directions = ShowsFragmentDirections.toShowDetailsFragment(show.id.toInt())
+            findNavController().navigate(directions)
+        }
     }
 
     override fun onDestroyView() {
