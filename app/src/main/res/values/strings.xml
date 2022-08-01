@@ -52,4 +52,5 @@
     <string name="error_fetching_reviews_msg">Fetching reviews about show was unsuccessful</string>
     <string name="passwords_do_not_match_error_message">Password and repeat password do not match!</string>
     <string name="registration_successful">Registration successful!</string>
+    <string name="no_internet_error_msg">You cannot login without Internet connection!</string>
 </resources>

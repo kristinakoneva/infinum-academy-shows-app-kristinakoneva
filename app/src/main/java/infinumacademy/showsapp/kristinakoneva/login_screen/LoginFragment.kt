@@ -15,6 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import infinumacademy.showsapp.kristinakoneva.Constants
+import infinumacademy.showsapp.kristinakoneva.NetworkLiveData
 import infinumacademy.showsapp.kristinakoneva.R
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentLoginBinding
 import model.User
@@ -63,6 +64,15 @@ class LoginFragment : Fragment() {
                 Toast.makeText(requireContext(), getString(R.string.unsuccessful_login_msg), Toast.LENGTH_SHORT).show()
             }
 
+        }
+
+
+        NetworkLiveData.observe(viewLifecycleOwner) { isOnline ->
+            binding.noInternetConnection.isVisible = !isOnline
+        }
+
+        if (!(NetworkLiveData.isNetworkAvailable())) {
+            binding.noInternetConnection.isVisible = true
         }
 
 
