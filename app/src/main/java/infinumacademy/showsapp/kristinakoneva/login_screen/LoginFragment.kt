@@ -40,9 +40,6 @@ class LoginFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
-
-        ApiModule.initRetrofit(requireContext())
         sessionManager = SessionManager(requireContext())
         sharedPreferences = requireContext().getSharedPreferences(Constants.SHOWS_APP, Context.MODE_PRIVATE)
     }
