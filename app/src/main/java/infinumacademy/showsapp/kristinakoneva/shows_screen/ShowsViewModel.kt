@@ -22,9 +22,6 @@ class ShowsViewModel(
     private val _showsListLiveData = MutableLiveData<List<Show>>()
     var showsListLiveData: LiveData<List<Show>> = _showsListLiveData
 
-    private val _showEmptyStateLiveData = MutableLiveData(false)
-    val showEmptyStateLiveData: LiveData<Boolean> = _showEmptyStateLiveData
-
     private val _listShowsResultLiveData = MutableLiveData(true)
     val listShowsResultLiveData: LiveData<Boolean> = _listShowsResultLiveData
 
@@ -59,7 +56,6 @@ class ShowsViewModel(
                 if (response.isSuccessful) {
                     _showsListLiveData.value = response.body()?.shows
                     saveShowsToDatabase(response.body()?.shows)
-                    _showEmptyStateLiveData.value = false
                 }
                 _apiCallForFetchingShowsInProgress.value = false
                 _apiCallInProgress.value = _apiCallForFetchingTopRatedShowsInProgress.value
@@ -74,10 +70,6 @@ class ShowsViewModel(
         })
     }
 
-    fun updateEmptyState(value: Boolean) {
-        _showEmptyStateLiveData.value = value
-    }
-
     fun fetchTopRatedShows() {
         _apiCallInProgress.postValue(true)
         _apiCallForFetchingTopRatedShowsInProgress.postValue(true)
@@ -86,7 +78,6 @@ class ShowsViewModel(
                 _listTopRatedShowsResultLiveData.value = response.isSuccessful
                 if (response.isSuccessful) {
                     _topRatedShowsListLiveData.value = response.body()!!.shows
-                    _showEmptyStateLiveData.value = false
                 }
                 _apiCallForFetchingTopRatedShowsInProgress.value = false
                 _apiCallInProgress.value = _apiCallForFetchingShowsInProgress.value
@@ -110,9 +101,7 @@ class ShowsViewModel(
     }
 
     fun fetchShowsFromDatabase() {
-        var data = emptyList<ShowEntity>()
         showsListLiveData = database.showDao().getAllShows().map { list ->
-            data = list
             list.map { showEntity ->
                 Show(
                     showEntity.id,
@@ -121,13 +110,14 @@ class ShowsViewModel(
                     showEntity.imageUrl,
                     showEntity.noOfReviews,
                     showEntity.title
-                )
+                   )
             }
         }
-
-        // TODO: set showEmptyStateLiveData to true when there aren't any shows in the database
-        //_showEmptyStateLiveData.value = data.isEmpty()
     }
 
+    // used for setting the empty state if database is empty
+    fun getShowsFromDB(): LiveData<List<ShowEntity>> {
+        return database.showDao().getAllShows()
+    }
 
 }

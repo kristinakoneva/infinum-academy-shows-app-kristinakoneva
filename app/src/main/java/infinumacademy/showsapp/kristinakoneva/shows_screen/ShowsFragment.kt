@@ -92,7 +92,7 @@ class ShowsFragment : Fragment() {
                 viewModel.fetchShowsFromDatabase()
             }
         }
-        if (!(NetworkLiveData.isNetworkAvailable())){
+        if (!(NetworkLiveData.isNetworkAvailable())) {
             viewModel.fetchShowsFromDatabase()
         }
 
@@ -110,12 +110,14 @@ class ShowsFragment : Fragment() {
     }
 
     private fun displayState() {
-
-        viewModel.showEmptyStateLiveData.observe(viewLifecycleOwner) { showEmptyState ->
-            if (showEmptyState) {
-                hideShows()
-            } else {
-                showShows()
+        if (NetworkLiveData.isNetworkAvailable()) {
+            showShows()
+        } else {
+            viewModel.getShowsFromDB().observe(viewLifecycleOwner) { list ->
+                if (list.isNullOrEmpty())
+                    hideShows()
+                else
+                    showShows()
             }
         }
     }
@@ -194,7 +196,7 @@ class ShowsFragment : Fragment() {
             sharedPreferences.edit {
                 putBoolean(Constants.REMEMBER_ME, false)
                 putString(Constants.EMAIL, null)
-                putString(Constants.USER_ID,null)
+                putString(Constants.USER_ID, null)
             }
             dialog.dismiss()
             bottomSheetDialog.dismiss()
