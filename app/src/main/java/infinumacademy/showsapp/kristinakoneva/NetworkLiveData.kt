@@ -6,9 +6,11 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 
-object NetworkLiveData: LiveData<Boolean>() {
+object NetworkLiveData : LiveData<Boolean>() {
 
     private lateinit var application: Application
     private lateinit var networkRequest: NetworkRequest
@@ -47,9 +49,26 @@ object NetworkLiveData: LiveData<Boolean>() {
     }
 
     fun isNetworkAvailable(): Boolean {
-        val cm = application.getSystemService(
-            Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetwork = cm.activeNetworkInfo
-        return activeNetwork != null && activeNetwork.isConnected
+        val connectivityManager =
+            application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val capabilities =
+                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            if (capabilities != null) {
+                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                    return true
+                }
+            }
+            return false
+        } else {
+            val activeNetwork = connectivityManager.activeNetworkInfo
+            return activeNetwork != null && activeNetwork.isConnected
+        }
     }
+
 }

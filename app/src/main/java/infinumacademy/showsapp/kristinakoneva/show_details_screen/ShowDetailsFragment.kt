@@ -209,9 +209,9 @@ class ShowDetailsFragment : Fragment() {
                 if (userId == null) {
                     userId = "123"
                 }
-                var userEmail = sharedPreferences.getString(Constants.EMAIL, "username@gmail.com")
+                var userEmail = sharedPreferences.getString(Constants.EMAIL, getString(R.string.example_email))
                 if (userEmail == null) {
-                    userEmail = "username@gmail.com"
+                    userEmail = getString(R.string.example_email)
                 }
                 viewModel.addReviewToDatabase(rating, comment, userId, userEmail, null)
                 viewModel.fetchShowFromDatabase()
