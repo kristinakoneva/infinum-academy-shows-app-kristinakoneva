@@ -19,7 +19,6 @@ import infinumacademy.showsapp.kristinakoneva.NetworkLiveData
 import infinumacademy.showsapp.kristinakoneva.R
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentLoginBinding
 import model.User
-import networking.ApiModule
 import networking.Session
 import networking.SessionManager
 
