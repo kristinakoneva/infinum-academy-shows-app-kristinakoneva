@@ -80,6 +80,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSubmitReview"
+        style="@style/DefaultPurpleButton"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
         android:layout_marginStart="24dp"
@@ -87,7 +88,6 @@
         android:enabled="false"
         android:text="@string/submit"
         app:cornerRadius="21.5dp"
-        style="@style/defaultPurpleButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tilComment"/>

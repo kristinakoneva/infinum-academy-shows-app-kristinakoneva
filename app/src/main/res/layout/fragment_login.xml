@@ -15,11 +15,11 @@
         android:layout_height="0dp"
         android:visibility="gone"
         android:background="@color/white"
+        android:translationZ="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:translationZ="10dp">
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/imgNoInternet"
@@ -55,10 +55,10 @@
     <include
         android:id="@+id/loadingProgressOverlayContainer"
         layout="@layout/loading_progress_overlay"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         >
     </include>
 
@@ -142,14 +142,9 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilEmail"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
+                style="@style/DefaultTextInputLayout"
                 android:layout_marginTop="27dp"
                 android:hint="@string/hint_email"
-                android:textColorHint="@color/hint_text_color_selector"
                 app:boxStrokeColor="@color/edit_text_color_selector"
                 app:hintTextColor="@color/hint_text_color_selector"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -169,14 +164,9 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilPassword"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
+                style="@style/DefaultTextInputLayout"
                 android:layout_marginTop="26dp"
                 android:hint="@string/hint_password"
-                android:textColorHint="@color/hint_text_color_selector"
                 app:boxStrokeColor="@color/edit_text_color_selector"
                 app:hintTextColor="@color/hint_text_color_selector"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -211,12 +201,12 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnLogin"
+                style="@style/DefaultWhiteButton"
                 android:layout_marginStart="24dp"
                 android:layout_marginEnd="24dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/login"
                 android:enabled="false"
-                style="@style/defaultWhiteButton"
                 app:cornerRadius="21.5dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

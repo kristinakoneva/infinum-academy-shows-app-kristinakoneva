@@ -11,10 +11,10 @@
     <include
         android:id="@+id/loadingProgressOverlayContainer"
         layout="@layout/loading_progress_overlay"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         >
     </include>
 
@@ -86,14 +86,9 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilEmail"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
+                style="@style/DefaultTextInputLayout"
                 android:layout_marginTop="27dp"
                 android:hint="@string/hint_email"
-                android:textColorHint="@color/hint_text_color_selector"
                 app:boxStrokeColor="@color/edit_text_color_selector"
                 app:hintTextColor="@color/hint_text_color_selector"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -113,14 +108,9 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilPassword"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
+                style="@style/DefaultTextInputLayout"
                 android:layout_marginTop="26dp"
                 android:hint="@string/hint_password"
-                android:textColorHint="@color/hint_text_color_selector"
                 app:boxStrokeColor="@color/edit_text_color_selector"
                 app:hintTextColor="@color/hint_text_color_selector"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -143,14 +133,9 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilRepeatPassword"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
+                style="@style/DefaultTextInputLayout"
                 android:layout_marginTop="26dp"
                 android:hint="@string/repeat_password"
-                android:textColorHint="@color/hint_text_color_selector"
                 app:boxStrokeColor="@color/edit_text_color_selector"
                 app:hintTextColor="@color/hint_text_color_selector"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -173,13 +158,13 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnRegister"
+                style="@style/DefaultWhiteButton"
                 android:layout_marginStart="24dp"
                 android:layout_marginEnd="24dp"
                 android:layout_marginTop="24dp"
                 android:text="@string/register"
                 android:enabled="false"
                 app:cornerRadius="21.5dp"
-                style="@style/defaultWhiteButton"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

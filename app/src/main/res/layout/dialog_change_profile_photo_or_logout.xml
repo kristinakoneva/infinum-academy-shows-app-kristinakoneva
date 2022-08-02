@@ -57,11 +57,11 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnLogout"
+        style="@style/DefaultPurpleButton"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:text="@string/logout_button_text"
         app:cornerRadius="21.5dp"
-        style="@style/defaultPurpleButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnChangeProfilePhoto"
