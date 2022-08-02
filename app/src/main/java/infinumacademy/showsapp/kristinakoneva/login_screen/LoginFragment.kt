@@ -94,9 +94,9 @@ class LoginFragment : Fragment() {
             Session.contentType = sessionManager.fetchContentType()
             Session.client = sessionManager.fetchClient()
 
-            UserInfo.id = sharedPreferences.getString(Constants.USER_ID,null)
-            UserInfo.email = sharedPreferences.getString(Constants.EMAIL,null)
-            UserInfo.imageUrl = sharedPreferences.getString(Constants.IMAGE_URL,null)
+            UserInfo.id = sharedPreferences.getString(Constants.USER_ID, null)
+            UserInfo.email = sharedPreferences.getString(Constants.EMAIL, null)
+            UserInfo.imageUrl = sharedPreferences.getString(Constants.IMAGE_URL, null)
 
             val directions = LoginFragmentDirections.toShowsNavGraph()
             findNavController().navigate(directions)
@@ -105,8 +105,8 @@ class LoginFragment : Fragment() {
             sharedPreferences.edit {
                 putBoolean(Constants.REMEMBER_ME, false)
                 putString(Constants.EMAIL, null)
-                putString(Constants.IMAGE_URL,null)
-                putString(Constants.USER_ID,null)
+                putString(Constants.IMAGE_URL, null)
+                putString(Constants.USER_ID, null)
             }
         }
     }
@@ -118,11 +118,11 @@ class LoginFragment : Fragment() {
     }
 
     private fun saveUserInfo() {
-        if(UserInfo.id != null){
+        if (UserInfo.id != null) {
             sharedPreferences.edit {
                 putString(Constants.EMAIL, UserInfo.email)
                 putString(Constants.USER_ID, UserInfo.id)
-                putString(Constants.IMAGE_URL,UserInfo.imageUrl)
+                putString(Constants.IMAGE_URL, UserInfo.imageUrl)
             }
         }
     }

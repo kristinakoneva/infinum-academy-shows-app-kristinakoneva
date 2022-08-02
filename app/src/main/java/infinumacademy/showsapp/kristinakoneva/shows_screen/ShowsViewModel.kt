@@ -53,7 +53,6 @@ class ShowsViewModel : ViewModel() {
     private val _apiCallForUpdatingProfilePhotoInProgress = MutableLiveData(false)
     // val apiCallForUpdatingProfilePhotoInProgress: LiveData<Boolean> = _apiCallForUpdatingProfilePhotoInProgress
 
-
     init {
         fetchShows()
         fetchTopRatedShows()
@@ -73,13 +72,15 @@ class ShowsViewModel : ViewModel() {
                 }
                 _listShowsResultLiveData.value = response.isSuccessful
                 _apiCallForFetchingShowsInProgress.value = false
-                _apiCallInProgress.value = _apiCallForFetchingTopRatedShowsInProgress.value!! || _apiCallForUpdatingProfilePhotoInProgress.value!!
+                _apiCallInProgress.value =
+                    _apiCallForFetchingTopRatedShowsInProgress.value!! || _apiCallForUpdatingProfilePhotoInProgress.value!!
             }
 
             override fun onFailure(call: Call<ShowsResponse>, t: Throwable) {
                 _listShowsResultLiveData.value = false
                 _apiCallForFetchingShowsInProgress.value = false
-                _apiCallInProgress.value = _apiCallForFetchingTopRatedShowsInProgress.value!! || _apiCallForUpdatingProfilePhotoInProgress.value!!
+                _apiCallInProgress.value =
+                    _apiCallForFetchingTopRatedShowsInProgress.value!! || _apiCallForUpdatingProfilePhotoInProgress.value!!
             }
 
         })
@@ -111,14 +112,15 @@ class ShowsViewModel : ViewModel() {
         })
     }
 
-    fun updateProfilePhoto(fileName: String, imagePath: String){
+    fun updateProfilePhoto(fileName: String, imagePath: String) {
         _apiCallInProgress.value = true
         _apiCallForUpdatingProfilePhotoInProgress.value = true
-        val requestBody = MultipartBody.Part.createFormData("image", "$fileName.jpg", File(imagePath).asRequestBody("multipart/form-data".toMediaType()))
+        val requestBody =
+            MultipartBody.Part.createFormData("image", "$fileName.jpg", File(imagePath).asRequestBody("multipart/form-data".toMediaType()))
 
-        ApiModule.retrofit.updateProfilePhoto(requestBody).enqueue(object: Callback<UpdateProfilePhotoResponse>{
+        ApiModule.retrofit.updateProfilePhoto(requestBody).enqueue(object : Callback<UpdateProfilePhotoResponse> {
             override fun onResponse(call: Call<UpdateProfilePhotoResponse>, response: Response<UpdateProfilePhotoResponse>) {
-                if(response.isSuccessful){
+                if (response.isSuccessful) {
                     UserInfo.imageUrl = response.body()?.user?.imageUrl
                 }
                 _updateProfilePhotoResultLiveData.value = response.isSuccessful
