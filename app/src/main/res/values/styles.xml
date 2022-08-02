@@ -9,4 +9,14 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0dp</item>
     </style>
+
+    <style name="defaultWhiteButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:backgroundTint">@color/default_white_button_background_color</item>
+        <item name="android:textColor">@color/default_white_button_text_color</item>
+    </style>
 </resources>
