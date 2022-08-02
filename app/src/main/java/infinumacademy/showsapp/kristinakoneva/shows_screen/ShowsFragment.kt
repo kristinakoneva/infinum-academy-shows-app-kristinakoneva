@@ -148,7 +148,12 @@ class ShowsFragment : Fragment() {
 
         // Listeners
         bottomSheetBinding.btnChangeProfilePhoto.setOnClickListener {
-            openDialogForChoosingChangingProfilePhotoMethod()
+            if (NetworkLiveData.isNetworkAvailable()) {
+                openDialogForChoosingChangingProfilePhotoMethod()
+            } else {
+                // prevent changing the profile photo when the user has no internet connection
+                Toast.makeText(requireContext(), getString(R.string.error_changing_pp_offline_msg), Toast.LENGTH_LONG).show()
+            }
             dialog.dismiss()
         }
 
@@ -292,17 +297,17 @@ class ShowsFragment : Fragment() {
         return file.absolutePath
     }
 
-//    private fun loadImageFromStorage(path: String) {
-//        try {
-//            val f = File(path)
-//            val b = BitmapFactory.decodeStream(FileInputStream(f))
-//            binding.btnDialogChangeProfilePicOrLogout.load(b) {
-//                transformations(CircleCropTransformation())
-//            }
-//        } catch (e: FileNotFoundException) {
-//            e.printStackTrace()
-//        }
-//    }
+    //    private fun loadImageFromStorage(path: String) {
+    //        try {
+    //            val f = File(path)
+    //            val b = BitmapFactory.decodeStream(FileInputStream(f))
+    //            binding.btnDialogChangeProfilePicOrLogout.load(b) {
+    //                transformations(CircleCropTransformation())
+    //            }
+    //        } catch (e: FileNotFoundException) {
+    //            e.printStackTrace()
+    //        }
+    //    }
 
     private fun getProfilePhotoPath(): String? {
         val email = sharedPreferences.getString(Constants.EMAIL, null)

@@ -49,7 +49,7 @@ class ReviewsAdapter(
                     profilePhoto.load(item.user.imageUrl) {
                         transformations(CircleCropTransformation())
                     }
-                }else{
+                } else {
                     profilePhoto.setImageResource(R.drawable.ic_profile_placeholder)
                 }
             }
