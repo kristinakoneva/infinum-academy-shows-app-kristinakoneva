@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
+import infinumacademy.showsapp.kristinakoneva.R
 import infinumacademy.showsapp.kristinakoneva.databinding.ViewReviewItemBinding
 import model.Review
 
@@ -48,6 +49,8 @@ class ReviewsAdapter(
                     profilePhoto.load(item.user.imageUrl) {
                         transformations(CircleCropTransformation())
                     }
+                }else{
+                    profilePhoto.setImageResource(R.drawable.ic_profile_placeholder)
                 }
             }
 

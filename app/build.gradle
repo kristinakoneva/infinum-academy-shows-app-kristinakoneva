@@ -110,4 +110,8 @@ dependencies {
     debugImplementation "com.github.chuckerteam.chucker:library:3.5.2"
     releaseImplementation "com.github.chuckerteam.chucker:library-no-op:3.5.2"
 
+
+    // compressor for the photos
+    implementation 'id.zelory:compressor:3.0.1'
+
 }

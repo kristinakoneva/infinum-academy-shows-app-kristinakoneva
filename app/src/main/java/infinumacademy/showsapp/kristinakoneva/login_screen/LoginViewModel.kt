@@ -5,8 +5,10 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import infinumacademy.showsapp.kristinakoneva.Constants
+import infinumacademy.showsapp.kristinakoneva.UserInfo
 import model.LoginRequest
 import model.LoginResponse
+import model.User
 import networking.ApiModule
 import networking.Session
 import networking.SessionManager
@@ -76,9 +78,13 @@ class LoginViewModel : ViewModel() {
 
         ApiModule.retrofit.login(loginRequest).enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-                loginResultLiveData.value = response.isSuccessful
 
                 if (response.isSuccessful) {
+
+                    UserInfo.id = response.body()?.user?.id ?: "0"
+                    UserInfo.email = response.body()?.user?.email ?: "username@gmail.com"
+                    UserInfo.imageUrl = response.body()?.user?.imageUrl
+
                     val token = response.headers()[Constants.ACCESS_TOKEN].toString()
                     val client = response.headers()[Constants.CLIENT].toString()
                     val expiry = response.headers()[Constants.EXPIRY].toString()
@@ -93,6 +99,7 @@ class LoginViewModel : ViewModel() {
 
                     sessionManager.saveSession(token, client, expiry, uid, contentType)
                 }
+                loginResultLiveData.value = response.isSuccessful
                 _apiCallInProgress.value = false
             }
 
