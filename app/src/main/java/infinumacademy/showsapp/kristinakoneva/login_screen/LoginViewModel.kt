@@ -5,6 +5,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import infinumacademy.showsapp.kristinakoneva.Constants
+import infinumacademy.showsapp.kristinakoneva.UserInfo
 import model.LoginRequest
 import model.LoginResponse
 import model.User
@@ -39,7 +40,6 @@ class LoginViewModel : ViewModel() {
     private val _isValidPassword = MutableLiveData(false)
     val isValidPassword: LiveData<Boolean> = _isValidPassword
 
-    var userInfo: User? = null
 
     private fun validateLoginForm(email: String?, password: String?): Boolean {
         val isValidEmail = email != null && email.isNotBlank() && email.matches(Constants.EMAIL_REGEX.toRegex())
@@ -80,11 +80,9 @@ class LoginViewModel : ViewModel() {
         ApiModule.retrofit.login(loginRequest).enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 if (response.isSuccessful) {
-                    userInfo = User(
-                        response.body()?.user?.id ?: "0",
-                        response.body()?.user?.email ?: "username@gmail.com",
-                        response.body()?.user?.imageUrl
-                    )
+                    UserInfo.id = response.body()?.user?.id ?: "0"
+                    UserInfo.email = response.body()?.user?.email ?: "username@gmail.com"
+                    UserInfo.imageUrl = response.body()?.user?.imageUrl
 
                     val token = response.headers()[Constants.ACCESS_TOKEN].toString()
                     val client = response.headers()[Constants.CLIENT].toString()

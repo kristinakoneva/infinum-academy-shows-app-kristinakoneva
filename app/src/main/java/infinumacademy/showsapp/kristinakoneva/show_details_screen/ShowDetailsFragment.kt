@@ -1,7 +1,5 @@
 package infinumacademy.showsapp.kristinakoneva.show_details_screen
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,10 +16,10 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import infinumacademy.showsapp.kristinakoneva.Constants
 import infinumacademy.showsapp.kristinakoneva.NetworkLiveData
 import infinumacademy.showsapp.kristinakoneva.R
 import infinumacademy.showsapp.kristinakoneva.ShowsApplication
+import infinumacademy.showsapp.kristinakoneva.UserInfo
 import infinumacademy.showsapp.kristinakoneva.databinding.DialogAddReviewBinding
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentShowDetailsBinding
 
@@ -37,14 +35,6 @@ class ShowDetailsFragment : Fragment() {
 
     private val viewModel: ShowDetailsViewModel by viewModels {
         ShowDetailsViewModelFactory((requireActivity().application as ShowsApplication).database, args.showId)
-    }
-
-    private lateinit var sharedPreferences: SharedPreferences
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        sharedPreferences = requireContext().getSharedPreferences(Constants.SHOWS_APP, Context.MODE_PRIVATE)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -205,15 +195,16 @@ class ShowDetailsFragment : Fragment() {
                 viewModel.fetchShow()
                 viewModel.fetchReviewsAboutShow()
             } else {
-                var userId = sharedPreferences.getString(Constants.USER_ID, "123")
+                var userId = UserInfo.id
                 if (userId == null) {
                     userId = "123"
                 }
-                var userEmail = sharedPreferences.getString(Constants.EMAIL, getString(R.string.example_email))
+                var userEmail = UserInfo.email
                 if (userEmail == null) {
                     userEmail = getString(R.string.example_email)
                 }
-                viewModel.addReviewToDatabase(rating, comment, userId, userEmail, null)
+                val userImageUrl = UserInfo.imageUrl
+                viewModel.addReviewToDatabase(rating, comment, userId, userEmail, userImageUrl)
                 viewModel.fetchShowFromDatabase()
                 viewModel.fetchReviewsFromDatabase()
             }

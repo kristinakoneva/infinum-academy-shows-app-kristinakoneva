@@ -53,4 +53,5 @@
     <string name="passwords_do_not_match_error_message">Password and repeat password do not match!</string>
     <string name="registration_successful">Registration successful!</string>
     <string name="no_internet_error_msg">You cannot login without Internet connection!</string>
+    <string name="error_changing_profile_photo_msg">Changing profile photo was unsuccessful</string>
 </resources>

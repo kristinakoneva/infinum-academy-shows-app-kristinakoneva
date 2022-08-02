@@ -17,6 +17,7 @@ import androidx.navigation.fragment.navArgs
 import infinumacademy.showsapp.kristinakoneva.Constants
 import infinumacademy.showsapp.kristinakoneva.NetworkLiveData
 import infinumacademy.showsapp.kristinakoneva.R
+import infinumacademy.showsapp.kristinakoneva.UserInfo
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentLoginBinding
 import model.User
 import networking.Session
@@ -100,6 +101,11 @@ class LoginFragment : Fragment() {
             Session.expiry = sessionManager.fetchExpiry()
             Session.contentType = sessionManager.fetchContentType()
             Session.client = sessionManager.fetchClient()
+
+            UserInfo.id = sharedPreferences.getString(Constants.USER_ID,null)
+            UserInfo.email = sharedPreferences.getString(Constants.EMAIL,null)
+            UserInfo.imageUrl = sharedPreferences.getString(Constants.IMAGE_URL,null)
+
             val directions = LoginFragmentDirections.toShowsNavGraph()
             findNavController().navigate(directions)
         } else {
@@ -108,6 +114,7 @@ class LoginFragment : Fragment() {
                 putBoolean(Constants.REMEMBER_ME, false)
                 putString(Constants.EMAIL, null)
                 putString(Constants.USER_ID, null)
+                putString(Constants.IMAGE_URL,null)
             }
         }
     }
@@ -118,11 +125,12 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private fun saveUserInfo(user: User?) {
-        if (user != null) {
+    private fun saveUserInfo() {
+        if(UserInfo.id != null){
             sharedPreferences.edit {
-                putString(Constants.EMAIL, user.email)
-                putString(Constants.USER_ID, user.id)
+                putString(Constants.EMAIL, UserInfo.email)
+                putString(Constants.USER_ID, UserInfo.id)
+                putString(Constants.IMAGE_URL,UserInfo.imageUrl)
             }
         }
     }
@@ -145,7 +153,7 @@ class LoginFragment : Fragment() {
 
     private fun saveData() {
         saveRememberMe()
-        saveUserInfo(viewModel.userInfo)
+        saveUserInfo()
     }
 
     private fun initListeners() {

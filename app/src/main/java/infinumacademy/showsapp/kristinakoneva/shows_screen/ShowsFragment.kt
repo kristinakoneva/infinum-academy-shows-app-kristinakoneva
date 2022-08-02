@@ -31,6 +31,7 @@ import infinumacademy.showsapp.kristinakoneva.Constants
 import infinumacademy.showsapp.kristinakoneva.NetworkLiveData
 import infinumacademy.showsapp.kristinakoneva.R
 import infinumacademy.showsapp.kristinakoneva.ShowsApplication
+import infinumacademy.showsapp.kristinakoneva.UserInfo
 import infinumacademy.showsapp.kristinakoneva.databinding.DialogChangeProfilePhotoOrLogoutBinding
 import infinumacademy.showsapp.kristinakoneva.databinding.DialogChooseChangingPofilePhotoMethodBinding
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentShowsBinding
@@ -131,12 +132,10 @@ class ShowsFragment : Fragment() {
         dialog.setContentView(bottomSheetBinding.root)
 
         // User Interface
-        val profilePhotoPath = getProfilePhotoPath()
-        if (profilePhotoPath != null) {
+        val profilePhotoUrl = UserInfo.imageUrl
+        if (profilePhotoUrl != null) {
             try {
-                val f = File(profilePhotoPath)
-                val b = BitmapFactory.decodeStream(FileInputStream(f))
-                bottomSheetBinding.profilePhoto.load(b) {
+                bottomSheetBinding.profilePhoto.load(profilePhotoUrl) {
                     transformations(CircleCropTransformation())
                 }
             } catch (e: FileNotFoundException) {
@@ -145,7 +144,7 @@ class ShowsFragment : Fragment() {
         } else {
             bottomSheetBinding.profilePhoto.load(R.drawable.profile_photo)
         }
-        bottomSheetBinding.emailAddress.text = sharedPreferences.getString(Constants.EMAIL, getString(R.string.example_email))
+        bottomSheetBinding.emailAddress.text = UserInfo.email
 
         // Listeners
         bottomSheetBinding.btnChangeProfilePhoto.setOnClickListener {
@@ -190,7 +189,9 @@ class ShowsFragment : Fragment() {
                 putBoolean(Constants.REMEMBER_ME, false)
                 putString(Constants.EMAIL, null)
                 putString(Constants.USER_ID, null)
+                putString(Constants.IMAGE_URL, null)
             }
+            sessionManager.clearSession()
             dialog.dismiss()
             bottomSheetDialog.dismiss()
             findNavController().navigate(R.id.toLoginFragment)
@@ -277,11 +278,11 @@ class ShowsFragment : Fragment() {
 
         val wrapper = ContextWrapper(requireContext().applicationContext)
         var file = wrapper.getDir(getString(R.string.images), Context.MODE_PRIVATE)
-        file = File(file, emailAsFileName)
+        file = File(file, "$emailAsFileName.jpg")
 
         try {
             val stream: OutputStream = FileOutputStream(file)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream)
             stream.flush()
             stream.close()
         } catch (e: IOException) {
@@ -291,17 +292,17 @@ class ShowsFragment : Fragment() {
         return file.absolutePath
     }
 
-    private fun loadImageFromStorage(path: String) {
-        try {
-            val f = File(path)
-            val b = BitmapFactory.decodeStream(FileInputStream(f))
-            binding.btnDialogChangeProfilePicOrLogout.load(b) {
-                transformations(CircleCropTransformation())
-            }
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
-        }
-    }
+//    private fun loadImageFromStorage(path: String) {
+//        try {
+//            val f = File(path)
+//            val b = BitmapFactory.decodeStream(FileInputStream(f))
+//            binding.btnDialogChangeProfilePicOrLogout.load(b) {
+//                transformations(CircleCropTransformation())
+//            }
+//        } catch (e: FileNotFoundException) {
+//            e.printStackTrace()
+//        }
+//    }
 
     private fun getProfilePhotoPath(): String? {
         val email = sharedPreferences.getString(Constants.EMAIL, null)
@@ -310,9 +311,12 @@ class ShowsFragment : Fragment() {
     }
 
     private fun showProfilePhoto() {
-        val profilePhotoPath = getProfilePhotoPath()
-        if (profilePhotoPath != null) {
-            loadImageFromStorage(profilePhotoPath)
+        val profilePhotoUrl = UserInfo.imageUrl
+
+        if (profilePhotoUrl != null) {
+            binding.btnDialogChangeProfilePicOrLogout.load(profilePhotoUrl) {
+                transformations(CircleCropTransformation())
+            }
         } else {
             binding.btnDialogChangeProfilePicOrLogout.load(R.drawable.btn_profile_photo)
         }
@@ -320,10 +324,20 @@ class ShowsFragment : Fragment() {
 
     private fun saveProfilePhoto(uri: Uri) {
         val bitmap = getBitmapFromURI(requireContext(), uri)
-        val email = sharedPreferences.getString(Constants.EMAIL, null)
+        val email = UserInfo.email
         val ppPath = saveToInternalStorage(bitmap!!, email!!)
-        sharedPreferences.edit {
-            putString(email, ppPath)
+        if (ppPath != null) {
+            viewModel.updateProfilePhoto(email, ppPath)
+            viewModel.updateProfilePhotoResultLiveData.observe(viewLifecycleOwner) { isSuccessful ->
+                if (isSuccessful) {
+                    sharedPreferences.edit {
+                        putString(Constants.IMAGE_URL, UserInfo.imageUrl)
+                    }
+                } else {
+                    Toast.makeText(requireContext(), getString(R.string.error_changing_profile_photo_msg), Toast.LENGTH_SHORT).show()
+                }
+            }
+
         }
     }
 
