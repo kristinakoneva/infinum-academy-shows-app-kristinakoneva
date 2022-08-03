@@ -117,7 +117,7 @@ class ShowsFragment : Fragment() {
     }
 
     private fun initListeners() {
-        binding.btnDialogChangeProfilePicOrLogout.setOnClickListener {
+        binding.toolbar.binding.btnDialogChangeProfilePicOrLogout.setOnClickListener {
             openDialogForChangingProfilePicOrLoggingOut()
         }
 
@@ -309,22 +309,11 @@ class ShowsFragment : Fragment() {
     //        }
     //    }
 
-    private fun getProfilePhotoPath(): String? {
-        val email = sharedPreferences.getString(Constants.EMAIL, null)
-        val profilePhotoPath = sharedPreferences.getString(email, null)
-        return profilePhotoPath
-    }
 
     private fun showProfilePhoto() {
         val profilePhotoUrl = UserInfo.imageUrl
 
-        if (profilePhotoUrl != null) {
-            binding.btnDialogChangeProfilePicOrLogout.load(profilePhotoUrl) {
-                transformations(CircleCropTransformation())
-            }
-        } else {
-            binding.btnDialogChangeProfilePicOrLogout.load(R.drawable.btn_profile_photo)
-        }
+        binding.toolbar.setProfilePhoto(profilePhotoUrl)
     }
 
     private fun saveProfilePhoto(uri: Uri) {
@@ -350,7 +339,7 @@ class ShowsFragment : Fragment() {
         if (isSuccess) {
             latestTmpUri?.let { uri ->
                 saveProfilePhoto(uri)
-                binding.btnDialogChangeProfilePicOrLogout.load(uri) {
+                binding.toolbar.binding.btnDialogChangeProfilePicOrLogout.load(uri) {
                     transformations(CircleCropTransformation())
                 }
             }
@@ -360,7 +349,7 @@ class ShowsFragment : Fragment() {
     private val selectImageFromGalleryResult = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
             saveProfilePhoto(uri)
-            binding.btnDialogChangeProfilePicOrLogout.load(uri) {
+            binding.toolbar.binding.btnDialogChangeProfilePicOrLogout.load(uri) {
                 transformations(CircleCropTransformation())
             }
         }

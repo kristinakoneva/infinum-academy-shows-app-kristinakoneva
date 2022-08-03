@@ -17,25 +17,15 @@
         >
     </include>
 
-    <Toolbar
-        android:id="@+id/toolbar"
+    <infinumacademy.showsapp.kristinakoneva.shows_screen.ToolbarWithProfilePhotoView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/toolbar">
 
-        <ImageButton
-            android:id="@+id/btnDialogChangeProfilePicOrLogout"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="end"
-            android:layout_marginEnd="12dp"
-            android:src="@drawable/btn_profile_photo"
-            android:backgroundTint="@color/white"
-            android:scaleType="fitCenter"
-            />
-    </Toolbar>
+    </infinumacademy.showsapp.kristinakoneva.shows_screen.ToolbarWithProfilePhotoView>
 
     <TextView
         android:id="@+id/tvShows"
