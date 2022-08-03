@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import infinumacademy.showsapp.kristinakoneva.Constants
 
 @Database(
     entities=[
@@ -23,7 +24,7 @@ abstract class ShowsAppDatabase: RoomDatabase() {
                 val database = Room.databaseBuilder(
                     context,
                     ShowsAppDatabase::class.java,
-                    "shows_app_db"
+                    Constants.DATABASE_NAME
                 )
                     .fallbackToDestructiveMigration()
                     .build()

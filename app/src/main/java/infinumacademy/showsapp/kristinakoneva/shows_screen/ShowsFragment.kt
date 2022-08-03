@@ -43,6 +43,12 @@ import java.io.OutputStream
 import model.Show
 import networking.SessionManager
 
+
+val Fragment.showsApp: ShowsApplication
+    get() {
+        return requireActivity().application as ShowsApplication
+    }
+
 class ShowsFragment : Fragment() {
 
     private var _binding: FragmentShowsBinding? = null
@@ -52,7 +58,7 @@ class ShowsFragment : Fragment() {
     private lateinit var adapter: ShowsAdapter
 
     private val viewModel: ShowsViewModel by viewModels {
-        ShowsViewModelFactory((requireActivity().application as ShowsApplication).database)
+        ShowsViewModelFactory(showsApp.database)
     }
 
     private lateinit var sharedPreferences: SharedPreferences
@@ -136,6 +142,8 @@ class ShowsFragment : Fragment() {
             try {
                 bottomSheetBinding.profilePhoto.load(profilePhotoUrl) {
                     transformations(CircleCropTransformation())
+                    placeholder(R.drawable.ic_profile_placeholder)
+                    error(R.drawable.ic_profile_placeholder)
                 }
             } catch (e: FileNotFoundException) {
                 e.printStackTrace()

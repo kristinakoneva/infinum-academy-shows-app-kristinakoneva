@@ -18,10 +18,10 @@ import coil.load
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import infinumacademy.showsapp.kristinakoneva.NetworkLiveData
 import infinumacademy.showsapp.kristinakoneva.R
-import infinumacademy.showsapp.kristinakoneva.ShowsApplication
 import infinumacademy.showsapp.kristinakoneva.UserInfo
 import infinumacademy.showsapp.kristinakoneva.databinding.DialogAddReviewBinding
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentShowDetailsBinding
+import infinumacademy.showsapp.kristinakoneva.shows_screen.showsApp
 
 class ShowDetailsFragment : Fragment() {
 
@@ -34,7 +34,7 @@ class ShowDetailsFragment : Fragment() {
     private val args by navArgs<ShowDetailsFragmentArgs>()
 
     private val viewModel: ShowDetailsViewModel by viewModels {
-        ShowDetailsViewModelFactory((requireActivity().application as ShowsApplication).database, args.showId)
+        ShowDetailsViewModelFactory(showsApp.database, args.showId)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -84,21 +84,24 @@ class ShowDetailsFragment : Fragment() {
                 viewModel.showLiveData.observe(viewLifecycleOwner) { show ->
                     binding.showName.text = show.title
                     binding.showDesc.text = show.description
-                    binding.showImg.load(show.imageUrl)
+                    binding.showImg.load(show.imageUrl){
+                        placeholder(R.drawable.show_image_placeholder)
+                        error(R.drawable.show_image_placeholder)
+                    }
+                    setReviewsStatus()
+                    showReviews()
                 }
             } else {
                 Toast.makeText(requireContext(), getString(R.string.error_fetching_show_msg), Toast.LENGTH_SHORT).show()
             }
         }
 
-        setReviewsStatus()
-        showReviews()
     }
 
     private fun showReviews() {
-        viewModel.showLiveData.observe(viewLifecycleOwner) { show ->
-            binding.groupShowReviews.isVisible = show.noOfReviews != 0
-            binding.noReviews.isVisible = show.noOfReviews == 0
+        viewModel.reviewsListLiveData.observe(viewLifecycleOwner) {  reviews ->
+            binding.reviewsRecycler.isVisible = !reviews.isNullOrEmpty()
+            binding.noReviews.isVisible = reviews.isNullOrEmpty()
         }
     }
 

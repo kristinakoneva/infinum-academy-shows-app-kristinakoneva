@@ -25,6 +25,8 @@ class ToolbarWithProfilePhotoView @JvmOverloads constructor(
         if (imageUrl != null) {
             binding.btnDialogChangeProfilePicOrLogout.load(imageUrl) {
                 transformations(CircleCropTransformation())
+                placeholder(R.drawable.btn_profile_photo)
+                error(R.drawable.btn_profile_photo)
             }
         } else {
             binding.btnDialogChangeProfilePicOrLogout.load(R.drawable.btn_profile_photo)

@@ -9,10 +9,10 @@
     <include
         android:id="@+id/loadingProgressOverlayContainer"
         layout="@layout/loading_progress_overlay"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         >
     </include>
 
@@ -121,6 +121,7 @@
                 android:id="@+id/reviewsRecycler"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ratingStatus"
                 tools:listitem="@layout/view_review_item">
@@ -133,32 +134,29 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_gravity="center_horizontal"
-                android:text="@string/no_reviews_yet"
+                android:text="@string/no_reviews_available"
                 android:textColor="@color/black"
                 android:textSize="17sp"
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/reviewsTitle"/>
-
-            <androidx.constraintlayout.widget.Group
-                android:id="@+id/groupShowReviews"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:constraint_referenced_ids="reviewsStatus,reviewsRecycler,ratingStatus"/>
+                app:layout_constraintTop_toBottomOf="@+id/reviewsRecycler"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnWriteReview"
-        style="@style/DefaultPurpleButton"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginBottom="20dp"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
         android:layout_marginTop="20dp"
+        android:backgroundTint="@color/purple"
         android:text="@string/write_a_review"
+        android:textColor="@color/white"
+        android:textStyle="bold"
         app:cornerRadius="21.5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
