@@ -43,6 +43,11 @@ import java.io.OutputStream
 import model.Show
 import networking.SessionManager
 
+val Fragment.showsApp: ShowsApplication
+    get() {
+        return requireActivity().application as ShowsApplication
+    }
+
 class ShowsFragment : Fragment() {
 
     private var _binding: FragmentShowsBinding? = null
@@ -52,7 +57,7 @@ class ShowsFragment : Fragment() {
     private lateinit var adapter: ShowsAdapter
 
     private val viewModel: ShowsViewModel by viewModels {
-        ShowsViewModelFactory((requireActivity().application as ShowsApplication).database)
+        ShowsViewModelFactory(showsApp.database)
     }
 
     private lateinit var sharedPreferences: SharedPreferences
@@ -307,12 +312,6 @@ class ShowsFragment : Fragment() {
     //            e.printStackTrace()
     //        }
     //    }
-
-    private fun getProfilePhotoPath(): String? {
-        val email = sharedPreferences.getString(Constants.EMAIL, null)
-        val profilePhotoPath = sharedPreferences.getString(email, null)
-        return profilePhotoPath
-    }
 
     private fun showProfilePhoto() {
         val profilePhotoUrl = UserInfo.imageUrl

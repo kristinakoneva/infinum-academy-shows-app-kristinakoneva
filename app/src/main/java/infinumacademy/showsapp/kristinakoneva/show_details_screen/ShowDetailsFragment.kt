@@ -18,10 +18,10 @@ import coil.load
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import infinumacademy.showsapp.kristinakoneva.NetworkLiveData
 import infinumacademy.showsapp.kristinakoneva.R
-import infinumacademy.showsapp.kristinakoneva.ShowsApplication
 import infinumacademy.showsapp.kristinakoneva.UserInfo
 import infinumacademy.showsapp.kristinakoneva.databinding.DialogAddReviewBinding
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentShowDetailsBinding
+import infinumacademy.showsapp.kristinakoneva.shows_screen.showsApp
 
 class ShowDetailsFragment : Fragment() {
 
@@ -34,7 +34,7 @@ class ShowDetailsFragment : Fragment() {
     private val args by navArgs<ShowDetailsFragmentArgs>()
 
     private val viewModel: ShowDetailsViewModel by viewModels {
-        ShowDetailsViewModelFactory((requireActivity().application as ShowsApplication).database, args.showId)
+        ShowDetailsViewModelFactory(showsApp.database, args.showId)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
