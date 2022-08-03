@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.withStyledAttributes
 import coil.load
 import coil.transform.CircleCropTransformation
 import infinumacademy.showsapp.kristinakoneva.R
@@ -14,13 +13,15 @@ class ToolbarWithProfilePhotoView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-): Toolbar(context, attrs, defStyleAttr) {
-    var binding: ViewToolbarWithProfilePhotoBinding
-    init{
-        binding = ViewToolbarWithProfilePhotoBinding.inflate(LayoutInflater.from(context),this)
+) : Toolbar(context, attrs, defStyleAttr) {
+
+    private var binding: ViewToolbarWithProfilePhotoBinding
+
+    init {
+        binding = ViewToolbarWithProfilePhotoBinding.inflate(LayoutInflater.from(context), this)
     }
 
-   fun setProfilePhoto(imageUrl: String?){
+    fun setProfilePhoto(imageUrl: String?) {
         if (imageUrl != null) {
             binding.btnDialogChangeProfilePicOrLogout.load(imageUrl) {
                 transformations(CircleCropTransformation())
@@ -28,6 +29,10 @@ class ToolbarWithProfilePhotoView @JvmOverloads constructor(
         } else {
             binding.btnDialogChangeProfilePicOrLogout.load(R.drawable.btn_profile_photo)
         }
+    }
+
+    fun setClickListener(listener: OnClickListener) {
+        binding.btnDialogChangeProfilePicOrLogout.setOnClickListener(listener)
     }
 
 }

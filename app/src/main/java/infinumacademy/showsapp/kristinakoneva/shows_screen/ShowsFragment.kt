@@ -36,7 +36,6 @@ import infinumacademy.showsapp.kristinakoneva.databinding.DialogChangeProfilePho
 import infinumacademy.showsapp.kristinakoneva.databinding.DialogChooseChangingPofilePhotoMethodBinding
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentShowsBinding
 import java.io.File
-import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
@@ -117,7 +116,7 @@ class ShowsFragment : Fragment() {
     }
 
     private fun initListeners() {
-        binding.toolbar.binding.btnDialogChangeProfilePicOrLogout.setOnClickListener {
+        binding.toolbar.setClickListener {
             openDialogForChangingProfilePicOrLoggingOut()
         }
 
@@ -309,7 +308,6 @@ class ShowsFragment : Fragment() {
     //        }
     //    }
 
-
     private fun showProfilePhoto() {
         val profilePhotoUrl = UserInfo.imageUrl
 
@@ -324,6 +322,7 @@ class ShowsFragment : Fragment() {
             viewModel.updateProfilePhoto(email, ppPath)
             viewModel.updateProfilePhotoResultLiveData.observe(viewLifecycleOwner) { isSuccessful ->
                 if (isSuccessful) {
+                    showProfilePhoto()
                     sharedPreferences.edit {
                         putString(Constants.IMAGE_URL, UserInfo.imageUrl)
                     }
@@ -331,7 +330,6 @@ class ShowsFragment : Fragment() {
                     Toast.makeText(requireContext(), getString(R.string.error_changing_profile_photo_msg), Toast.LENGTH_SHORT).show()
                 }
             }
-
         }
     }
 
@@ -339,9 +337,6 @@ class ShowsFragment : Fragment() {
         if (isSuccess) {
             latestTmpUri?.let { uri ->
                 saveProfilePhoto(uri)
-                binding.toolbar.binding.btnDialogChangeProfilePicOrLogout.load(uri) {
-                    transformations(CircleCropTransformation())
-                }
             }
         }
     }
@@ -349,9 +344,6 @@ class ShowsFragment : Fragment() {
     private val selectImageFromGalleryResult = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
             saveProfilePhoto(uri)
-            binding.toolbar.binding.btnDialogChangeProfilePicOrLogout.load(uri) {
-                transformations(CircleCropTransformation())
-            }
         }
     }
 
