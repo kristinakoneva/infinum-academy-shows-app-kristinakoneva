@@ -7,13 +7,14 @@ import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 
 object NetworkLiveData : LiveData<Boolean>() {
 
     private lateinit var application: Application
     private lateinit var networkRequest: NetworkRequest
+    private lateinit var networkCallback: ConnectivityManager.NetworkCallback
+    private lateinit var connectivityManager: ConnectivityManager
 
     fun init(application: Application) {
         this.application = application
@@ -21,6 +22,8 @@ object NetworkLiveData : LiveData<Boolean>() {
             .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
             .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
             .build()
+        networkCallback = getNetworkCallBack()
+        connectivityManager = NetworkLiveData.application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     }
 
     override fun onActive() {
@@ -28,9 +31,13 @@ object NetworkLiveData : LiveData<Boolean>() {
         getDetails()
     }
 
-    private fun getDetails() {
-        val cm = application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        cm.registerNetworkCallback(networkRequest, object : ConnectivityManager.NetworkCallback() {
+    override fun onInactive() {
+        super.onInactive()
+        connectivityManager.unregisterNetworkCallback(networkCallback)
+    }
+
+    private fun getNetworkCallBack(): ConnectivityManager.NetworkCallback {
+        return object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
                 super.onAvailable(network)
                 postValue(true)
@@ -45,7 +52,11 @@ object NetworkLiveData : LiveData<Boolean>() {
                 super.onLost(network)
                 postValue(false)
             }
-        })
+        }
+    }
+
+    private fun getDetails() {
+        connectivityManager.registerNetworkCallback(networkRequest, networkCallback)
     }
 
     fun isNetworkAvailable(): Boolean {

@@ -36,7 +36,6 @@ import infinumacademy.showsapp.kristinakoneva.databinding.DialogChangeProfilePho
 import infinumacademy.showsapp.kristinakoneva.databinding.DialogChooseChangingPofilePhotoMethodBinding
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentShowsBinding
 import java.io.File
-import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
