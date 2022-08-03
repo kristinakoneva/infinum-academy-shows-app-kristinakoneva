@@ -141,6 +141,8 @@ class ShowsFragment : Fragment() {
             try {
                 bottomSheetBinding.profilePhoto.load(profilePhotoUrl) {
                     transformations(CircleCropTransformation())
+                    placeholder(R.drawable.ic_profile_placeholder)
+                    error(R.drawable.ic_profile_placeholder)
                 }
             } catch (e: FileNotFoundException) {
                 e.printStackTrace()
@@ -319,6 +321,8 @@ class ShowsFragment : Fragment() {
         if (profilePhotoUrl != null) {
             binding.btnDialogChangeProfilePicOrLogout.load(profilePhotoUrl) {
                 transformations(CircleCropTransformation())
+                placeholder(R.drawable.btn_profile_photo)
+                error(R.drawable.btn_profile_photo)
             }
         } else {
             binding.btnDialogChangeProfilePicOrLogout.load(R.drawable.btn_profile_photo)
