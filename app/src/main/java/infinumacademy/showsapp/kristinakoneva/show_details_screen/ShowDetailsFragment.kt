@@ -85,20 +85,21 @@ class ShowDetailsFragment : Fragment() {
                     binding.showName.text = show.title
                     binding.showDesc.text = show.description
                     binding.showImg.load(show.imageUrl)
+                    setReviewsStatus()
+                    showReviews()
                 }
             } else {
                 Toast.makeText(requireContext(), getString(R.string.error_fetching_show_msg), Toast.LENGTH_SHORT).show()
             }
         }
 
-        setReviewsStatus()
-        showReviews()
+
     }
 
     private fun showReviews() {
-        viewModel.showLiveData.observe(viewLifecycleOwner) { show ->
-            binding.groupShowReviews.isVisible = show.noOfReviews != 0
-            binding.noReviews.isVisible = show.noOfReviews == 0
+        viewModel.reviewsListLiveData.observe(viewLifecycleOwner) { reviews ->
+            binding.reviewsRecycler.isVisible = !reviews.isNullOrEmpty()
+            binding.noReviews.isVisible = reviews.isNullOrEmpty()
         }
     }
 
