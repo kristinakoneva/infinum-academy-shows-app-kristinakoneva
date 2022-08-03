@@ -7,6 +7,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.BounceInterpolator
+import android.view.animation.OvershootInterpolator
+import android.view.animation.ScaleAnimation
 import android.widget.Toast
 import androidx.core.content.edit
 import androidx.core.view.isVisible
@@ -19,7 +23,6 @@ import infinumacademy.showsapp.kristinakoneva.NetworkLiveData
 import infinumacademy.showsapp.kristinakoneva.R
 import infinumacademy.showsapp.kristinakoneva.UserInfo
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentLoginBinding
-import model.User
 import networking.Session
 import networking.SessionManager
 
@@ -72,12 +75,34 @@ class LoginFragment : Fragment() {
             binding.noInternetConnection.isVisible = true
         }
 
-
+        animatePlayButtonTitle()
+        animateTitle()
         displayLoadingScreen()
         checkRememberMe()
         observeLiveDataForValidation()
         initListeners()
         checkComingFromRegister()
+    }
+
+    private fun animatePlayButtonTitle() = with(binding.imgPlayBtnTitle) {
+        y = -1000f
+        animate()
+            .translationY(0f)
+            .setDuration(1000)
+            .setInterpolator(BounceInterpolator())
+            .start()
+    }
+
+    private fun animateTitle() {
+        val expand = ScaleAnimation(
+            0f, 1.0f, 0f, 1.0f, Animation.RELATIVE_TO_SELF, 0.5f,
+            Animation.RELATIVE_TO_SELF, 0.5f
+        )
+        expand.interpolator = OvershootInterpolator()
+        expand.duration = 1000
+        expand.startOffset = 1000
+        binding.tvShows.animation = expand
+        binding.tvShows.animation.start()
     }
 
     private fun displayLoadingScreen() {
@@ -102,9 +127,9 @@ class LoginFragment : Fragment() {
             Session.contentType = sessionManager.fetchContentType()
             Session.client = sessionManager.fetchClient()
 
-            UserInfo.id = sharedPreferences.getString(Constants.USER_ID,null)
-            UserInfo.email = sharedPreferences.getString(Constants.EMAIL,null)
-            UserInfo.imageUrl = sharedPreferences.getString(Constants.IMAGE_URL,null)
+            UserInfo.id = sharedPreferences.getString(Constants.USER_ID, null)
+            UserInfo.email = sharedPreferences.getString(Constants.EMAIL, null)
+            UserInfo.imageUrl = sharedPreferences.getString(Constants.IMAGE_URL, null)
 
             val directions = LoginFragmentDirections.toShowsNavGraph()
             findNavController().navigate(directions)
@@ -114,7 +139,7 @@ class LoginFragment : Fragment() {
                 putBoolean(Constants.REMEMBER_ME, false)
                 putString(Constants.EMAIL, null)
                 putString(Constants.USER_ID, null)
-                putString(Constants.IMAGE_URL,null)
+                putString(Constants.IMAGE_URL, null)
             }
         }
     }
@@ -126,11 +151,11 @@ class LoginFragment : Fragment() {
     }
 
     private fun saveUserInfo() {
-        if(UserInfo.id != null){
+        if (UserInfo.id != null) {
             sharedPreferences.edit {
                 putString(Constants.EMAIL, UserInfo.email)
                 putString(Constants.USER_ID, UserInfo.id)
-                putString(Constants.IMAGE_URL,UserInfo.imageUrl)
+                putString(Constants.IMAGE_URL, UserInfo.imageUrl)
             }
         }
     }
