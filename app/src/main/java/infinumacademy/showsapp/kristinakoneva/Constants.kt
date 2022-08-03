@@ -15,4 +15,5 @@ object Constants {
     const val USER_ID = "USER_ID"
     const val EMAIL_REGEX = "^[a-z][a-z0-9\\.\\_]*@[a-z]+\\.[a-z]+"
     const val IMAGE_URL = "IMAGE_URL"
+    const val DATABASE_NAME = "shows_app_db"
 }
