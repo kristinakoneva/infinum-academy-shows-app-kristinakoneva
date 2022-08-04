@@ -13,7 +13,7 @@ The networking part of this app was done with the help of some libraries, such a
 <a href="https://github.com/Kotlin/kotlinx.serialization/blob/master/docs/serialization-guide.md" target="_blank">KotlinX Serialization</a>. 
 For simplifying the inspection of HTTP(S) requests/responses fired by the app, <a href="https://github.com/ChuckerTeam/chucker" target="_blank">Chucker</a> was used as an OkHttp Interceptor. <br /> <br />
 This app also has a database created with <a href="https://developer.android.com/training/data-storage/room" target="_blank">Room</a>.
-When the user is offline, the data from the database is displayed (if the database is empty, an empty state is displayed). <br /> <br />
+When the user is offline, the data from the database is displayed. If the database is empty, an empty state is displayed. <br /> <br />
 The <a href="https://coil-kt.github.io/coil/" target="_blank">Coil</a> library is used for loading images into the views. <br /> <br />
 More details about which libraries were used and their versions can be seen in the app's build.grade file. <br /> <br />
 The Shows App needs permissions for accessing and changing the network state, accessing the Internet, reading from external storage and writing settings. <br /> <br />
@@ -53,7 +53,7 @@ after the user has inserted correctly formatted information in all of the text i
 In order to register, the user must enter a proper email, a password with at least 6 characters and repeat that password. 
 If the user has inputted the data in the correct format, the Register button is enabled, otherwise, an error message is displayed, the Register button 
 is disabled and the user cannot continue to the next screen. <br /><br />
-If the user registers successfully, they are taken to the Login screen where it is required from them to login before they start using the app. <br /><br />
+If the user registers successfully, they are taken to the Login screen where they are required to login before they start using the app. <br /><br />
 If the registration fails, the user will be notified with a Toast at the bottom of the screen.
 
 ## Shows Screen
