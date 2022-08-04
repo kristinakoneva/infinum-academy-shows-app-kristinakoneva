@@ -10,7 +10,8 @@ The documentation for the API used in this app is available on the following lin
 The networking part of this app was done with the help of some libraries, such as:
 <a href="https://square.github.io/okhttp/" target="_blank">OkHttp</a>,
 <a href="https://square.github.io/retrofit/" target="_blank">Retrofit</a>,
-<a href="https://github.com/Kotlin/kotlinx.serialization/blob/master/docs/serialization-guide.md" target="_blank">KotlinX Serialization</a>. <br /> <br />
+<a href="https://github.com/Kotlin/kotlinx.serialization/blob/master/docs/serialization-guide.md" target="_blank">KotlinX Serialization</a>. 
+For simplifying the inspection of HTTP(S) requests/responses fired by the app, <a href="https://github.com/ChuckerTeam/chucker" target="_blank">Chucker</a> was used as an OkHttp Interceptor. <br /> <br />
 This app also has a database created with <a href="https://developer.android.com/training/data-storage/room" target="_blank">Room</a>.
 When the user is offline, the data from the database is displayed (if the database is empty, an empty state is displayed). <br /> <br />
 The <a href="https://coil-kt.github.io/coil/" target="_blank">Coil</a> library is used for loading images into the views. <br /> <br />
