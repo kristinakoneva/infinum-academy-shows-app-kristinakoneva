@@ -1,12 +1,12 @@
-package infinumacademy.showsapp.kristinakoneva
+package infinumacademy.showsapp.kristinakoneva.show_details_screen
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -15,14 +15,11 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
-import coil.transform.CircleCropTransformation
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import infinumacademy.showsapp.kristinakoneva.Constants
+import infinumacademy.showsapp.kristinakoneva.R
 import infinumacademy.showsapp.kristinakoneva.databinding.DialogAddReviewBinding
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentShowDetailsBinding
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileNotFoundException
-import model.Show
 
 class ShowDetailsFragment : Fragment() {
 
@@ -53,26 +50,62 @@ class ShowDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        showReviews()
-        displayShow(args.show)
+        displayLoadingScreen()
         initBackButtonFromToolbar()
         initReviewsRecycler()
         initAddReviewButton()
-        setReviewsStatus()
+        displayShow()
     }
 
-    private fun displayShow(show: Show) {
-        binding.showName.text = show.name
-        binding.showDesc.text = show.description
-        binding.showImg.setImageResource(show.imageResourceId)
-    }
-
-    private fun showReviews(){
-        viewModel.reviewsListLiveData.observe(viewLifecycleOwner){reviewsList->
-            binding.groupShowReviews.isVisible = reviewsList.isNotEmpty()
-            binding.noReviews.isVisible = reviewsList.isEmpty()
+    private fun displayLoadingScreen() {
+        viewModel.apiCallInProgress.observe(viewLifecycleOwner) { isApiInProgress ->
+            binding.loadingProgressOverlayContainer.loadingProgressOverlay.isVisible = isApiInProgress
         }
     }
+
+    private fun displayShow() {
+        viewModel.getShow(args.showId)
+        viewModel.getShowResultLiveData.observe(viewLifecycleOwner) { isSuccessful ->
+            if (isSuccessful) {
+                viewModel.showLiveData.observe(viewLifecycleOwner) { show ->
+                    binding.showName.text = show.title
+                    binding.showDesc.text = show.description
+                    binding.showImg.load(show.imageUrl)
+                }
+            } else {
+                Toast.makeText(requireContext(), getString(R.string.error_fetching_show_msg), Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        setReviewsStatus()
+        showReviews()
+    }
+
+    private fun showReviews() {
+        viewModel.fetchReviewsAboutShow(args.showId)
+        viewModel.showLiveData.observe(viewLifecycleOwner) { show ->
+            binding.groupShowReviews.isVisible = show.noOfReviews != 0
+            binding.noReviews.isVisible = show.noOfReviews == 0
+        }
+    }
+
+    private fun setReviewsStatus() {
+        viewModel.getShowResultLiveData.observe(viewLifecycleOwner) { isSuccessful ->
+            if (isSuccessful) {
+                viewModel.showLiveData.observe(viewLifecycleOwner) { show ->
+                    val numOfReviews = show.noOfReviews
+                    val averageRating = show.averageRating
+                    binding.ratingStatus.rating = String.format("%.2f", averageRating).toFloat()
+                    binding.reviewsStatus.text = getString(R.string.review_status, numOfReviews, averageRating)
+                }
+            } else {
+                Toast.makeText(requireContext(), getString(R.string.error_fetching_show_msg), Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    }
+
+    /*
     private fun setReviewsStatus() {
         val numOfReviews = viewModel.reviewsListLiveData.value?.size
         val averageRating = viewModel.getAverageReviewsRating().toFloat()
@@ -82,7 +115,7 @@ class ShowDetailsFragment : Fragment() {
                 binding.reviewsStatus.text = getString(R.string.review_status, numOfReviews, averageRating)
             }
         }
-    }
+    }*/
 
     private fun initBackButtonFromToolbar() {
         binding.showDetailsToolbar.setNavigationOnClickListener {
@@ -91,9 +124,16 @@ class ShowDetailsFragment : Fragment() {
     }
 
     private fun populateRecyclerView() {
-        viewModel.reviewsListLiveData.observe(viewLifecycleOwner) { reviewsList ->
-            adapter.addAllItems(reviewsList)
+        viewModel.fetchReviewsLiveData.observe(viewLifecycleOwner) { isSuccessful ->
+            if (isSuccessful) {
+                viewModel.reviewsListLiveData.observe(viewLifecycleOwner) { reviewsList ->
+                    adapter.addAllItems(reviewsList)
+                }
+            } else {
+                Toast.makeText(requireContext(), getString(R.string.error_fetching_reviews_msg), Toast.LENGTH_SHORT).show()
+            }
         }
+
     }
 
     private fun initReviewsRecycler() {
@@ -118,8 +158,6 @@ class ShowDetailsFragment : Fragment() {
         binding.btnWriteReview.setOnClickListener {
             showAddReviewBottomSheet()
         }
-
-        setReviewsStatus()
     }
 
     private fun showAddReviewBottomSheet() {
@@ -135,20 +173,16 @@ class ShowDetailsFragment : Fragment() {
         }
 
         bottomSheetBinding.btnSubmitReview.setOnClickListener {
-            addReviewToList(bottomSheetBinding.rbRating.rating.toDouble(), bottomSheetBinding.etComment.text.toString())
-            showReviews()
-            setReviewsStatus()
+            val rating = bottomSheetBinding.rbRating.rating.toInt()
+            val comment = bottomSheetBinding.etComment.text.toString()
+            val showId = args.showId
+            viewModel.addReview(rating, comment, showId)
+            populateRecyclerView()
+            displayShow()
             dialog.dismiss()
         }
 
         dialog.show()
-    }
-
-    private fun addReviewToList(rating: Double, comment: String) {
-        val username = sharedPreferences.getString(Constants.USERNAME, getString(R.string.username_placeholder))
-        viewModel.addReviewToList(rating, comment, username!!)
-        populateRecyclerView()
-        setReviewsStatus()
     }
 
     override fun onDestroyView() {

@@ -1,12 +1,13 @@
-package infinumacademy.showsapp.kristinakoneva
+package infinumacademy.showsapp.kristinakoneva.show_details_screen
 
-import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import coil.transform.CircleCropTransformation
+import infinumacademy.showsapp.kristinakoneva.R
 import infinumacademy.showsapp.kristinakoneva.databinding.ViewReviewItemBinding
 import model.Review
-import model.Show
 
 class ReviewsAdapter(
 
@@ -32,16 +33,25 @@ class ReviewsAdapter(
         notifyDataSetChanged()
     }
 
+    private fun extractUsername(email: String): String {
+        val parts = email.split("@")
+        val username = parts[0]
+        return username
+    }
+
     inner class ShowDetailsViewHolder(private val binding: ViewReviewItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Review) {
             with(binding) {
                 reviewRating.text = item.rating.toString()
-                if (item.reviewer == null) {
-                    reviewUsername.text = Resources.getSystem().getString(R.string.username_placeholder)
-                } else {
-                    reviewUsername.text = item.reviewer
-                }
+                reviewUsername.text = extractUsername(item.user.email)
                 reviewComment.text = item.comment
+                if (item.user.imageUrl != null) {
+                    profilePhoto.load(item.user.imageUrl) {
+                        transformations(CircleCropTransformation())
+                    }
+                } else {
+                    profilePhoto.setImageResource(R.drawable.ic_profile_placeholder)
+                }
             }
 
         }

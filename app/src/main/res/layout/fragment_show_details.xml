@@ -6,6 +6,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <include
+        android:id="@+id/loadingProgressOverlayContainer"
+        layout="@layout/loading_progress_overlay"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+    </include>
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/showDetailsToolbar"
         android:layout_width="match_parent"
@@ -29,9 +39,10 @@
 
             <TextView
                 android:id="@+id/showName"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
                 android:textColor="@color/black"
                 android:textSize="36sp"
                 android:textStyle="bold"
@@ -41,15 +52,17 @@
 
             <ImageView
                 android:id="@+id/showImg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="24dp"
-                android:src="@drawable/the_office"
+                android:src="@drawable/show_image_placeholder"
+                android:scaleType="fitStart"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/showName"/>
+                app:layout_constraintTop_toBottomOf="@+id/showName"
+                />
 
             <TextView
                 android:id="@+id/showDesc"
