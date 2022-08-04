@@ -20,12 +20,16 @@
         <action
             android:id="@+id/toShowsNavGraph"
             app:destination="@id/shows_nav_graph"
+            app:enterAnim="@anim/slide_in"
+            app:popExitAnim="@anim/slide_out"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true">
         </action>
         <action
             android:id="@+id/toRegisterFragment"
             app:destination="@id/registerFragment"
+            app:enterAnim="@anim/slide_in"
+            app:popExitAnim="@anim/slide_out"
             />
 
     </fragment>
@@ -37,6 +41,8 @@
         <action
             android:id="@+id/toLoginFragment"
             app:destination="@id/loginFragment"
+            app:enterAnim="@anim/slide_in"
+            app:popExitAnim="@anim/slide_out"
             app:popUpTo="@id/registerFragment"
             app:popUpToInclusive="true"
             >
