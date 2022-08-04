@@ -2,23 +2,23 @@
 This project represents an Android application
 used for listing TV shows which was developed
 during the Infinum Academy 2022 Android Course. <br /> <br />
-The application is be built using 
+The application is built using 
 <a href="https://developer.android.com/kotlin?gclid=Cj0KCQjwuaiXBhCCARIsAKZLt3kUvO79J4zLzxIvRhNSUE0pkQPWleNghyJF8kI6gOdL-aeBUM_STPwaAhYcEALw_wcB&gclsrc=aw.ds" target="_blank">Kotlin</a> as the language of choice,
 <a href="https://developer.android.com/studio?gclid=Cj0KCQjwuaiXBhCCARIsAKZLt3nmrYJTmrUlYUZ6NBPX3gBL0N91KPxJ_OsjAjBOMZPZbUhe4VnnYlcaAqrJEALw_wcB&gclsrc=aw.ds" target="_blank">Android Studio</a> 
 as the official IDE and MVVM as the application architecture. <br /> <br />
-The documentation for the API used in this app is available on the following link: <a href="https://tv-shows.infinum.academy/api/v1/docs/index.html" target="_blank">tv-shows.infinum.academy/api</a> <br /> <br />
+The documentation for the API used in this app is available on the following link: <a href="https://tv-shows.infinum.academy/api/v1/docs/index.html" target="_blank">tv-shows.infinum.academy/api</a>. <br /> <br />
 The networking part of this app was done with the help of some libraries, such as:
 <a href="https://square.github.io/okhttp/" target="_blank">OkHttp</a>,
 <a href="https://square.github.io/retrofit/" target="_blank">Retrofit</a>,
 <a href="https://github.com/Kotlin/kotlinx.serialization/blob/master/docs/serialization-guide.md" target="_blank">KotlinX Serialization</a>. <br /> <br />
-This app also has a database created with <a href="https://developer.android.com/training/data-storage/room" target="_blank">Room</a>
+This app also has a database created with <a href="https://developer.android.com/training/data-storage/room" target="_blank">Room</a>.
 When the user is offline, the data from the database is displayed (if the database is empty, an empty state is displayed). <br /> <br />
 The <a href="https://coil-kt.github.io/coil/" target="_blank">Coil</a> library is used for loading images into the views. <br /> <br />
 More details about which libraries were used and their versions can be seen in the app's build.grade file. <br /> <br />
 The Shows App needs permissions for accessing and changing the network state, accessing the Internet, reading from external storage and writing settings. <br /> <br />
 In order to have a more dynamic and flexible UI, 
 fragments were used to modularise the app in combination with the 
-<a href="https://developer.android.com/guide/navigation/navigation-getting-started" target="_blank">Navigation Component</a> for reducing teh navigation logic.
+<a href="https://developer.android.com/guide/navigation/navigation-getting-started" target="_blank">Navigation Component</a> for reducing the navigation logic.
 
 ## Login Screen
 <p align="left">
@@ -31,10 +31,11 @@ fragments were used to modularise the app in combination with the
 The application starts with the login screen where the user is required to enter an email and a password to continue. <br /><br />
 The email and password must be inputted in the correct format, otherwise the Login button is disabled, an error message is displayed and the user cannot continue to the next screen. 
 An example of a correct email format is: username@gmail.com and the password must contain at least 6 characters. <br /> <br />
-If the user has checked the Remember me checkbox (as shown in the second image), the next time the user opens the app, 
+If the user has checked the Remember me checkbox, the next time the user opens the app, 
 they will be directly taken to the Shows screen, without the need to log in again. <br /> <br />
-A click on the Login button takes the user to the next screen - the Shows screen. <br /> <br />
-If the user clicks on the Register button, they will be taken to the Register screen and if they Register successfully, they will still need to login before they continue. 
+If the user logs in successfully, a click on the Login button takes the user to the next screen - the Shows screen. <br /> <br />
+If the login fails, the user will be notified with a Toast at the bottom of the screen. <br /> <br />
+If the user clicks on the Register button, they will be taken to the Register screen and if they Register successfully, they will be taken back to the Login screen and they will still need to login before they continue. 
 The third image shows how the Login screen looks when the user is coming from the Register screen after a successful registration. <br /> <br />
 The user must be connected to the Internet in order to login, otherwise this will be displayed: <br /> <br />
 <img src="README_images/no_internet_error_login.png" width="30%" height="30%"/>
@@ -43,7 +44,7 @@ The user must be connected to the Internet in order to login, otherwise this wil
 <p align="left">
 <img src="README_images/register_screen_without_input.png" width="30%" height="30%"/>
 &nbsp; &nbsp; &nbsp; &nbsp;
-<img src="README_images/register_screen_after_registration.png" width="30%" height="30%"/>
+<img src="README_images/register_screen_with_input.png" width="30%" height="30%"/>
 </p>
 If the user clicks the Register button on the Login screen, this is the screen they will be taken to. <br /><br />
 The first image shows how the Register screen looks before the user has inputted any data and the second image shows 
