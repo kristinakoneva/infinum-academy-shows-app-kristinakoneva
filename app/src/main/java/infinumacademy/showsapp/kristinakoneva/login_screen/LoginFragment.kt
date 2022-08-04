@@ -15,12 +15,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import infinumacademy.showsapp.kristinakoneva.Constants
+import infinumacademy.showsapp.kristinakoneva.NetworkLiveData
 import infinumacademy.showsapp.kristinakoneva.R
 import infinumacademy.showsapp.kristinakoneva.UserInfo
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentLoginBinding
 import model.User
-import model.UserInfoResponse
-import networking.ApiModule
 import networking.Session
 import networking.SessionManager
 
@@ -65,6 +64,15 @@ class LoginFragment : Fragment() {
         }
 
 
+        NetworkLiveData.observe(viewLifecycleOwner) { isOnline ->
+            binding.noInternetConnection.isVisible = !isOnline
+        }
+
+        if (!(NetworkLiveData.isNetworkAvailable())) {
+            binding.noInternetConnection.isVisible = true
+        }
+
+
         displayLoadingScreen()
         checkRememberMe()
         observeLiveDataForValidation()
@@ -105,8 +113,8 @@ class LoginFragment : Fragment() {
             sharedPreferences.edit {
                 putBoolean(Constants.REMEMBER_ME, false)
                 putString(Constants.EMAIL, null)
-                putString(Constants.IMAGE_URL, null)
                 putString(Constants.USER_ID, null)
+                putString(Constants.IMAGE_URL, null)
             }
         }
     }

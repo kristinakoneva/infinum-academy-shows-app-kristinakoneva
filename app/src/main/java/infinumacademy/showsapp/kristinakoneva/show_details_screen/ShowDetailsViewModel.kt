@@ -3,23 +3,33 @@ package infinumacademy.showsapp.kristinakoneva.show_details_screen
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
+import db.ReviewEntity
+import db.ShowEntity
+import db.ShowsAppDatabase
+import java.util.concurrent.Executors
 import model.CreateReviewRequest
 import model.CreateReviewResponse
 import model.DisplayShowResponse
 import model.Review
 import model.ReviewsResponse
 import model.Show
+import model.User
 import networking.ApiModule
+import networking.Session
 import retrofit2.Callback
 import retrofit2.Response
 
-class ShowDetailsViewModel : ViewModel() {
+class ShowDetailsViewModel(
+    private val database: ShowsAppDatabase,
+    private val showId: Int
+) : ViewModel() {
 
     private val _reviewsListLiveData = MutableLiveData<List<Review>>(listOf())
-    val reviewsListLiveData: LiveData<List<Review>> = _reviewsListLiveData
+    var reviewsListLiveData: LiveData<List<Review>> = _reviewsListLiveData
 
     private val _showLiveData = MutableLiveData<Show>()
-    val showLiveData: LiveData<Show> = _showLiveData
+    var showLiveData: LiveData<Show> = _showLiveData
 
     private val _apiCallForFetchingShowInProgress = MutableLiveData(false)
     // val apiCallForFetchingShowInProgress: LiveData<Boolean> = _apiCallForFetchingShowInProgress
@@ -37,7 +47,7 @@ class ShowDetailsViewModel : ViewModel() {
     val getShowResultLiveData: LiveData<Boolean> = _getShowResultLiveData
 
     private val _fetchReviewsResultLiveData = MutableLiveData(true)
-    val fetchReviewsLiveData: LiveData<Boolean> = _fetchReviewsResultLiveData
+    val fetchReviewsResultLiveData: LiveData<Boolean> = _fetchReviewsResultLiveData
 
     /*
     fun getAverageReviewsRating(): Double {
@@ -52,9 +62,9 @@ class ShowDetailsViewModel : ViewModel() {
         }
     }*/
 
-    fun getShow(showId: Int) {
-        _apiCallForFetchingShowInProgress.value = true
-        _apiCallInProgress.value = true
+    fun fetchShow() {
+        _apiCallForFetchingShowInProgress.postValue(true)
+        _apiCallInProgress.postValue(true)
         ApiModule.retrofit.displayShow(showId).enqueue(object : Callback<DisplayShowResponse> {
             override fun onResponse(call: retrofit2.Call<DisplayShowResponse>, response: Response<DisplayShowResponse>) {
                 _getShowResultLiveData.value = response.isSuccessful
@@ -74,7 +84,7 @@ class ShowDetailsViewModel : ViewModel() {
         })
     }
 
-    fun addReview(rating: Int, comment: String?, showId: Int) {
+    fun addReview(rating: Int, comment: String?) {
         _apiCallForCreatingReviewInProgress.value = true
         _apiCallInProgress.value = true
         val request = CreateReviewRequest(
@@ -101,14 +111,15 @@ class ShowDetailsViewModel : ViewModel() {
         })
     }
 
-    fun fetchReviewsAboutShow(showId: Int) {
-        _apiCallForFetchingReviewsInProgress.value = true
-        _apiCallInProgress.value = true
+    fun fetchReviewsAboutShow() {
+        _apiCallForFetchingReviewsInProgress.postValue(true)
+        _apiCallInProgress.postValue(true)
         ApiModule.retrofit.fetchReviewsAboutShow(showId).enqueue(object : Callback<ReviewsResponse> {
             override fun onResponse(call: retrofit2.Call<ReviewsResponse>, response: Response<ReviewsResponse>) {
                 _fetchReviewsResultLiveData.value = response.isSuccessful
                 if (response.isSuccessful) {
                     _reviewsListLiveData.value = response.body()?.reviews
+                    saveReviewsToDatabase(response.body()?.reviews)
                 }
                 _apiCallForFetchingReviewsInProgress.value = false
                 _apiCallInProgress.value = _apiCallForFetchingShowInProgress.value!! || _apiCallForCreatingReviewInProgress.value!!
@@ -123,5 +134,53 @@ class ShowDetailsViewModel : ViewModel() {
         })
     }
 
+    private fun saveReviewsToDatabase(reviews: List<Review>?) {
+        Executors.newSingleThreadExecutor().execute {
+            database.reviewDao().insertAllReviews(reviews?.map { review ->
+                ReviewEntity(
+                    review.id.toInt(),
+                    review.comment,
+                    review.rating,
+                    review.showId,
+                    review.user.id,
+                    review.user.email,
+                    review.user.imageUrl
+                )
+            } ?: listOf())
+        }
+    }
+
+    fun fetchShowFromDatabase() {
+        showLiveData = database.showDao().getShow(showId.toString()).map { showEntity ->
+            Show(
+                showEntity.id,
+                showEntity.averageRating,
+                showEntity.description,
+                showEntity.imageUrl,
+                showEntity.noOfReviews,
+                showEntity.title
+            )
+        }
+    }
+
+    fun fetchReviewsFromDatabase() {
+        reviewsListLiveData = database.reviewDao().getAllReviews(showId).map { list ->
+            list.map { reviewEntity ->
+                Review(
+                    reviewEntity.id.toString(),
+                    reviewEntity.comment,
+                    reviewEntity.rating,
+                    reviewEntity.showId,
+                    User(reviewEntity.userId, reviewEntity.userEmail, reviewEntity.userImageUrl)
+                )
+            }
+        }
+    }
+
+    fun addReviewToDatabase(rating: Int, comment: String?, userId: String, userEmail: String, userImageUrl: String?) {
+        Executors.newSingleThreadExecutor().execute {
+            database.reviewDao().insertAllReviews(listOf(ReviewEntity(0, comment, rating, showId, userId, userEmail, userImageUrl)))
+        }
+    }
 
 }

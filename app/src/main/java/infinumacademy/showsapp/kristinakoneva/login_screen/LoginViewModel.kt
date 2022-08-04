@@ -40,6 +40,7 @@ class LoginViewModel : ViewModel() {
     private val _isValidPassword = MutableLiveData(false)
     val isValidPassword: LiveData<Boolean> = _isValidPassword
 
+
     private fun validateLoginForm(email: String?, password: String?): Boolean {
         val isValidEmail = email != null && email.isNotBlank() && email.matches(Constants.EMAIL_REGEX.toRegex())
         val isValidPassword = password != null && password.isNotBlank() && password.length >= Constants.MIN_CHARS_FOR_PASSWORD
@@ -78,9 +79,7 @@ class LoginViewModel : ViewModel() {
 
         ApiModule.retrofit.login(loginRequest).enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-
                 if (response.isSuccessful) {
-
                     UserInfo.id = response.body()?.user?.id ?: "0"
                     UserInfo.email = response.body()?.user?.email ?: "username@gmail.com"
                     UserInfo.imageUrl = response.body()?.user?.imageUrl

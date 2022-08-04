@@ -1,12 +1,12 @@
 package infinumacademy.showsapp.kristinakoneva.show_details_screen
 
-import android.content.Context
-import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -16,10 +16,12 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import infinumacademy.showsapp.kristinakoneva.Constants
+import infinumacademy.showsapp.kristinakoneva.NetworkLiveData
 import infinumacademy.showsapp.kristinakoneva.R
+import infinumacademy.showsapp.kristinakoneva.UserInfo
 import infinumacademy.showsapp.kristinakoneva.databinding.DialogAddReviewBinding
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentShowDetailsBinding
+import infinumacademy.showsapp.kristinakoneva.shows_screen.showsApp
 
 class ShowDetailsFragment : Fragment() {
 
@@ -31,14 +33,8 @@ class ShowDetailsFragment : Fragment() {
 
     private val args by navArgs<ShowDetailsFragmentArgs>()
 
-    private val viewModel by viewModels<ShowDetailsViewModel>()
-
-    private lateinit var sharedPreferences: SharedPreferences
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        sharedPreferences = requireContext().getSharedPreferences(Constants.SHOWS_APP, Context.MODE_PRIVATE)
+    private val viewModel: ShowDetailsViewModel by viewModels {
+        ShowDetailsViewModelFactory(showsApp.database, args.showId)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -46,15 +42,34 @@ class ShowDetailsFragment : Fragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
 
+        NetworkLiveData.observe(viewLifecycleOwner) { isOnline ->
+            if (isOnline) {
+                //connected
+                viewModel.fetchShow()
+                viewModel.fetchReviewsAboutShow()
+
+            } else {
+                //connection gone
+                viewModel.fetchShowFromDatabase()
+                viewModel.fetchReviewsFromDatabase()
+            }
+        }
+
+        if (!(NetworkLiveData.isNetworkAvailable())) {
+            viewModel.fetchShowFromDatabase()
+            viewModel.fetchReviewsFromDatabase()
+        }
+
         displayLoadingScreen()
+        displayShow()
         initBackButtonFromToolbar()
         initReviewsRecycler()
         initAddReviewButton()
-        displayShow()
     }
 
     private fun displayLoadingScreen() {
@@ -64,28 +79,30 @@ class ShowDetailsFragment : Fragment() {
     }
 
     private fun displayShow() {
-        viewModel.getShow(args.showId)
         viewModel.getShowResultLiveData.observe(viewLifecycleOwner) { isSuccessful ->
             if (isSuccessful) {
                 viewModel.showLiveData.observe(viewLifecycleOwner) { show ->
                     binding.showName.text = show.title
                     binding.showDesc.text = show.description
-                    binding.showImg.load(show.imageUrl)
+                    binding.showImg.load(show.imageUrl){
+                        placeholder(R.drawable.show_image_placeholder)
+                        error(R.drawable.show_image_placeholder)
+                    }
+                    setReviewsStatus()
+                    showReviews()
                 }
             } else {
                 Toast.makeText(requireContext(), getString(R.string.error_fetching_show_msg), Toast.LENGTH_SHORT).show()
             }
         }
 
-        setReviewsStatus()
-        showReviews()
+
     }
 
     private fun showReviews() {
-        viewModel.fetchReviewsAboutShow(args.showId)
-        viewModel.showLiveData.observe(viewLifecycleOwner) { show ->
-            binding.groupShowReviews.isVisible = show.noOfReviews != 0
-            binding.noReviews.isVisible = show.noOfReviews == 0
+        viewModel.reviewsListLiveData.observe(viewLifecycleOwner) { reviews ->
+            binding.reviewsRecycler.isVisible = !reviews.isNullOrEmpty()
+            binding.noReviews.isVisible = reviews.isNullOrEmpty()
         }
     }
 
@@ -124,7 +141,7 @@ class ShowDetailsFragment : Fragment() {
     }
 
     private fun populateRecyclerView() {
-        viewModel.fetchReviewsLiveData.observe(viewLifecycleOwner) { isSuccessful ->
+        viewModel.fetchReviewsResultLiveData.observe(viewLifecycleOwner) { isSuccessful ->
             if (isSuccessful) {
                 viewModel.reviewsListLiveData.observe(viewLifecycleOwner) { reviewsList ->
                     adapter.addAllItems(reviewsList)
@@ -133,7 +150,9 @@ class ShowDetailsFragment : Fragment() {
                 Toast.makeText(requireContext(), getString(R.string.error_fetching_reviews_msg), Toast.LENGTH_SHORT).show()
             }
         }
-
+        viewModel.reviewsListLiveData.observe(viewLifecycleOwner) { reviewsList ->
+            adapter.addAllItems(reviewsList)
+        }
     }
 
     private fun initReviewsRecycler() {
@@ -175,8 +194,24 @@ class ShowDetailsFragment : Fragment() {
         bottomSheetBinding.btnSubmitReview.setOnClickListener {
             val rating = bottomSheetBinding.rbRating.rating.toInt()
             val comment = bottomSheetBinding.etComment.text.toString()
-            val showId = args.showId
-            viewModel.addReview(rating, comment, showId)
+            if (NetworkLiveData.isNetworkAvailable()) {
+                viewModel.addReview(rating, comment)
+                viewModel.fetchShow()
+                viewModel.fetchReviewsAboutShow()
+            } else {
+                var userId = UserInfo.id
+                if (userId == null) {
+                    userId = "123"
+                }
+                var userEmail = UserInfo.email
+                if (userEmail == null) {
+                    userEmail = getString(R.string.example_email)
+                }
+                val userImageUrl = UserInfo.imageUrl
+                viewModel.addReviewToDatabase(rating, comment, userId, userEmail, userImageUrl)
+                viewModel.fetchShowFromDatabase()
+                viewModel.fetchReviewsFromDatabase()
+            }
             populateRecyclerView()
             displayShow()
             dialog.dismiss()

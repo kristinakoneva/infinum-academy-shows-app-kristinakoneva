@@ -48,6 +48,8 @@ class ReviewsAdapter(
                 if (item.user.imageUrl != null) {
                     profilePhoto.load(item.user.imageUrl) {
                         transformations(CircleCropTransformation())
+                        placeholder(R.drawable.ic_profile_placeholder)
+                        error(R.drawable.ic_profile_placeholder)
                     }
                 } else {
                     profilePhoto.setImageResource(R.drawable.ic_profile_placeholder)

@@ -7,12 +7,14 @@ import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.core.content.FileProvider
 import androidx.core.content.edit
 import androidx.core.view.isVisible
@@ -26,7 +28,9 @@ import coil.transform.CircleCropTransformation
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import infinumacademy.showsapp.kristinakoneva.BuildConfig
 import infinumacademy.showsapp.kristinakoneva.Constants
+import infinumacademy.showsapp.kristinakoneva.NetworkLiveData
 import infinumacademy.showsapp.kristinakoneva.R
+import infinumacademy.showsapp.kristinakoneva.ShowsApplication
 import infinumacademy.showsapp.kristinakoneva.UserInfo
 import infinumacademy.showsapp.kristinakoneva.databinding.DialogChangeProfilePhotoOrLogoutBinding
 import infinumacademy.showsapp.kristinakoneva.databinding.DialogChooseChangingPofilePhotoMethodBinding
@@ -39,6 +43,11 @@ import java.io.OutputStream
 import model.Show
 import networking.SessionManager
 
+val Fragment.showsApp: ShowsApplication
+    get() {
+        return requireActivity().application as ShowsApplication
+    }
+
 class ShowsFragment : Fragment() {
 
     private var _binding: FragmentShowsBinding? = null
@@ -47,7 +56,9 @@ class ShowsFragment : Fragment() {
 
     private lateinit var adapter: ShowsAdapter
 
-    private val viewModel by viewModels<ShowsViewModel>()
+    private val viewModel: ShowsViewModel by viewModels {
+        ShowsViewModelFactory(showsApp.database)
+    }
 
     private lateinit var sharedPreferences: SharedPreferences
 
@@ -66,9 +77,22 @@ class ShowsFragment : Fragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        NetworkLiveData.observe(viewLifecycleOwner) { isOnline ->
+            if (isOnline) {
+                viewModel.fetchShows()
+                viewModel.fetchTopRatedShows()
+            } else {
+                viewModel.fetchShowsFromDatabase()
+            }
+        }
+        if (!(NetworkLiveData.isNetworkAvailable())) {
+            viewModel.fetchShowsFromDatabase()
+        }
 
         displayLoadingScreen()
         showProfilePhoto()
@@ -84,21 +108,19 @@ class ShowsFragment : Fragment() {
     }
 
     private fun displayState() {
-        viewModel.showEmptyStateLiveData.observe(viewLifecycleOwner) { showEmptyState ->
-            if (showEmptyState) {
-                hideShows()
-            } else {
-                showShows()
+        if (NetworkLiveData.isNetworkAvailable()) {
+            showShows()
+        } else {
+            viewModel.getShowsFromDB().observe(viewLifecycleOwner) { list ->
+                if (list.isNullOrEmpty())
+                    hideShows()
+                else
+                    showShows()
             }
         }
     }
 
     private fun initListeners() {
-        binding.btnShowHideEmptyState.setOnClickListener {
-            viewModel.resetEmptyState()
-            displayState()
-        }
-
         binding.btnDialogChangeProfilePicOrLogout.setOnClickListener {
             openDialogForChangingProfilePicOrLoggingOut()
         }
@@ -114,11 +136,13 @@ class ShowsFragment : Fragment() {
         dialog.setContentView(bottomSheetBinding.root)
 
         // User Interface
-        val profilePhotoPath = UserInfo.imageUrl
-        if (profilePhotoPath != null) {
+        val profilePhotoUrl = UserInfo.imageUrl
+        if (profilePhotoUrl != null) {
             try {
-                bottomSheetBinding.profilePhoto.load(profilePhotoPath) {
+                bottomSheetBinding.profilePhoto.load(profilePhotoUrl) {
                     transformations(CircleCropTransformation())
+                    placeholder(R.drawable.ic_profile_placeholder)
+                    error(R.drawable.ic_profile_placeholder)
                 }
             } catch (e: FileNotFoundException) {
                 e.printStackTrace()
@@ -130,7 +154,12 @@ class ShowsFragment : Fragment() {
 
         // Listeners
         bottomSheetBinding.btnChangeProfilePhoto.setOnClickListener {
-            openDialogForChoosingChangingProfilePhotoMethod()
+            if (NetworkLiveData.isNetworkAvailable()) {
+                openDialogForChoosingChangingProfilePhotoMethod()
+            } else {
+                // prevent changing the profile photo when the user has no internet connection
+                Toast.makeText(requireContext(), getString(R.string.error_changing_pp_offline_msg), Toast.LENGTH_LONG).show()
+            }
             dialog.dismiss()
         }
 
@@ -170,8 +199,8 @@ class ShowsFragment : Fragment() {
             sharedPreferences.edit {
                 putBoolean(Constants.REMEMBER_ME, false)
                 putString(Constants.EMAIL, null)
-                putString(Constants.IMAGE_URL, null)
                 putString(Constants.USER_ID, null)
+                putString(Constants.IMAGE_URL, null)
             }
             sessionManager.clearSession()
             dialog.dismiss()
@@ -204,7 +233,8 @@ class ShowsFragment : Fragment() {
                 viewModel.listShowsResultLiveData.observe(viewLifecycleOwner) { isSuccessful ->
                     if (isSuccessful) {
                         viewModel.showsListLiveData.observe(viewLifecycleOwner) { showsList ->
-                            adapter.addAllItems(showsList)
+                            if (showsList != null)
+                                adapter.addAllItems(showsList)
                         }
                     } else {
                         Toast.makeText(requireContext(), getString(R.string.error_fetching_shows_msg), Toast.LENGTH_SHORT).show()
@@ -234,8 +264,20 @@ class ShowsFragment : Fragment() {
     }
 
     private fun showDetailsAbout(show: Show) {
-        val directions = ShowsFragmentDirections.toShowDetailsFragment(show.id.toInt())
-        findNavController().navigate(directions)
+        if (!NetworkLiveData.isNetworkAvailable()) {
+            viewModel.getShowsFromDB().observe(viewLifecycleOwner) { list ->
+                // prevent the user from entering ShowDetails screen if there is no internet connection and the database is empty
+                if (list.isNullOrEmpty()) {
+                    displayState()
+                } else {
+                    val directions = ShowsFragmentDirections.toShowDetailsFragment(show.id.toInt())
+                    findNavController().navigate(directions)
+                }
+            }
+        } else {
+            val directions = ShowsFragmentDirections.toShowDetailsFragment(show.id.toInt())
+            findNavController().navigate(directions)
+        }
     }
 
     override fun onDestroyView() {
@@ -244,6 +286,7 @@ class ShowsFragment : Fragment() {
     }
 
     private fun saveToInternalStorage(bitmap: Bitmap, emailAsFileName: String): String? {
+
         val wrapper = ContextWrapper(requireContext().applicationContext)
         var file = wrapper.getDir(getString(R.string.images), Context.MODE_PRIVATE)
         file = File(file, "$emailAsFileName.jpg")
@@ -256,7 +299,6 @@ class ShowsFragment : Fragment() {
         } catch (e: IOException) {
             e.printStackTrace()
         }
-
 
         return file.absolutePath
     }
@@ -279,6 +321,8 @@ class ShowsFragment : Fragment() {
         if (profilePhotoUrl != null) {
             binding.btnDialogChangeProfilePicOrLogout.load(profilePhotoUrl) {
                 transformations(CircleCropTransformation())
+                placeholder(R.drawable.btn_profile_photo)
+                error(R.drawable.btn_profile_photo)
             }
         } else {
             binding.btnDialogChangeProfilePicOrLogout.load(R.drawable.btn_profile_photo)
