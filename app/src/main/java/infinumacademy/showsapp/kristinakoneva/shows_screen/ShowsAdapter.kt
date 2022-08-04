@@ -34,7 +34,7 @@ class ShowsAdapter(
     inner class ShowsViewHolder(private val binding: ViewShowItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Show) {
             binding.showName.text = item.title
-            binding.showImage.load(item.imageUrl){
+            binding.showImage.load(item.imageUrl) {
                 placeholder(R.drawable.show_image_placeholder)
                 error(R.drawable.show_image_placeholder)
             }

@@ -8,7 +8,6 @@ import infinumacademy.showsapp.kristinakoneva.Constants
 import infinumacademy.showsapp.kristinakoneva.UserInfo
 import model.LoginRequest
 import model.LoginResponse
-import model.User
 import networking.ApiModule
 import networking.Session
 import networking.SessionManager
@@ -39,7 +38,6 @@ class LoginViewModel : ViewModel() {
 
     private val _isValidPassword = MutableLiveData(false)
     val isValidPassword: LiveData<Boolean> = _isValidPassword
-
 
     private fun validateLoginForm(email: String?, password: String?): Boolean {
         val isValidEmail = email != null && email.isNotBlank() && email.matches(Constants.EMAIL_REGEX.toRegex())

@@ -43,7 +43,6 @@ import java.io.OutputStream
 import model.Show
 import networking.SessionManager
 
-
 val Fragment.showsApp: ShowsApplication
     get() {
         return requireActivity().application as ShowsApplication

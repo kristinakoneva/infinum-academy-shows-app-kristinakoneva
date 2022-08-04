@@ -84,7 +84,7 @@ class ShowDetailsFragment : Fragment() {
                 viewModel.showLiveData.observe(viewLifecycleOwner) { show ->
                     binding.showName.text = show.title
                     binding.showDesc.text = show.description
-                    binding.showImg.load(show.imageUrl){
+                    binding.showImg.load(show.imageUrl) {
                         placeholder(R.drawable.show_image_placeholder)
                         error(R.drawable.show_image_placeholder)
                     }
@@ -99,7 +99,7 @@ class ShowDetailsFragment : Fragment() {
     }
 
     private fun showReviews() {
-        viewModel.reviewsListLiveData.observe(viewLifecycleOwner) {  reviews ->
+        viewModel.reviewsListLiveData.observe(viewLifecycleOwner) { reviews ->
             binding.reviewsRecycler.isVisible = !reviews.isNullOrEmpty()
             binding.noReviews.isVisible = reviews.isNullOrEmpty()
         }
