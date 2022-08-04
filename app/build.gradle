@@ -96,9 +96,6 @@ dependencies {
 // optional - Test helpers for LiveData
     testImplementation("androidx.arch.core:core-testing:2.1.0")
 
-    // user permissions
-    implementation 'com.karumi:dexter:6.2.2'
-
     // coil
     implementation("io.coil-kt:coil:1.1.1")
 
