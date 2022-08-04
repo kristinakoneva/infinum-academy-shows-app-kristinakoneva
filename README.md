@@ -19,7 +19,9 @@ More details about which libraries were used and their versions can be seen in t
 The Shows App needs permissions for accessing and changing the network state, accessing the Internet, reading from external storage and writing settings. <br /> <br />
 In order to have a more dynamic and flexible UI, 
 fragments were used to modularise the app in combination with the 
-<a href="https://developer.android.com/guide/navigation/navigation-getting-started" target="_blank">Navigation Component</a> for reducing the navigation logic.
+<a href="https://developer.android.com/guide/navigation/navigation-getting-started" target="_blank">Navigation Component</a> for reducing the navigation logic. <br /> <br />
+For keeping the code formatting consistent, the following Infinum Android Studio code style was used: 
+<a href="https://github.com/infinum/android-handbook/blob/master/files/InfinumCodeStyle.xml" target="_blank">https://github.com/infinum/android-handbook/blob/master/files/InfinumCodeStyle.xml</a>
 
 ## Login Screen
 <p align="left">
