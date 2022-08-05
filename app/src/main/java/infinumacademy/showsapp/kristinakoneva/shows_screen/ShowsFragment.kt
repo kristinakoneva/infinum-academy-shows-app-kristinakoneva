@@ -232,8 +232,10 @@ class ShowsFragment : Fragment() {
                 viewModel.listShowsResultLiveData.observe(viewLifecycleOwner) { isSuccessful ->
                     if (isSuccessful) {
                         viewModel.showsListLiveData.observe(viewLifecycleOwner) { showsList ->
-                            if (showsList != null)
+                            showsList?.let {
                                 adapter.addAllItems(showsList)
+                            }
+
                         }
                     } else {
                         Toast.makeText(requireContext(), getString(R.string.error_fetching_shows_msg), Toast.LENGTH_SHORT).show()
@@ -324,7 +326,7 @@ class ShowsFragment : Fragment() {
         val bitmap = getBitmapFromURI(requireContext(), uri)
         val email = UserInfo.email
         val ppPath = saveToInternalStorage(bitmap!!, email!!)
-        if (ppPath != null) {
+        ppPath?.let {
             viewModel.updateProfilePhoto(email, ppPath)
             viewModel.updateProfilePhotoResultLiveData.observe(viewLifecycleOwner) { isSuccessful ->
                 if (isSuccessful) {
@@ -337,6 +339,7 @@ class ShowsFragment : Fragment() {
                 }
             }
         }
+
     }
 
     private val takeImageResult = registerForActivityResult(ActivityResultContracts.TakePicture()) { isSuccess ->

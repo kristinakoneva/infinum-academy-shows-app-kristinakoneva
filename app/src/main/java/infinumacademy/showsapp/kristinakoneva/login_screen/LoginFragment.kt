@@ -154,7 +154,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun saveUserInfo() {
-        if (UserInfo.id != null) {
+        UserInfo.id?.let {
             sharedPreferences.edit {
                 putString(Constants.EMAIL, UserInfo.email)
                 putString(Constants.USER_ID, UserInfo.id)
