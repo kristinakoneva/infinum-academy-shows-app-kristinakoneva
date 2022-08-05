@@ -5,10 +5,10 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import infinumacademy.showsapp.kristinakoneva.Constants
-import model.RegisterRequest
-import model.RegisterResponse
-import networking.ApiModule
-import networking.SessionManager
+import infinumacademy.showsapp.kristinakoneva.model.RegisterRequest
+import infinumacademy.showsapp.kristinakoneva.model.RegisterResponse
+import infinumacademy.showsapp.kristinakoneva.networking.ApiModule
+import infinumacademy.showsapp.kristinakoneva.networking.SessionManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

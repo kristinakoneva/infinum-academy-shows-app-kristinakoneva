@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import infinumacademy.showsapp.kristinakoneva.R
 import infinumacademy.showsapp.kristinakoneva.databinding.ViewShowItemBinding
-import model.Show
+import infinumacademy.showsapp.kristinakoneva.model.Show
 
 class ShowsAdapter(
     private var items: List<Show>,

@@ -9,11 +9,11 @@ import db.ShowsAppDatabase
 import infinumacademy.showsapp.kristinakoneva.UserInfo
 import java.io.File
 import java.util.concurrent.Executors
-import model.Show
-import model.ShowsResponse
-import model.TopRatedShowsResponse
-import model.UpdateProfilePhotoResponse
-import networking.ApiModule
+import infinumacademy.showsapp.kristinakoneva.model.Show
+import infinumacademy.showsapp.kristinakoneva.model.ShowsResponse
+import infinumacademy.showsapp.kristinakoneva.model.TopRatedShowsResponse
+import infinumacademy.showsapp.kristinakoneva.model.UpdateProfilePhotoResponse
+import infinumacademy.showsapp.kristinakoneva.networking.ApiModule
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody

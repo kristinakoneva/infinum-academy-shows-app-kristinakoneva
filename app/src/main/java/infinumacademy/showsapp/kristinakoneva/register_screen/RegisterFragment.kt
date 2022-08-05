@@ -15,7 +15,7 @@ import androidx.navigation.fragment.findNavController
 import infinumacademy.showsapp.kristinakoneva.Constants
 import infinumacademy.showsapp.kristinakoneva.R
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentRegisterBinding
-import networking.SessionManager
+import infinumacademy.showsapp.kristinakoneva.networking.SessionManager
 
 class RegisterFragment : Fragment() {
 

@@ -6,12 +6,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import infinumacademy.showsapp.kristinakoneva.Constants
 import infinumacademy.showsapp.kristinakoneva.UserInfo
-import model.LoginRequest
-import model.LoginResponse
-import model.User
-import networking.ApiModule
-import networking.Session
-import networking.SessionManager
+import infinumacademy.showsapp.kristinakoneva.model.LoginRequest
+import infinumacademy.showsapp.kristinakoneva.model.LoginResponse
+import infinumacademy.showsapp.kristinakoneva.networking.ApiModule
+import infinumacademy.showsapp.kristinakoneva.networking.Session
+import infinumacademy.showsapp.kristinakoneva.networking.SessionManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

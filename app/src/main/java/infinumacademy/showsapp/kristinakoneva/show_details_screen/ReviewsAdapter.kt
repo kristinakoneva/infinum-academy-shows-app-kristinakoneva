@@ -7,7 +7,7 @@ import coil.load
 import coil.transform.CircleCropTransformation
 import infinumacademy.showsapp.kristinakoneva.R
 import infinumacademy.showsapp.kristinakoneva.databinding.ViewReviewItemBinding
-import model.Review
+import infinumacademy.showsapp.kristinakoneva.model.Review
 
 class ReviewsAdapter(
 

@@ -1,9 +1,9 @@
-package model
+package infinumacademy.showsapp.kristinakoneva.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UserInfoResponse(
+data class LoginResponse(
     @SerialName("user") val user: User
 )

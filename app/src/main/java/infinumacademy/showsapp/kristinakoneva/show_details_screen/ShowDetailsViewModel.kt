@@ -5,18 +5,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import db.ReviewEntity
-import db.ShowEntity
 import db.ShowsAppDatabase
 import java.util.concurrent.Executors
-import model.CreateReviewRequest
-import model.CreateReviewResponse
-import model.DisplayShowResponse
-import model.Review
-import model.ReviewsResponse
-import model.Show
-import model.User
-import networking.ApiModule
-import networking.Session
+import infinumacademy.showsapp.kristinakoneva.model.CreateReviewRequest
+import infinumacademy.showsapp.kristinakoneva.model.CreateReviewResponse
+import infinumacademy.showsapp.kristinakoneva.model.DisplayShowResponse
+import infinumacademy.showsapp.kristinakoneva.model.Review
+import infinumacademy.showsapp.kristinakoneva.model.ReviewsResponse
+import infinumacademy.showsapp.kristinakoneva.model.Show
+import infinumacademy.showsapp.kristinakoneva.model.User
+import infinumacademy.showsapp.kristinakoneva.networking.ApiModule
 import retrofit2.Callback
 import retrofit2.Response
 
@@ -152,7 +150,9 @@ class ShowDetailsViewModel (
     fun fetchReviewsFromDatabase(){
         reviewsListLiveData = database.reviewDao().getAllReviews(showId).map { list->
             list.map { reviewEntity->
-                Review(reviewEntity.id.toString(),reviewEntity.comment,reviewEntity.rating,reviewEntity.showId,User(reviewEntity.userId,reviewEntity.userEmail,reviewEntity.userImageUrl))
+                Review(reviewEntity.id.toString(),reviewEntity.comment,reviewEntity.rating,reviewEntity.showId,
+                    User(reviewEntity.userId,reviewEntity.userEmail,reviewEntity.userImageUrl)
+                )
             }
         }
     }

@@ -3,7 +3,6 @@ package db
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import model.User
 
 @Entity(tableName = "review")
 data class ReviewEntity(

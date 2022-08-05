@@ -23,8 +23,8 @@ import infinumacademy.showsapp.kristinakoneva.NetworkLiveData
 import infinumacademy.showsapp.kristinakoneva.R
 import infinumacademy.showsapp.kristinakoneva.UserInfo
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentLoginBinding
-import networking.Session
-import networking.SessionManager
+import infinumacademy.showsapp.kristinakoneva.networking.Session
+import infinumacademy.showsapp.kristinakoneva.networking.SessionManager
 
 class LoginFragment : Fragment() {
 

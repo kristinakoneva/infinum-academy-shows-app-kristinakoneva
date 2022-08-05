@@ -1,9 +1,10 @@
-package model
+package infinumacademy.showsapp.kristinakoneva.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UpdateProfilePhotoResponse(
+data class RegisterResponse(
     @SerialName("user") val user: User
 )
+
