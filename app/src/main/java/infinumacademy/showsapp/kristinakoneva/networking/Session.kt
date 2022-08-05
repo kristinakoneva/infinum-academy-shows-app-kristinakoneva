@@ -1,4 +1,4 @@
-package networking
+package infinumacademy.showsapp.kristinakoneva.networking
 
 object Session {
     var accessToken: String? = null

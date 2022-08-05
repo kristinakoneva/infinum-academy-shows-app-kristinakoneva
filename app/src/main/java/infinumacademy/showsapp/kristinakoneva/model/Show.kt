@@ -1,4 +1,4 @@
-package model
+package infinumacademy.showsapp.kristinakoneva.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

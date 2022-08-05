@@ -143,6 +143,8 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilEmail"
                 style="@style/DefaultTextInputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="27dp"
                 android:hint="@string/hint_email"
                 app:boxStrokeColor="@color/edit_text_color_selector"
@@ -165,6 +167,8 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilPassword"
                 style="@style/DefaultTextInputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="26dp"
                 android:hint="@string/hint_password"
                 app:boxStrokeColor="@color/edit_text_color_selector"
@@ -202,6 +206,8 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnLogin"
                 style="@style/DefaultWhiteButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginEnd="24dp"
                 android:layout_marginTop="16dp"
@@ -216,7 +222,7 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnRegister"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginEnd="24dp"
                 android:text="@string/register"

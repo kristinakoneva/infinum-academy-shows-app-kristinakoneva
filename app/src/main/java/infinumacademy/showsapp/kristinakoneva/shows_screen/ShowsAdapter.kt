@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import infinumacademy.showsapp.kristinakoneva.R
 import infinumacademy.showsapp.kristinakoneva.databinding.ViewShowItemBinding
-import model.Show
+import infinumacademy.showsapp.kristinakoneva.model.Show
 
 class ShowsAdapter(
     private var items: List<Show>,
@@ -37,6 +37,7 @@ class ShowsAdapter(
             binding.showImage.load(item.imageUrl) {
                 placeholder(R.drawable.show_image_placeholder)
                 error(R.drawable.show_image_placeholder)
+                R.drawable.show_image_placeholder
             }
             binding.showDescription.text = item.description
             binding.showCardContainer.setOnClickListener {

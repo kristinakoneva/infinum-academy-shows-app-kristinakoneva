@@ -40,8 +40,8 @@ import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
-import model.Show
-import networking.SessionManager
+import infinumacademy.showsapp.kristinakoneva.model.Show
+import infinumacademy.showsapp.kristinakoneva.networking.SessionManager
 
 val Fragment.showsApp: ShowsApplication
     get() {
@@ -130,27 +130,50 @@ class ShowsFragment : Fragment() {
         }
     }
 
+    private fun bindDataToTheBottomSheetDialog(
+        bottomSheetBinding: DialogChangeProfilePhotoOrLogoutBinding,
+        email: String?,
+        profilePhotoUrl: String?
+    ) {
+        bottomSheetBinding.profilePhoto.load(profilePhotoUrl) {
+            transformations(CircleCropTransformation())
+            placeholder(R.drawable.ic_profile_placeholder)
+            error(R.drawable.ic_profile_placeholder)
+            fallback(R.drawable.ic_profile_placeholder)
+        }
+        bottomSheetBinding.emailAddress.text = email
+    }
+
     private fun openDialogForChangingProfilePicOrLoggingOut() {
         val dialog = BottomSheetDialog(requireContext())
         val bottomSheetBinding = DialogChangeProfilePhotoOrLogoutBinding.inflate(layoutInflater)
         dialog.setContentView(bottomSheetBinding.root)
 
         // User Interface
-        val profilePhotoUrl = UserInfo.imageUrl
-        if (profilePhotoUrl != null) {
-            try {
-                bottomSheetBinding.profilePhoto.load(profilePhotoUrl) {
-                    transformations(CircleCropTransformation())
-                    placeholder(R.drawable.ic_profile_placeholder)
-                    error(R.drawable.ic_profile_placeholder)
+        var profilePhotoUrl: String? = null
+        var email: String? = null
+        if (NetworkLiveData.isNetworkAvailable()) {
+            viewModel.getLatestUserInfo()
+            viewModel.getLatestUserInfoResultLiveData.observe(viewLifecycleOwner) { isSuccessful ->
+                if (isSuccessful) {
+                    viewModel.currentUser.observe(viewLifecycleOwner) { user ->
+                        profilePhotoUrl = user?.imageUrl ?: UserInfo.imageUrl
+                        email = user?.email ?: UserInfo.email
+                    }
+                } else {
+                    Toast.makeText(requireContext(), getString(R.string.error_fetching_user_info_msg), Toast.LENGTH_SHORT).show()
+                    profilePhotoUrl = UserInfo.imageUrl
+                    email = UserInfo.email
                 }
-            } catch (e: FileNotFoundException) {
-                e.printStackTrace()
+
+                bindDataToTheBottomSheetDialog(bottomSheetBinding, email, profilePhotoUrl)
             }
         } else {
-            bottomSheetBinding.profilePhoto.load(R.drawable.profile_photo)
+            profilePhotoUrl = UserInfo.imageUrl
+            email = UserInfo.email
+
+            bindDataToTheBottomSheetDialog(bottomSheetBinding, email, profilePhotoUrl)
         }
-        bottomSheetBinding.emailAddress.text = UserInfo.email
 
         // Listeners
         bottomSheetBinding.btnChangeProfilePhoto.setOnClickListener {
@@ -233,8 +256,10 @@ class ShowsFragment : Fragment() {
                 viewModel.listShowsResultLiveData.observe(viewLifecycleOwner) { isSuccessful ->
                     if (isSuccessful) {
                         viewModel.showsListLiveData.observe(viewLifecycleOwner) { showsList ->
-                            if (showsList != null)
+                            showsList?.let {
                                 adapter.addAllItems(showsList)
+                            }
+
                         }
                     } else {
                         Toast.makeText(requireContext(), getString(R.string.error_fetching_shows_msg), Toast.LENGTH_SHORT).show()
@@ -316,16 +341,32 @@ class ShowsFragment : Fragment() {
     //    }
 
     private fun showProfilePhoto() {
-        val profilePhotoUrl = UserInfo.imageUrl
+        var profilePhotoUrl: String? = null
+        if (NetworkLiveData.isNetworkAvailable()) {
+            viewModel.getLatestUserInfo()
+            viewModel.getLatestUserInfoResultLiveData.observe(viewLifecycleOwner) { isSuccessful ->
+                if (isSuccessful) {
+                    viewModel.currentUser.observe(viewLifecycleOwner) { user ->
+                        profilePhotoUrl = user?.imageUrl ?: UserInfo.imageUrl
+                    }
+                } else {
+                    Toast.makeText(requireContext(), getString(R.string.error_fetching_user_info_msg), Toast.LENGTH_SHORT).show()
+                    profilePhotoUrl = UserInfo.imageUrl
+                }
+                binding.toolbar.setProfilePhoto(profilePhotoUrl)
+            }
+        } else {
+            profilePhotoUrl = UserInfo.imageUrl
+            binding.toolbar.setProfilePhoto(profilePhotoUrl)
+        }
 
-        binding.toolbar.setProfilePhoto(profilePhotoUrl)
     }
 
     private fun saveProfilePhoto(uri: Uri) {
         val bitmap = getBitmapFromURI(requireContext(), uri)
         val email = UserInfo.email
         val ppPath = saveToInternalStorage(bitmap!!, email!!)
-        if (ppPath != null) {
+        ppPath?.let {
             viewModel.updateProfilePhoto(email, ppPath)
             viewModel.updateProfilePhotoResultLiveData.observe(viewLifecycleOwner) { isSuccessful ->
                 if (isSuccessful) {
@@ -338,6 +379,7 @@ class ShowsFragment : Fragment() {
                 }
             }
         }
+
     }
 
     private val takeImageResult = registerForActivityResult(ActivityResultContracts.TakePicture()) { isSuccess ->
@@ -392,13 +434,11 @@ class ShowsFragment : Fragment() {
         val exif = ExifInterface(file.absoluteFile.toString())
         val orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
         val matrix = Matrix()
-
         when(orientation){
             ExifInterface.ORIENTATION_ROTATE_90 -> matrix.postRotate(90F)
             ExifInterface.ORIENTATION_ROTATE_180 -> matrix.postRotate(180F)
             ExifInterface.ORIENTATION_ROTATE_270 -> matrix.postRotate(270F)
         }
-
         val rotatedBitmap = Bitmap.createBitmap(bitmap, 0,0 , bitmap.width, bitmap.height, matrix, true)
         bitmap.recycle()
         return rotatedBitmap
@@ -406,9 +446,3 @@ class ShowsFragment : Fragment() {
 
 
 }
-
-
-
-
-
-

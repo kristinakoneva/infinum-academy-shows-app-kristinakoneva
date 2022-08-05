@@ -7,7 +7,7 @@ import coil.load
 import coil.transform.CircleCropTransformation
 import infinumacademy.showsapp.kristinakoneva.R
 import infinumacademy.showsapp.kristinakoneva.databinding.ViewReviewItemBinding
-import model.Review
+import infinumacademy.showsapp.kristinakoneva.model.Review
 
 class ReviewsAdapter(
 
@@ -45,15 +45,14 @@ class ReviewsAdapter(
                 reviewRating.text = item.rating.toString()
                 reviewUsername.text = extractUsername(item.user.email)
                 reviewComment.text = item.comment
-                if (item.user.imageUrl != null) {
-                    profilePhoto.load(item.user.imageUrl) {
-                        transformations(CircleCropTransformation())
-                        placeholder(R.drawable.ic_profile_placeholder)
-                        error(R.drawable.ic_profile_placeholder)
-                    }
-                } else {
-                    profilePhoto.setImageResource(R.drawable.ic_profile_placeholder)
+
+                profilePhoto.load(item.user.imageUrl) {
+                    transformations(CircleCropTransformation())
+                    placeholder(R.drawable.ic_profile_placeholder)
+                    error(R.drawable.ic_profile_placeholder)
+                    fallback(R.drawable.ic_profile_placeholder)
                 }
+
             }
 
         }

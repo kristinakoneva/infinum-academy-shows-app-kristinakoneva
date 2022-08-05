@@ -1,4 +1,4 @@
-package infinumacademy.showsapp.kristinakoneva.shows_screen
+package infinumacademy.showsapp.kristinakoneva.views
 
 import android.content.Context
 import android.util.AttributeSet
@@ -22,15 +22,13 @@ class ToolbarWithProfilePhotoView @JvmOverloads constructor(
     }
 
     fun setProfilePhoto(imageUrl: String?) {
-        if (imageUrl != null) {
-            binding.btnDialogChangeProfilePicOrLogout.load(imageUrl) {
-                transformations(CircleCropTransformation())
-                placeholder(R.drawable.btn_profile_photo)
-                error(R.drawable.btn_profile_photo)
-            }
-        } else {
-            binding.btnDialogChangeProfilePicOrLogout.load(R.drawable.btn_profile_photo)
+        binding.btnDialogChangeProfilePicOrLogout.load(imageUrl) {
+            transformations(CircleCropTransformation())
+            placeholder(R.drawable.btn_profile_photo)
+            error(R.drawable.btn_profile_photo)
+            fallback(R.drawable.btn_profile_photo)
         }
+
     }
 
     fun setClickListener(listener: OnClickListener) {
