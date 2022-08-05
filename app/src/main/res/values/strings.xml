@@ -56,4 +56,5 @@
     <string name="error_changing_profile_photo_msg">Changing profile photo was unsuccessful</string>
     <string name="error_changing_pp_offline_msg">You cannot change your profile photo while you are offline!</string>
     <string name="no_reviews_available">No reviews available.</string>
+    <string name="error_fetching_user_info_msg">Fetching user info was unsuccessful</string>
 </resources>
