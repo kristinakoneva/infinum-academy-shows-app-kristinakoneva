@@ -131,6 +131,20 @@ class ShowsFragment : Fragment() {
         }
     }
 
+    private fun bindDataToTheBottomSheetDialog(
+        bottomSheetBinding: DialogChangeProfilePhotoOrLogoutBinding,
+        email: String?,
+        profilePhotoUrl: String?
+    ) {
+        bottomSheetBinding.profilePhoto.load(profilePhotoUrl) {
+            transformations(CircleCropTransformation())
+            placeholder(R.drawable.ic_profile_placeholder)
+            error(R.drawable.ic_profile_placeholder)
+            fallback(R.drawable.ic_profile_placeholder)
+        }
+        bottomSheetBinding.emailAddress.text = email
+    }
+
     private fun openDialogForChangingProfilePicOrLoggingOut() {
         val dialog = BottomSheetDialog(requireContext())
         val bottomSheetBinding = DialogChangeProfilePhotoOrLogoutBinding.inflate(layoutInflater)
@@ -153,24 +167,13 @@ class ShowsFragment : Fragment() {
                     email = UserInfo.email
                 }
 
-                bottomSheetBinding.profilePhoto.load(profilePhotoUrl) {
-                    transformations(CircleCropTransformation())
-                    placeholder(R.drawable.ic_profile_placeholder)
-                    error(R.drawable.ic_profile_placeholder)
-                    fallback(R.drawable.ic_profile_placeholder)
-                }
-                bottomSheetBinding.emailAddress.text = email
+                bindDataToTheBottomSheetDialog(bottomSheetBinding, email, profilePhotoUrl)
             }
         } else {
             profilePhotoUrl = UserInfo.imageUrl
             email = UserInfo.email
-            bottomSheetBinding.profilePhoto.load(profilePhotoUrl) {
-                transformations(CircleCropTransformation())
-                placeholder(R.drawable.ic_profile_placeholder)
-                error(R.drawable.ic_profile_placeholder)
-                fallback(R.drawable.ic_profile_placeholder)
-            }
-            bottomSheetBinding.emailAddress.text = email
+            
+            bindDataToTheBottomSheetDialog(bottomSheetBinding, email, profilePhotoUrl)
         }
 
         // Listeners
