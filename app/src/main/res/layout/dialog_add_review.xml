@@ -81,6 +81,8 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSubmitReview"
         style="@style/DefaultPurpleButton"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
         android:layout_marginStart="24dp"
