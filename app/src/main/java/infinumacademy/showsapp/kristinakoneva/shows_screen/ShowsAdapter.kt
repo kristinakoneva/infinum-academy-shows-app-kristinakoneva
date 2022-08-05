@@ -37,6 +37,7 @@ class ShowsAdapter(
             binding.showImage.load(item.imageUrl){
                 placeholder(R.drawable.show_image_placeholder)
                 error(R.drawable.show_image_placeholder)
+                fallback(R.drawable.show_image_placeholder)
             }
             binding.showDescription.text = item.description
             binding.showCardContainer.setOnClickListener {

@@ -87,6 +87,7 @@ class ShowDetailsFragment : Fragment() {
                     binding.showImg.load(show.imageUrl){
                         placeholder(R.drawable.show_image_placeholder)
                         error(R.drawable.show_image_placeholder)
+                        fallback(R.drawable.show_image_placeholder)
                     }
                     setReviewsStatus()
                     showReviews()

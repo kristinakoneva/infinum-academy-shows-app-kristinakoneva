@@ -43,7 +43,6 @@ import java.io.OutputStream
 import infinumacademy.showsapp.kristinakoneva.model.Show
 import infinumacademy.showsapp.kristinakoneva.networking.SessionManager
 
-
 val Fragment.showsApp: ShowsApplication
     get() {
         return requireActivity().application as ShowsApplication
@@ -138,19 +137,18 @@ class ShowsFragment : Fragment() {
 
         // User Interface
         val profilePhotoUrl = UserInfo.imageUrl
-        if (profilePhotoUrl != null) {
-            try {
-                bottomSheetBinding.profilePhoto.load(profilePhotoUrl) {
-                    transformations(CircleCropTransformation())
-                    placeholder(R.drawable.ic_profile_placeholder)
-                    error(R.drawable.ic_profile_placeholder)
-                }
-            } catch (e: FileNotFoundException) {
-                e.printStackTrace()
+
+        try {
+            bottomSheetBinding.profilePhoto.load(profilePhotoUrl) {
+                transformations(CircleCropTransformation())
+                placeholder(R.drawable.ic_profile_placeholder)
+                error(R.drawable.ic_profile_placeholder)
+                fallback(R.drawable.ic_profile_placeholder)
             }
-        } else {
-            bottomSheetBinding.profilePhoto.load(R.drawable.profile_photo)
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
         }
+
         bottomSheetBinding.emailAddress.text = UserInfo.email
 
         // Listeners
