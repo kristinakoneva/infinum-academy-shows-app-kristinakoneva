@@ -47,7 +47,7 @@ interface ShowsApiService {
     @Multipart
     @PUT("/users")
     fun updateProfilePhoto(@Part image: MultipartBody.Part): Call<UpdateProfilePhotoResponse>
-    
+
     @GET("/users/me")
     fun getMyUserInfo(): Call<UserInfoResponse>
 }
