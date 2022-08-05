@@ -172,7 +172,7 @@ class ShowsFragment : Fragment() {
         } else {
             profilePhotoUrl = UserInfo.imageUrl
             email = UserInfo.email
-            
+
             bindDataToTheBottomSheetDialog(bottomSheetBinding, email, profilePhotoUrl)
         }
 
@@ -250,7 +250,6 @@ class ShowsFragment : Fragment() {
                     } else {
                         Toast.makeText(requireContext(), getString(R.string.error_fetching_top_rated_shows_msg), Toast.LENGTH_SHORT).show()
                     }
-
                 }
 
             } else {

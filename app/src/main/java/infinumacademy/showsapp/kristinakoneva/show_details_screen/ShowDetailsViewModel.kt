@@ -18,10 +18,10 @@ import infinumacademy.showsapp.kristinakoneva.networking.ApiModule
 import retrofit2.Callback
 import retrofit2.Response
 
-class ShowDetailsViewModel (
+class ShowDetailsViewModel(
     private val database: ShowsAppDatabase,
     private val showId: Int
-    ): ViewModel() {
+) : ViewModel() {
 
     private val _reviewsListLiveData = MutableLiveData<List<Review>>(listOf())
     var reviewsListLiveData: LiveData<List<Review>> = _reviewsListLiveData
@@ -132,34 +132,49 @@ class ShowDetailsViewModel (
         })
     }
 
-
-    private fun saveReviewsToDatabase(reviews: List<Review>?){
-        Executors.newSingleThreadExecutor().execute{
+    private fun saveReviewsToDatabase(reviews: List<Review>?) {
+        Executors.newSingleThreadExecutor().execute {
             database.reviewDao().insertAllReviews(reviews?.map { review ->
-                    ReviewEntity(review.id.toInt(),review.comment,review.rating,review.showId,review.user.id,review.user.email,review.user.imageUrl)
-                } ?: listOf())
+                ReviewEntity(
+                    review.id.toInt(),
+                    review.comment,
+                    review.rating,
+                    review.showId,
+                    review.user.id,
+                    review.user.email,
+                    review.user.imageUrl
+                )
+            } ?: listOf())
         }
     }
 
-    fun fetchShowFromDatabase(){
-        showLiveData = database.showDao().getShow(showId.toString()).map { showEntity->
-            Show(showEntity.id,showEntity.averageRating,showEntity.description,showEntity.imageUrl,showEntity.noOfReviews,showEntity.title)
+    fun fetchShowFromDatabase() {
+        showLiveData = database.showDao().getShow(showId.toString()).map { showEntity ->
+            Show(
+                showEntity.id,
+                showEntity.averageRating,
+                showEntity.description,
+                showEntity.imageUrl,
+                showEntity.noOfReviews,
+                showEntity.title
+            )
         }
     }
 
-    fun fetchReviewsFromDatabase(){
-        reviewsListLiveData = database.reviewDao().getAllReviews(showId).map { list->
-            list.map { reviewEntity->
-                Review(reviewEntity.id.toString(),reviewEntity.comment,reviewEntity.rating,reviewEntity.showId,
-                    User(reviewEntity.userId,reviewEntity.userEmail,reviewEntity.userImageUrl)
+    fun fetchReviewsFromDatabase() {
+        reviewsListLiveData = database.reviewDao().getAllReviews(showId).map { list ->
+            list.map { reviewEntity ->
+                Review(
+                    reviewEntity.id.toString(), reviewEntity.comment, reviewEntity.rating, reviewEntity.showId,
+                    User(reviewEntity.userId, reviewEntity.userEmail, reviewEntity.userImageUrl)
                 )
             }
         }
     }
 
-    fun addReviewToDatabase(rating: Int, comment: String?, userId: String, userEmail: String, userImageUrl: String?){
-        Executors.newSingleThreadExecutor().execute{
-            database.reviewDao().insertAllReviews(listOf(ReviewEntity(0,comment,rating,showId,userId,userEmail,userImageUrl)))
+    fun addReviewToDatabase(rating: Int, comment: String?, userId: String, userEmail: String, userImageUrl: String?) {
+        Executors.newSingleThreadExecutor().execute {
+            database.reviewDao().insertAllReviews(listOf(ReviewEntity(0, comment, rating, showId, userId, userEmail, userImageUrl)))
         }
     }
 
