@@ -1,4 +1,4 @@
-package infinumacademy.showsapp.kristinakoneva.shows_screen
+package infinumacademy.showsapp.kristinakoneva.views
 
 import android.content.Context
 import android.util.AttributeSet

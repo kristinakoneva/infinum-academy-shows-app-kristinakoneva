@@ -17,7 +17,7 @@
         >
     </include>
 
-    <infinumacademy.showsapp.kristinakoneva.shows_screen.ToolbarWithProfilePhotoView
+    <infinumacademy.showsapp.kristinakoneva.views.ToolbarWithProfilePhotoView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,7 +25,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/toolbar">
 
-    </infinumacademy.showsapp.kristinakoneva.shows_screen.ToolbarWithProfilePhotoView>
+    </infinumacademy.showsapp.kristinakoneva.views.ToolbarWithProfilePhotoView>
 
     <TextView
         android:id="@+id/tvShows"
