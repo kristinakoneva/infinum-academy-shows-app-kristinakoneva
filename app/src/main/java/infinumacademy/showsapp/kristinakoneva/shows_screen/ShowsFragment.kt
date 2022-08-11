@@ -201,13 +201,11 @@ class ShowsFragment : Fragment() {
 
         bottomSheetBinding.imgBtnCamera.setOnClickListener {
             takeImage()
-            showProfilePhoto()
             dialog.dismiss()
         }
 
         bottomSheetBinding.imgBtnGallery.setOnClickListener {
             selectImageFromGallery()
-            showProfilePhoto()
             dialog.dismiss()
         }
         dialog.show()
