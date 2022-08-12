@@ -50,7 +50,7 @@ The user must be connected to the Internet in order to login, otherwise this wil
 <img src="README_images/register_screen_with_input.png" width="30%" height="30%"/>
 </p>
 If the user clicks the Register button on the Login screen, this is the screen they will be taken to. <br /><br />
-The first image shows how the Register screen looks before the user has inputted any data and the second image shows 
+The first image shows how the Register screen looks before the user has inputted any data and the second image shows how it looks 
 after the user has inserted correctly formatted information in all of the text input fields. <br /><br />
 In order to register, the user must enter a proper email, a password with at least 6 characters and repeat that password. 
 If the user has inputted the data in the correct format, the Register button is enabled, otherwise, an error message is displayed, the Register button 
@@ -66,8 +66,8 @@ If the registration fails, the user will be notified with a Toast at the bottom 
 &nbsp; &nbsp; &nbsp; &nbsp;
 <img src="README_images/shows_screen_empty_state.png" width="30%" height="30%"/>
 </p>
-This is the Shows screen where a list of shows is displayed as seen in the first image. <br /> <br />
-If the user click on a show card, a new screen is shown where details about that particular show are displayed. <br /> <br />
+This is the Shows screen where a list of shows is displayed as it can be seen in the first image. <br /> <br />
+If the user clicks on a show card, a new screen is shown where details about that particular show are displayed. <br /> <br />
 When the user clicks on the Top rated chip, a list of the top rated shows is displayed as in the second image. <br /> <br />
 If the user has no Internet connection and the database is empty, an empty state is displayed.
 The design of the empty state screen is shown in the third image. <br /> <br />
