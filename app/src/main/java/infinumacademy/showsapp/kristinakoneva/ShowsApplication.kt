@@ -2,7 +2,7 @@ package infinumacademy.showsapp.kristinakoneva
 
 import android.app.Application
 import db.ShowsAppDatabase
-import networking.ApiModule
+import infinumacademy.showsapp.kristinakoneva.networking.ApiModule
 
 class ShowsApplication : Application() {
 

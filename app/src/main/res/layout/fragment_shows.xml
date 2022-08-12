@@ -10,14 +10,14 @@
     <include
         android:id="@+id/loadingProgressOverlayContainer"
         layout="@layout/loading_progress_overlay"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         >
     </include>
 
-    <Toolbar
+    <infinumacademy.showsapp.kristinakoneva.views.ToolbarWithProfilePhotoView
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,17 +25,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageButton
-            android:id="@+id/btnDialogChangeProfilePicOrLogout"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="end"
-            android:layout_marginEnd="12dp"
-            android:src="@drawable/btn_profile_photo"
-            android:backgroundTint="@color/white"
-            android:scaleType="fitCenter"
-            />
-    </Toolbar>
+    </infinumacademy.showsapp.kristinakoneva.views.ToolbarWithProfilePhotoView>
 
     <TextView
         android:id="@+id/tvShows"

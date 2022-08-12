@@ -7,6 +7,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.BounceInterpolator
+import android.view.animation.OvershootInterpolator
+import android.view.animation.ScaleAnimation
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.edit
 import androidx.core.view.isVisible
@@ -19,9 +25,29 @@ import infinumacademy.showsapp.kristinakoneva.NetworkLiveData
 import infinumacademy.showsapp.kristinakoneva.R
 import infinumacademy.showsapp.kristinakoneva.UserInfo
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentLoginBinding
-import model.User
-import networking.Session
-import networking.SessionManager
+import infinumacademy.showsapp.kristinakoneva.networking.Session
+import infinumacademy.showsapp.kristinakoneva.networking.SessionManager
+
+fun ImageView.animateBounceFromTop() {
+    y = -1000f
+    animate()
+        .translationY(0f)
+        .setDuration(1000)
+        .setInterpolator(BounceInterpolator())
+        .start()
+}
+
+fun TextView.animateOvershootPopOut() {
+    val expand = ScaleAnimation(
+        0f, 1.0f, 0f, 1.0f, Animation.RELATIVE_TO_SELF, 0.5f,
+        Animation.RELATIVE_TO_SELF, 0.5f
+    )
+    expand.interpolator = OvershootInterpolator()
+    expand.duration = 1000
+    expand.startOffset = 1000
+    this.animation = expand
+    this.animation.start()
+}
 
 class LoginFragment : Fragment() {
 
@@ -73,6 +99,8 @@ class LoginFragment : Fragment() {
         }
 
 
+        binding.imgPlayBtnTitle.animateBounceFromTop()
+        binding.tvShows.animateOvershootPopOut()
         displayLoadingScreen()
         checkRememberMe()
         observeLiveDataForValidation()
@@ -126,7 +154,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun saveUserInfo() {
-        if (UserInfo.id != null) {
+        UserInfo.id?.let {
             sharedPreferences.edit {
                 putString(Constants.EMAIL, UserInfo.email)
                 putString(Constants.USER_ID, UserInfo.id)

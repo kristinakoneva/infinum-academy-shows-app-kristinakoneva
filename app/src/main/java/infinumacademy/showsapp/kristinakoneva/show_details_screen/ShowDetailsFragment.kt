@@ -84,9 +84,10 @@ class ShowDetailsFragment : Fragment() {
                 viewModel.showLiveData.observe(viewLifecycleOwner) { show ->
                     binding.showName.text = show.title
                     binding.showDesc.text = show.description
-                    binding.showImg.load(show.imageUrl){
+                    binding.showImg.load(show.imageUrl) {
                         placeholder(R.drawable.show_image_placeholder)
                         error(R.drawable.show_image_placeholder)
+                        fallback(R.drawable.show_image_placeholder)
                     }
                     setReviewsStatus()
                     showReviews()
@@ -95,7 +96,6 @@ class ShowDetailsFragment : Fragment() {
                 Toast.makeText(requireContext(), getString(R.string.error_fetching_show_msg), Toast.LENGTH_SHORT).show()
             }
         }
-
 
     }
 

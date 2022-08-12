@@ -21,7 +21,7 @@
     <TextView
         android:id="@+id/emailAddress"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginTop="16dp"
@@ -36,7 +36,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnChangeProfilePhoto"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
@@ -47,7 +47,6 @@
         android:textStyle="bold"
         android:textSize="17sp"
         android:textAllCaps="false"
-        android:padding="8dp"
         app:cornerRadius="21.5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -58,21 +57,16 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnLogout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/DefaultPurpleButton"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
-        android:backgroundTint="@color/purple"
-        android:textColor="@color/white"
         android:text="@string/logout_button_text"
-        android:textStyle="bold"
-        android:textSize="17sp"
-        android:textAllCaps="false"
-        android:padding="8dp"
         app:cornerRadius="21.5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnChangeProfilePhoto"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

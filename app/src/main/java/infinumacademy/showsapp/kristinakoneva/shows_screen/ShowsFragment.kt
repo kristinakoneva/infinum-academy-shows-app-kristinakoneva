@@ -40,8 +40,9 @@ import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
-import model.Show
-import networking.SessionManager
+import infinumacademy.showsapp.kristinakoneva.model.Show
+import infinumacademy.showsapp.kristinakoneva.model.User
+import infinumacademy.showsapp.kristinakoneva.networking.SessionManager
 
 val Fragment.showsApp: ShowsApplication
     get() {
@@ -121,7 +122,7 @@ class ShowsFragment : Fragment() {
     }
 
     private fun initListeners() {
-        binding.btnDialogChangeProfilePicOrLogout.setOnClickListener {
+        binding.toolbar.setClickListener {
             openDialogForChangingProfilePicOrLoggingOut()
         }
 
@@ -130,27 +131,50 @@ class ShowsFragment : Fragment() {
         }
     }
 
+    private fun bindDataToTheBottomSheetDialog(
+        bottomSheetBinding: DialogChangeProfilePhotoOrLogoutBinding,
+        email: String?,
+        profilePhotoUrl: String?
+    ) {
+        bottomSheetBinding.profilePhoto.load(profilePhotoUrl) {
+            transformations(CircleCropTransformation())
+            placeholder(R.drawable.ic_profile_placeholder)
+            error(R.drawable.ic_profile_placeholder)
+            fallback(R.drawable.ic_profile_placeholder)
+        }
+        bottomSheetBinding.emailAddress.text = email
+    }
+
     private fun openDialogForChangingProfilePicOrLoggingOut() {
         val dialog = BottomSheetDialog(requireContext())
         val bottomSheetBinding = DialogChangeProfilePhotoOrLogoutBinding.inflate(layoutInflater)
         dialog.setContentView(bottomSheetBinding.root)
 
         // User Interface
-        val profilePhotoUrl = UserInfo.imageUrl
-        if (profilePhotoUrl != null) {
-            try {
-                bottomSheetBinding.profilePhoto.load(profilePhotoUrl) {
-                    transformations(CircleCropTransformation())
-                    placeholder(R.drawable.ic_profile_placeholder)
-                    error(R.drawable.ic_profile_placeholder)
+        var profilePhotoUrl: String? = null
+        var email: String? = null
+        if (NetworkLiveData.isNetworkAvailable()) {
+            viewModel.getLatestUserInfo()
+            viewModel.getLatestUserInfoResultLiveData.observe(viewLifecycleOwner) { isSuccessful ->
+                if (isSuccessful) {
+                    viewModel.currentUser.observe(viewLifecycleOwner) { user ->
+                        profilePhotoUrl = user?.imageUrl ?: UserInfo.imageUrl
+                        email = user?.email ?: UserInfo.email
+                    }
+                } else {
+                    Toast.makeText(requireContext(), getString(R.string.error_fetching_user_info_msg), Toast.LENGTH_SHORT).show()
+                    profilePhotoUrl = UserInfo.imageUrl
+                    email = UserInfo.email
                 }
-            } catch (e: FileNotFoundException) {
-                e.printStackTrace()
+
+                bindDataToTheBottomSheetDialog(bottomSheetBinding, email, profilePhotoUrl)
             }
         } else {
-            bottomSheetBinding.profilePhoto.load(R.drawable.profile_photo)
+            profilePhotoUrl = UserInfo.imageUrl
+            email = UserInfo.email
+
+            bindDataToTheBottomSheetDialog(bottomSheetBinding, email, profilePhotoUrl)
         }
-        bottomSheetBinding.emailAddress.text = UserInfo.email
 
         // Listeners
         bottomSheetBinding.btnChangeProfilePhoto.setOnClickListener {
@@ -178,13 +202,11 @@ class ShowsFragment : Fragment() {
 
         bottomSheetBinding.imgBtnCamera.setOnClickListener {
             takeImage()
-            showProfilePhoto()
             dialog.dismiss()
         }
 
         bottomSheetBinding.imgBtnGallery.setOnClickListener {
             selectImageFromGallery()
-            showProfilePhoto()
             dialog.dismiss()
         }
         dialog.show()
@@ -226,15 +248,16 @@ class ShowsFragment : Fragment() {
                     } else {
                         Toast.makeText(requireContext(), getString(R.string.error_fetching_top_rated_shows_msg), Toast.LENGTH_SHORT).show()
                     }
-
                 }
 
             } else {
                 viewModel.listShowsResultLiveData.observe(viewLifecycleOwner) { isSuccessful ->
                     if (isSuccessful) {
                         viewModel.showsListLiveData.observe(viewLifecycleOwner) { showsList ->
-                            if (showsList != null)
+                            showsList?.let {
                                 adapter.addAllItems(showsList)
+                            }
+
                         }
                     } else {
                         Toast.makeText(requireContext(), getString(R.string.error_fetching_shows_msg), Toast.LENGTH_SHORT).show()
@@ -316,27 +339,36 @@ class ShowsFragment : Fragment() {
     //    }
 
     private fun showProfilePhoto() {
-        val profilePhotoUrl = UserInfo.imageUrl
-
-        if (profilePhotoUrl != null) {
-            binding.btnDialogChangeProfilePicOrLogout.load(profilePhotoUrl) {
-                transformations(CircleCropTransformation())
-                placeholder(R.drawable.btn_profile_photo)
-                error(R.drawable.btn_profile_photo)
+        var profilePhotoUrl: String? = null
+        if (NetworkLiveData.isNetworkAvailable()) {
+            viewModel.getLatestUserInfo()
+            viewModel.getLatestUserInfoResultLiveData.observe(viewLifecycleOwner) { isSuccessful ->
+                if (isSuccessful) {
+                    viewModel.currentUser.observe(viewLifecycleOwner) { user ->
+                        profilePhotoUrl = user?.imageUrl ?: UserInfo.imageUrl
+                    }
+                } else {
+                    Toast.makeText(requireContext(), getString(R.string.error_fetching_user_info_msg), Toast.LENGTH_SHORT).show()
+                    profilePhotoUrl = UserInfo.imageUrl
+                }
+                binding.toolbar.setProfilePhoto(profilePhotoUrl)
             }
         } else {
-            binding.btnDialogChangeProfilePicOrLogout.load(R.drawable.btn_profile_photo)
+            profilePhotoUrl = UserInfo.imageUrl
+            binding.toolbar.setProfilePhoto(profilePhotoUrl)
         }
+
     }
 
     private fun saveProfilePhoto(uri: Uri) {
         val bitmap = getBitmapFromURI(requireContext(), uri)
         val email = UserInfo.email
         val ppPath = saveToInternalStorage(bitmap!!, email!!)
-        if (ppPath != null) {
+        ppPath?.let {
             viewModel.updateProfilePhoto(email, ppPath)
             viewModel.updateProfilePhotoResultLiveData.observe(viewLifecycleOwner) { isSuccessful ->
                 if (isSuccessful) {
+                    showProfilePhoto()
                     sharedPreferences.edit {
                         putString(Constants.IMAGE_URL, UserInfo.imageUrl)
                     }
@@ -344,17 +376,14 @@ class ShowsFragment : Fragment() {
                     Toast.makeText(requireContext(), getString(R.string.error_changing_profile_photo_msg), Toast.LENGTH_SHORT).show()
                 }
             }
-
         }
+
     }
 
     private val takeImageResult = registerForActivityResult(ActivityResultContracts.TakePicture()) { isSuccess ->
         if (isSuccess) {
             latestTmpUri?.let { uri ->
                 saveProfilePhoto(uri)
-                binding.btnDialogChangeProfilePicOrLogout.load(uri) {
-                    transformations(CircleCropTransformation())
-                }
             }
         }
     }
@@ -362,9 +391,6 @@ class ShowsFragment : Fragment() {
     private val selectImageFromGalleryResult = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
             saveProfilePhoto(uri)
-            binding.btnDialogChangeProfilePicOrLogout.load(uri) {
-                transformations(CircleCropTransformation())
-            }
         }
     }
 

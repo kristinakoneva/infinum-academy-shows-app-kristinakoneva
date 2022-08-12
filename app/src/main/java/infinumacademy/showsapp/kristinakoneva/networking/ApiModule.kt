@@ -1,4 +1,4 @@
-package networking
+package infinumacademy.showsapp.kristinakoneva.networking
 
 import android.content.Context
 import com.chuckerteam.chucker.api.ChuckerInterceptor

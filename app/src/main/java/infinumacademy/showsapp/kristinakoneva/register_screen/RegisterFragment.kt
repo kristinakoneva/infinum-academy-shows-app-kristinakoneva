@@ -15,7 +15,9 @@ import androidx.navigation.fragment.findNavController
 import infinumacademy.showsapp.kristinakoneva.Constants
 import infinumacademy.showsapp.kristinakoneva.R
 import infinumacademy.showsapp.kristinakoneva.databinding.FragmentRegisterBinding
-import networking.SessionManager
+import infinumacademy.showsapp.kristinakoneva.login_screen.animateBounceFromTop
+import infinumacademy.showsapp.kristinakoneva.login_screen.animateOvershootPopOut
+import infinumacademy.showsapp.kristinakoneva.networking.SessionManager
 
 class RegisterFragment : Fragment() {
 
@@ -55,6 +57,8 @@ class RegisterFragment : Fragment() {
             }
         }
 
+        binding.imgPlayBtnTitle.animateBounceFromTop()
+        binding.tvShows.animateOvershootPopOut()
         observeLiveDataForValidation()
         displayLoadingScreen()
         initListeners()
