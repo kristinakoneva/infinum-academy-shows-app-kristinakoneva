@@ -16,6 +16,7 @@ object ApiModule {
     lateinit var retrofit: ShowsApiService
 
     fun initRetrofit(context: Context) {
+
         val okhttp = OkHttpClient.Builder()
             .addInterceptor(AuthInterceptor(context)).addInterceptor(ChuckerInterceptor.Builder(context).build())
             .build()
