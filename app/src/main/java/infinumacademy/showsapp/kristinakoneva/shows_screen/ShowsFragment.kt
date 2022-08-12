@@ -41,7 +41,6 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
 import infinumacademy.showsapp.kristinakoneva.model.Show
-import infinumacademy.showsapp.kristinakoneva.model.User
 import infinumacademy.showsapp.kristinakoneva.networking.SessionManager
 
 val Fragment.showsApp: ShowsApplication
@@ -248,6 +247,7 @@ class ShowsFragment : Fragment() {
                     } else {
                         Toast.makeText(requireContext(), getString(R.string.error_fetching_top_rated_shows_msg), Toast.LENGTH_SHORT).show()
                     }
+
                 }
 
             } else {
@@ -432,13 +432,11 @@ class ShowsFragment : Fragment() {
         val exif = ExifInterface(file.absoluteFile.toString())
         val orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
         val matrix = Matrix()
-
         when(orientation){
             ExifInterface.ORIENTATION_ROTATE_90 -> matrix.postRotate(90F)
             ExifInterface.ORIENTATION_ROTATE_180 -> matrix.postRotate(180F)
             ExifInterface.ORIENTATION_ROTATE_270 -> matrix.postRotate(270F)
         }
-
         val rotatedBitmap = Bitmap.createBitmap(bitmap, 0,0 , bitmap.width, bitmap.height, matrix, true)
         bitmap.recycle()
         return rotatedBitmap
@@ -446,9 +444,3 @@ class ShowsFragment : Fragment() {
 
 
 }
-
-
-
-
-
-

@@ -98,7 +98,6 @@ class LoginFragment : Fragment() {
             binding.noInternetConnection.isVisible = true
         }
 
-
         binding.imgPlayBtnTitle.animateBounceFromTop()
         binding.tvShows.animateOvershootPopOut()
         displayLoadingScreen()

@@ -13,10 +13,18 @@
         tools:layout="@layout/fragment_shows">
         <action
             android:id="@+id/toShowDetailsFragment"
-            app:destination="@id/showDetailsFragment"/>
+            app:destination="@id/showDetailsFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out"/>
         <action
             android:id="@+id/toLoginFragment"
             app:destination="@id/main"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out"
             app:popUpTo="@id/main"
             app:popUpToInclusive="true"/>
     </fragment>

@@ -39,7 +39,6 @@ class LoginViewModel : ViewModel() {
     private val _isValidPassword = MutableLiveData(false)
     val isValidPassword: LiveData<Boolean> = _isValidPassword
 
-
     private fun validateLoginForm(email: String?, password: String?): Boolean {
         val isValidEmail = email != null && email.isNotBlank() && email.matches(Constants.EMAIL_REGEX.toRegex())
         val isValidPassword = password != null && password.isNotBlank() && password.length >= Constants.MIN_CHARS_FOR_PASSWORD

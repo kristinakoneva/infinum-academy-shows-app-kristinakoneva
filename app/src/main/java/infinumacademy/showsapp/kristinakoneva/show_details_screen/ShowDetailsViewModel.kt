@@ -165,7 +165,10 @@ class ShowDetailsViewModel(
         reviewsListLiveData = database.reviewDao().getAllReviews(showId).map { list ->
             list.map { reviewEntity ->
                 Review(
-                    reviewEntity.id.toString(), reviewEntity.comment, reviewEntity.rating, reviewEntity.showId,
+                    reviewEntity.id.toString(),
+                    reviewEntity.comment,
+                    reviewEntity.rating,
+                    reviewEntity.showId,
                     User(reviewEntity.userId, reviewEntity.userEmail, reviewEntity.userImageUrl)
                 )
             }

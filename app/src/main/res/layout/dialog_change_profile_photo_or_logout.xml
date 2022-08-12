@@ -58,6 +58,8 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnLogout"
         style="@style/DefaultPurpleButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:text="@string/logout_button_text"

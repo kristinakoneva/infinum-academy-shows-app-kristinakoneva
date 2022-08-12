@@ -28,6 +28,7 @@ class ToolbarWithProfilePhotoView @JvmOverloads constructor(
             error(R.drawable.btn_profile_photo)
             fallback(R.drawable.btn_profile_photo)
         }
+
     }
 
     fun setClickListener(listener: OnClickListener) {

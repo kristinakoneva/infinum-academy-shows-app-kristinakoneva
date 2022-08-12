@@ -45,6 +45,7 @@ class ReviewsAdapter(
                 reviewRating.text = item.rating.toString()
                 reviewUsername.text = extractUsername(item.user.email)
                 reviewComment.text = item.comment
+
                 profilePhoto.load(item.user.imageUrl) {
                     transformations(CircleCropTransformation())
                     placeholder(R.drawable.ic_profile_placeholder)

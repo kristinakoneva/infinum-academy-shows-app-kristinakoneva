@@ -2,8 +2,8 @@
 <paths>
     <cache-path
         name="cached_files"
-        path="." />
+        path="."/>
     <files-path
         name="images"
-        path="." />
+        path="."/>
 </paths>

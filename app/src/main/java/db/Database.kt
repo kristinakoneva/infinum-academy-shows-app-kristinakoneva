@@ -7,13 +7,13 @@ import androidx.room.RoomDatabase
 import infinumacademy.showsapp.kristinakoneva.Constants
 
 @Database(
-    entities=[
+    entities = [
         ShowEntity::class,
         ReviewEntity::class
     ],
     version = 3
 )
-abstract class ShowsAppDatabase: RoomDatabase() {
+abstract class ShowsAppDatabase : RoomDatabase() {
     companion object {
 
         @Volatile
