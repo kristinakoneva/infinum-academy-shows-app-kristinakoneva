@@ -15,7 +15,7 @@ For simplifying the inspection of HTTP(S) requests/responses fired by the app, <
 This app also has a database created with <a href="https://developer.android.com/training/data-storage/room" target="_blank">Room</a>.
 When the user is offline, the data from the database is displayed. If the database is empty, an empty state is displayed. <br /> <br />
 The <a href="https://coil-kt.github.io/coil/" target="_blank">Coil</a> library is used for loading images into the views. <br /> <br />
-More details about which libraries were used and their versions can be seen in the app's build.grade file. <br /> <br />
+More details about which libraries were used and their versions can be seen in the app's build.gradle file. <br /> <br />
 The Shows App needs permissions for accessing and changing the network state, accessing the Internet, reading from external storage and writing settings. <br /> <br />
 In order to have a more dynamic and flexible UI, 
 fragments were used to modularise the app in combination with the 
