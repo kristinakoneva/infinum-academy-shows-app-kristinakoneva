@@ -25,11 +25,11 @@ For keeping the code formatting consistent, the following Infinum Android Studio
 
 ## Login Screen
 <p align="left">
-<img src="README_images/login_screen_without_input.png" width="30%" height="30%"/>
+<img src="README_images/login_screen_without_input.png" width="30%" />
 &nbsp; &nbsp; &nbsp; &nbsp;
-<img src="README_images/login_screen_with_input.png" width="30%" height="30%"/>
+<img src="README_images/login_screen_with_input.png" width="30%" />
 &nbsp; &nbsp; &nbsp; &nbsp;
-<img src="README_images/login_screen_after_registration.png" width="30%" height="30%"/>
+<img src="README_images/login_screen_after_registration.png" width="30%" />
 </p>
 The application starts with the login screen where the user is required to enter an email and a password to continue. <br /><br />
 The email and password must be inputted in the correct format, otherwise the Login button is disabled, an error message is displayed and the user cannot continue to the next screen. 
@@ -41,13 +41,13 @@ If the login fails, the user will be notified with a Toast at the bottom of the 
 If the user clicks on the Register button, they will be taken to the Register screen and if they Register successfully, they will be taken back to the Login screen and they will still need to login before they continue. 
 The third image shows how the Login screen looks when the user is coming from the Register screen after a successful registration. <br /> <br />
 The user must be connected to the Internet in order to login, otherwise this will be displayed: <br /> <br />
-<img src="README_images/no_internet_error_login.png" width="30%" height="30%"/>
+<img src="README_images/no_internet_error_login.png" width="30%" />
 
 ## Register screen
 <p align="left">
-<img src="README_images/register_screen_without_input.png" width="30%" height="30%"/>
+<img src="README_images/register_screen_without_input.png" width="30%" />
 &nbsp; &nbsp; &nbsp; &nbsp;
-<img src="README_images/register_screen_with_input.png" width="30%" height="30%"/>
+<img src="README_images/register_screen_with_input.png" width="30%" />
 </p>
 If the user clicks the Register button on the Login screen, this is the screen they will be taken to. <br /><br />
 The first image shows how the Register screen looks before the user has inputted any data and the second image shows how it looks 
@@ -60,11 +60,11 @@ If the registration fails, the user will be notified with a Toast at the bottom 
 
 ## Shows Screen
 <p align="left">
-<img src="README_images/shows_screen.png" width="30%" height="30%"/>
+<img src="README_images/shows_screen.png" width="30%" />
 &nbsp; &nbsp; &nbsp; &nbsp;
-<img src="README_images/shows_screen_top_rated.png" width="30%" height="30%"/>
+<img src="README_images/shows_screen_top_rated.png" width="30%" />
 &nbsp; &nbsp; &nbsp; &nbsp;
-<img src="README_images/shows_screen_empty_state.png" width="30%" height="30%"/>
+<img src="README_images/shows_screen_empty_state.png" width="30%" />
 </p>
 This is the Shows screen where a list of shows is displayed as it can be seen in the first image. <br /> <br />
 If the user clicks on a show card, a new screen is shown where details about that particular show are displayed. <br /> <br />
@@ -74,20 +74,20 @@ The design of the empty state screen is shown in the third image. <br /> <br />
 On the top right corner, the user's profile photo is shown and when it is clicked, it opens a bottom sheet dialog for changing the profile photo or logging out. <br /> <br />
 
 ### Change Profile Photo or Logout Bottom Sheet Dialog
-<img src="README_images/profile_photo_dialog.png" width="30%" height="30%"/> <br />
+<img src="README_images/profile_photo_dialog.png" width="30%" /> <br />
 In this bottom sheet dialog, the user's profile photo and email are displayed. Below them, there are two button: one for changing the profile photo and one for logging out. <br /> <br />
 If the user clicks on the button - Change profile photo, 
 a new bottom sheet dialog is opened where the user can choose whether to change the photo 
 by taking a photo directly from the Camera app or choose a photo from their gallery. This bottom sheet dialog is shown below: <br /> <br />
-<img src="README_images/change_profile_photo_method.png" width="30%" height="30%"/> <br />
+<img src="README_images/change_profile_photo_method.png" width="30%" /> <br />
 If the user is not connected to the Internet, they will not be allowed to change their profile photo. <br /><br />
 If the user clicks on the Logout button, an alert dialog will be shown where the user has to confirm their logout: <br /> <br />
-<img src="README_images/logout_alert_dialog.png" width="30%" height="30%"/> <br /> 
+<img src="README_images/logout_alert_dialog.png" width="30%" /> <br /> 
 If the user confirms their logout, they will be taken back to the Login screen.
 
 ## Show Details Screen
 <p align="left">
-<img src="README_images/show_details_screen.png" width="30%" height="30%"/>
+<img src="README_images/show_details_screen.png" width="30%" />
 </p>
 This Show Details screen appears when a user clicks on a particular show card in the shows list. <br /> <br />
 There is a photo and description about the show and at the bottom there is a reviews section.
@@ -97,9 +97,9 @@ the user is taken back to the Shows screen.
 
 ### Write a Review Bottom Sheet Dialog
 <p align="left">
-<img src="README_images/write_review_dialog_without_input.png" width="30%" height="30%"/>
+<img src="README_images/write_review_dialog_without_input.png" width="30%" />
 &nbsp; &nbsp; &nbsp; &nbsp;
-<img src="README_images/write_review_dialog_with_input.png" width="30%" height="30%"/>
+<img src="README_images/write_review_dialog_with_input.png" width="30%" />
 </p>
 This bottom sheet dialog is opened once the user clicks on the Write a review button from the Show Details screen.
 The review consists of a rating and a comment. <br /> <br />
@@ -112,7 +112,7 @@ The dialog can be dismissed by clicking somewhere outside the dialog or by click
 
 ### Reviews Section
 <p align="left">
-<img src="README_images/reviews_section.png" width="30%" height="30%"/>
+<img src="README_images/reviews_section.png" width="30%" />
 </p>
 The image above shows how the reviews will be displayed. <br /> <br />
 The user's profile photo, their username, the rating and the comment they left are displayed for each review.
